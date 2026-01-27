@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('deskripsi');
             $table->string('foto')->nullable();
             $table->enum('tingkat_urgency', ['rendah', 'sedang', 'tinggi']);
-            $table->enum('status', ['pending', 'ditugaskan', 'diproses', 'selesai', 'ditolak']);
+            $table->enum('status', ['pending', 'ditugaskan', 'diproses', 'selesai']);
             $table->timestamp('tanggal_selesai')->nullable();
             $table->timestamps();
         });

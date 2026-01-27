@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -45,4 +46,21 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+     // 🔗 Relasi
+    public function laporans()
+    {
+        return $this->hasMany(Laporan::class);
+    }
+
+    public function tugasTeknisi()
+    {
+        return $this->hasMany(Laporan::class, 'teknisi_id');
+    }
+
+    public function riwayatTeknisi()
+    {
+        return $this->hasMany(RiwayatLaporan::class, 'teknisi_id');
+    }
+
 }
