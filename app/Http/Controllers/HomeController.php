@@ -6,23 +6,21 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+    // Halaman home default
     public function index()
     {
-        return view('home');
+        return view('home'); // bisa ubah sesuai halaman home umum
+    }
+
+    // Halaman dashboard admin
+    public function adminDashboard()
+    {
+        return view('admin.dashboard'); // pastikan file ini ada di resources/views/admin/dashboard.blade.php
+    }
+
+    // Halaman dashboard teknisi
+    public function teknisiDashboard()
+    {
+        return view('teknisi.dashboard'); // pastikan file ini ada
     }
 }

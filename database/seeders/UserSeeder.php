@@ -3,39 +3,51 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;                 
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'role' => 'admin',
-            'password' => Hash::make('password'),
-        ]);
+        // Admin
+        User::firstOrCreate(
+            ['email' => 'admin@gmail.com'], // cek berdasarkan email
+            [
+                'name' => 'Admin',
+                'role' => 'admin',
+                'password' => Hash::make('admin123'),
+            ]
+        );
 
-        User::create([
-            'name' => 'Siswa',
-            'email' => 'siswa@gmail.com',
-            'role' => 'siswa',
-            'password' => Hash::make('password'),
-        ]);
+        // Siswa
+        User::firstOrCreate(
+            ['email' => 'siswa@gmail.com'],
+            [
+                'name' => 'Siswa',
+                'role' => 'siswa',
+                'password' => Hash::make('siswa123'),
+            ]
+        );
 
-        User::create([
-            'name' => 'Guru',
-            'email' => 'guru@gmail.com',
-            'role' => 'guru',
-            'password' => Hash::make('password'),
-        ]);
+        // Guru
+        User::firstOrCreate(
+            ['email' => 'guru@gmail.com'],
+            [
+                'name' => 'Guru',
+                'role' => 'guru',
+                'password' => Hash::make('guru123'),
+            ]
+        );
 
-        User::create([
-            'name' => 'Teknisi',
-            'email' => 'teknisi@gmail.com',
-            'role' => 'teknisi',
-            'password' => Hash::make('password'),
-        ]);
+        // Teknisi
+        User::firstOrCreate(
+            ['email' => 'teknisi@gmail.com'],
+            [
+                'name' => 'Teknisi',
+                'role' => 'teknisi',
+                'password' => Hash::make('teknisi123'),
+            ]
+        );
     }
 }
