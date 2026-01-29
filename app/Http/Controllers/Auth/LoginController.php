@@ -11,40 +11,39 @@ class LoginController extends Controller
     // Tampilkan halaman login
     public function showLoginForm()
     {
-        return view('auth.login'); // pastikan view auth.login ada
+        return view('auth.login');
     }
 
     // Proses login
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
 
-            $user = Auth::user();
-
-            // Redirect berdasarkan role
-            switch ($user->role) {
-                case 'admin':
-                    return redirect()->intended('/admin/dashboard');
-                case 'teknisi':
-                    return redirect()->intended('/teknisi/dashboard');
-                case 'siswa':
-                case 'guru':
-                    return redirect()->intended('/laporan/create');
-                default:
-                    Auth::logout();
-                    return redirect('/login')->withErrors('Role tidak dikenali!');
-            }
+            return match (Auth::user()->role) {
+                'admin'   => redirect()->route('admin.dashboard'),
+                'teknisi' => redirect()->route('teknisi.dashboard'),
+                'guru'    => redirect()->route('guru.laporan.create'),
+                'siswa'   => redirect()->route('siswa.laporan.create'),
+                default   => $this->logoutWithError(),
+            };
         }
 
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ])->onlyInput('email');
+    }
+
+    private function logoutWithError()
+    {
+        Auth::logout();
+        return redirect()->route('login')
+            ->withErrors('Role tidak dikenali!');
     }
 
     // Logout
@@ -54,6 +53,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login'); // redirect ke halaman publik
+        return redirect()->route('login');
     }
 }
+
