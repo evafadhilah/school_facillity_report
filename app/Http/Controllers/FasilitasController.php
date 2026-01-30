@@ -36,23 +36,23 @@ class FasilitasController extends Controller
         Fasilitas::create($request->all());
 
         return redirect()->route('admin.fasilitas.index')
-                         ->with('success', 'Fasilitas berhasil ditambahkan');
+            ->with('success', 'Fasilitas berhasil ditambahkan');
     }
 
-    // 📌 Detail fasilitas
+    // 📌 Detail fasilitas (FIXED - ubah $fasilita jadi $fasilitas)
     public function show(Fasilitas $fasilitas)
     {
         return view('admin.fasilitas.show', compact('fasilitas'));
     }
 
-    // 📌 Form edit fasilitas
+    // 📌 Form edit fasilitas (FIXED)
     public function edit(Fasilitas $fasilitas)
     {
         $kategori = Kategori::all();
         return view('admin.fasilitas.edit', compact('fasilitas', 'kategori'));
     }
 
-    // 📌 Update data fasilitas
+    // 📌 Update data fasilitas (FIXED)
     public function update(Request $request, Fasilitas $fasilitas)
     {
         $request->validate([
@@ -66,15 +66,15 @@ class FasilitasController extends Controller
         $fasilitas->update($request->all());
 
         return redirect()->route('admin.fasilitas.index')
-                         ->with('success', 'Fasilitas berhasil diperbarui');
+            ->with('success', 'Fasilitas berhasil diperbarui');
     }
 
-    // 📌 Hapus fasilitas
+    // 📌 Hapus fasilitas (FIXED)
     public function destroy(Fasilitas $fasilitas)
     {
         $fasilitas->delete();
 
         return redirect()->route('admin.fasilitas.index')
-                         ->with('success', 'Fasilitas berhasil dihapus');
+            ->with('success', 'Fasilitas berhasil dihapus');
     }
 }

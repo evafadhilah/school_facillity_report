@@ -45,7 +45,8 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::resource('kategori', KategoriController::class);
         Route::resource('laporan', LaporanController::class);
-        Route::resource('fasilitas', FasilitasController::class);
+        Route::resource('fasilitas', FasilitasController::class)
+            ->parameters(['fasilitas' => 'fasilitas']);
         Route::resource('riwayatlaporan', RiwayatLaporanController::class);
     });
 
