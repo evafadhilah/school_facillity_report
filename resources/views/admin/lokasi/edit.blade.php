@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Tambah Kategori')
+@section('title', 'Edit Lokasi')
 
 @section('content')
 
@@ -223,10 +223,10 @@
     <div class="index-header">
         <div class="header-content">
             <div class="header-title">
-                <h4>Tambah Kategori</h4>
-                <p>Form penambahan kategori baru</p>
+                <h4>Edit Lokasi</h4>
+                <p>Form perubahan data lokasi</p>
             </div>
-            <a href="{{ route('admin.kategori.index') }}" class="btn-back">
+            <a href="{{ route('admin.lokasi.index') }}" class="btn-back">
                 <i class='bx bx-arrow-back'></i>
                 Kembali
             </a>
@@ -250,20 +250,21 @@
     <!-- Card Form -->
     <div class="card form-card">
         <div class="card-body">
-            <form action="{{ route('admin.kategori.store') }}" method="POST">
+            <form action="{{ route('admin.lokasi.update', $lokasi->id) }}" method="POST">
                 @csrf
+                @method('PUT')
 
                 <div class="mb-4">
-                    <label class="form-label">Nama Kategori <span class="text-danger">*</span></label>
+                    <label class="form-label">Nama Lokasi <span class="text-danger">*</span></label>
                     <input
                         type="text"
-                        name="nama_kategori"
-                        class="form-control @error('nama_kategori') is-invalid @enderror"
-                        value="{{ old('nama_kategori') }}"
-                        placeholder="Masukkan nama kategori"
+                        name="nama_lokasi"
+                        class="form-control @error('nama_lokasi') is-invalid @enderror"
+                        value="{{ old('nama_lokasi', $lokasi->nama_lokasi) }}"
+                        placeholder="Masukkan nama lokasi"
                         autofocus
                     >
-                    @error('nama_kategori')
+                    @error('nama_lokasi')
                         <div class="invalid-feedback">
                             <i class='bx bx-error-circle me-1'></i>{{ $message }}
                         </div>
@@ -271,11 +272,11 @@
                 </div>
 
                 <div class="d-flex justify-content-end gap-2">
-                    <a href="{{ route('admin.kategori.index') }}" class="btn-cancel">
+                    <a href="{{ route('admin.lokasi.index') }}" class="btn-cancel">
                         <i class='bx bx-x'></i> Batal
                     </a>
                     <button type="submit" class="btn-submit">
-                        <i class='bx bx-save'></i> Simpan
+                        <i class='bx bx-save'></i> Update
                     </button>
                 </div>
             </form>
@@ -283,4 +284,3 @@
     </div>
 
 </div>
-@endsection

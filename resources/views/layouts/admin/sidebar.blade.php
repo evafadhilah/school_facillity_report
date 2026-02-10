@@ -36,6 +36,13 @@
       </a>
     </li>
 
+    <li class="menu-item {{ request()->routeIs('admin.kategori.*') ? 'active' : '' }}">
+      <a href="{{ route('admin.lokasi.index') }}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-collection"></i>
+        <div>Lokasi</div>
+      </a>
+    </li>
+
     <li class="menu-item {{ request()->routeIs('admin.fasilitas.*') ? 'active' : '' }}">
       <a href="{{ route('admin.fasilitas.index') }}" class="menu-link">
         <i class="menu-icon tf-icons bx bx-buildings"></i>

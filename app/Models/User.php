@@ -2,43 +2,31 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
+// Import relasi
+use App\Models\Laporan;
+use App\Models\RiwayatLaporan;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
-        'password',
         'role',
+        'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -47,20 +35,23 @@ class User extends Authenticatable
         ];
     }
 
-     // 🔗 Relasi
+    // ================= RELASI =================
+
+    // laporan yg dibuat user
     public function laporans()
     {
         return $this->hasMany(Laporan::class);
     }
 
+    // laporan yg ditangani teknisi
     public function tugasTeknisi()
     {
         return $this->hasMany(Laporan::class, 'teknisi_id');
     }
 
+    // riwayat teknisi
     public function riwayatTeknisi()
     {
         return $this->hasMany(RiwayatLaporan::class, 'teknisi_id');
     }
-
 }

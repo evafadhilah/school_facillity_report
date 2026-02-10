@@ -15,11 +15,11 @@
     </ul>
 @endif
 
-<form action="{{ route('laporan.store') }}" method="POST">
+<form action="{{ route('siswa.laporan.store') }}" method="POST">
     @csrf
 
     <label>Fasilitas</label><br>
-    <select name="fasilitas_id">
+    <select name="fasilitas_id" required>
         <option value="">-- Pilih Fasilitas --</option>
         @foreach($fasilitas as $item)
             <option value="{{ $item->id }}">{{ $item->nama_fasilitas }}</option>
@@ -31,13 +31,13 @@
     <select name="teknisi_id">
         <option value="">-- Belum Ditentukan --</option>
         @foreach($teknisi as $t)
-            <option value="{{ $t->id }}">{{ $t->nama }}</option>
+            <option value="{{ $t->id }}">{{ $t->name }}</option>
         @endforeach
     </select>
     <br><br>
 
     <label>Tingkat Urgency</label><br>
-    <select name="tingkat_urgency">
+    <select name="tingkat_urgency" required>
         <option value="rendah">Rendah</option>
         <option value="sedang">Sedang</option>
         <option value="tinggi">Tinggi</option>
@@ -45,11 +45,11 @@
     <br><br>
 
     <label>Deskripsi</label><br>
-    <textarea name="deskripsi" rows="4"></textarea>
+    <textarea name="deskripsi" rows="4" required></textarea>
     <br><br>
 
     <button type="submit">Kirim Laporan</button>
-    <a href="{{ route('laporan.index') }}">Kembali</a>
+    <a href="{{ route('riwayatlaporan.index') }}">Kembali</a>
 </form>
 
 </body>

@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('nama_fasilitas');
             $table->foreignId('kategori_id')->constrained('kategoris')->cascadeOnDelete();
-            $table->string('lokasi');
+            $table->foreignId('lokasi_id')->constrained('lokasis')->cascadeOnDelete();
             $table->string('kode_fasilitas')->unique();
             $table->enum('kondisi',['baik', 'rusak_ringan', 'rusak_berat']);
             $table->timestamps();
-            
+
         });
     }
 

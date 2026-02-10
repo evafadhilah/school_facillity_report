@@ -46,6 +46,17 @@
 
     <!-- Config -->
     <script src="{{ asset('assets/admin/js/config.js') }}"></script>
+
+    <style>
+        .menu-item.active > .menu-link {
+    background-color: #7367F0; /* warna background saat aktif */
+    color: #fff; /* warna teks */
+}
+.menu-item.active > .menu-link i {
+    color: #fff; /* warna icon */
+}
+
+    </style>
   </head>
 
   <body>
@@ -53,7 +64,14 @@
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
         <!-- Sidebar -->
+       <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    @if(Auth::user()->role == 'admin')
         @include('layouts.admin.sidebar')
+    @elseif(Auth::user()->role == 'siswa')
+        @include('layouts.siswa.sidebar')
+    @endif
+</aside>
+
         <!-- / Sidebar -->
 
         <!-- Layout container -->

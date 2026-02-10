@@ -154,6 +154,12 @@
                         </button>
                     </div>
             </form>
+            <p class="text-center">
+                <span>New on our platform?</span>
+                <a href="{{ route('register') }}">
+                  <span>Create an account</span>
+                </a>
+              </p>
 
             </div>
           </div>

@@ -48,13 +48,19 @@
                     @enderror
                 </div>
 
-                <!-- Lokasi -->
+                <!-- Lokasi (UBAH JADI DROPDOWN!) -->
                 <div class="mb-3">
                     <label class="form-label">Lokasi</label>
-                    <input type="text" name="lokasi"
-                        class="form-control @error('lokasi') is-invalid @enderror"
-                        value="{{ old('lokasi') }}" required>
-                    @error('lokasi')
+                    <select name="lokasi_id"
+                        class="form-select @error('lokasi_id') is-invalid @enderror" required>
+                        <option value="">-- Pilih Lokasi --</option>
+                        @foreach($lokasis as $lokasi)
+                            <option value="{{ $lokasi->id }}" {{ old('lokasi_id') == $lokasi->id ? 'selected' : '' }}>
+                                {{ $lokasi->nama_lokasi }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('lokasi_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

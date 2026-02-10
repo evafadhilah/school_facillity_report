@@ -15,7 +15,7 @@ class Fasilitas extends Model
     protected $fillable = [
         'nama_fasilitas',
         'kategori_id',
-        'lokasi',
+        'lokasi_id',
         'kode_fasilitas',
         'kondisi',
     ];
@@ -31,4 +31,9 @@ class Fasilitas extends Model
     {
         return $this->hasMany(Laporan::class);
     }
+
+    public function lokasi()
+{
+    return $this->belongsTo(Lokasi::class);
+}
 }
