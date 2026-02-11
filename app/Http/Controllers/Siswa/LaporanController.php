@@ -17,23 +17,20 @@ class LaporanController extends Controller
 
     public function create()
     {
-        return view('siswa.laporan.create');
+        $kelas = Kelas::all();
+        $fasilitas = Fasilitas::all();
+        return view('siswa.laporan.create', compact('kelas', 'fasilitas'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'judul' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
-        ]);
+        // Siswa kirim laporan
+        $data = $request->all();
+        $data['user_id'] = auth()->id(); // ID siswa yang login
+        $data['status'] = 'pending';
 
-        Laporan::create([
-            'user_id' => Auth::id(),
-            'judul' => $request->judul,
-            'deskripsi' => $request->deskripsi,
-            'status' => 'pending',
-        ]);
+        Laporan::create($data);
 
-        return redirect()->route('siswa.laporan.index')->with('success', 'Laporan berhasil dibuat');
+        return redirect()->route('siswa.laporan.index')->with('success', 'Laporan berhasil dikirim');
     }
 }

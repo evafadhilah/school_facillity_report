@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Data Fasilitas')
+@section('title', 'Data Kelas')
 
 @section('content')
 
@@ -263,12 +263,12 @@
     <div class="index-header">
         <div class="header-content">
             <div class="header-title">
-                <h4>Data Fasilitas</h4>
-                <p>Kelola daftar fasilitas sekolah</p>
+                <h4>Data Kelas</h4>
+                <p>Kelola daftar kelas sekolah</p>
             </div>
-            <a href="{{ route('admin.fasilitas.create') }}" class="btn-add">
+            <a href="{{ route('admin.kelas.create') }}" class="btn-add">
                 <i class='bx bx-plus-circle'></i>
-                Tambah Fasilitas
+                Tambah Kelas
             </a>
         </div>
     </div>
@@ -281,29 +281,29 @@
                     <thead>
                         <tr>
                             <th style="width: 60px;">No</th>
-                            <th>Nama Fasilitas</th>
+                            <th>Nama Kelas</th>
                             <th style="width: 200px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($fasilitas as $item)
+                        @forelse ($kelas as $item)
                             <tr>
                                 <td class="text-center"><strong>{{ $loop->iteration }}</strong></td>
-                                <td><strong>{{ $item->nama_fasilitas }}</strong></td>
+                                <td><strong>{{ $item->nama_kelas }}</strong></td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="{{ route('admin.fasilitas.edit', $item) }}"
-                                           class="btn-action  btn-sm  btn-edit">
+                                        <a href="{{ route('admin.kelas.edit', $item->id) }}"
+                                           class="btn-action btn-edit">
                                             <i class='bx bx-edit'></i> Edit
                                         </a>
 
-                                        <form action="{{ route('admin.fasilitas.destroy', $item) }}"
+                                        <form action="{{ route('admin.kelas.destroy', $item->id) }}"
                                               method="POST"
                                               class="d-inline"
                                               onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn-action btn-sm btn-delete">
+                                            <button type="submit" class="btn-action btn-delete">
                                                 <i class='bx bx-trash'></i> Hapus
                                             </button>
                                         </form>
@@ -315,7 +315,7 @@
                                 <td colspan="3">
                                     <div class="empty-state">
                                         <i class='bx bx-folder-open'></i>
-                                        <p>Data fasilitas belum tersedia</p>
+                                        <p>Data kelas belum tersedia</p>
                                     </div>
                                 </td>
                             </tr>

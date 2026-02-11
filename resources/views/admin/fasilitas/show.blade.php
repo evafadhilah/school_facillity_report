@@ -22,30 +22,6 @@
                     <th width="200">Nama Fasilitas</th>
                     <td>: {{ $fasilitas->nama_fasilitas }}</td>
                 </tr>
-                <tr>
-                    <th>Kategori</th>
-                    <td>: {{ $fasilitas->kategori->nama_kategori ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <th>Lokasi</th>
-                    <td>: {{ $fasilitas->lokasi }}</td>
-                </tr>
-                <tr>
-                    <th>Kode Fasilitas</th>
-                    <td>: {{ $fasilitas->kode_fasilitas }}</td>
-                </tr>
-                <tr>
-                    <th>Kondisi</th>
-                    <td>:
-                        @if ($fasilitas->kondisi == 'baik')
-                            <span class="badge bg-success">Baik</span>
-                        @elseif ($fasilitas->kondisi == 'rusak_ringan')
-                            <span class="badge bg-warning">Rusak Ringan</span>
-                        @else
-                            <span class="badge bg-danger">Rusak Berat</span>
-                        @endif
-                    </td>
-                </tr>
             </table>
 
             <div class="mt-4">

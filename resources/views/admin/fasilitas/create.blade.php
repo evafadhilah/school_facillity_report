@@ -31,69 +31,10 @@
                     @enderror
                 </div>
 
-                <!-- Kategori -->
-                <div class="mb-3">
-                    <label class="form-label">Kategori</label>
-                    <select name="kategori_id"
-                        class="form-select @error('kategori_id') is-invalid @enderror" required>
-                        <option value="">-- Pilih Kategori --</option>
-                        @foreach($kategori as $k)
-                            <option value="{{ $k->id }}" {{ old('kategori_id') == $k->id ? 'selected' : '' }}>
-                                {{ $k->nama_kategori }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('kategori_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <!-- Lokasi (UBAH JADI DROPDOWN!) -->
-                <div class="mb-3">
-                    <label class="form-label">Lokasi</label>
-                    <select name="lokasi_id"
-                        class="form-select @error('lokasi_id') is-invalid @enderror" required>
-                        <option value="">-- Pilih Lokasi --</option>
-                        @foreach($lokasis as $lokasi)
-                            <option value="{{ $lokasi->id }}" {{ old('lokasi_id') == $lokasi->id ? 'selected' : '' }}>
-                                {{ $lokasi->nama_lokasi }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('lokasi_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <!-- Kode Fasilitas -->
-                <div class="mb-3">
-                    <label class="form-label">Kode Fasilitas</label>
-                    <input type="text" name="kode_fasilitas"
-                        class="form-control @error('kode_fasilitas') is-invalid @enderror"
-                        value="{{ old('kode_fasilitas') }}" required>
-                    @error('kode_fasilitas')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <!-- Kondisi -->
-                <div class="mb-3">
-                    <label class="form-label">Kondisi</label>
-                    <select name="kondisi"
-                        class="form-select @error('kondisi') is-invalid @enderror" required>
-                        <option value="">-- Pilih Kondisi --</option>
-                        <option value="baik" {{ old('kondisi') == 'baik' ? 'selected' : '' }}>Baik</option>
-                        <option value="rusak_ringan" {{ old('kondisi') == 'rusak_ringan' ? 'selected' : '' }}>Rusak Ringan</option>
-                        <option value="rusak_berat" {{ old('kondisi') == 'rusak_berat' ? 'selected' : '' }}>Rusak Berat</option>
-                    </select>
-                    @error('kondisi')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
                 <button type="submit" class="btn btn-primary">Simpan Fasilitas</button>
             </form>
         </div>
     </div>
 </div>
+@endsection
 @endsection

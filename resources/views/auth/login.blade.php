@@ -1,17 +1,5 @@
 <!DOCTYPE html>
 
-<!-- =========================================================
-* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
-==============================================================
-
-* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
-* Created by: ThemeSelection
-* License: You must have a valid license purchased in order to legally use the theme for your project.
-* Copyright ThemeSelection (https://themeselection.com)
-
-=========================================================
- -->
-<!-- beautify ignore:start -->
 <html
   lang="en"
   class="light-style customizer-hide"
@@ -28,10 +16,8 @@
     />
     <meta name="description" content="" />
 
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -39,122 +25,99 @@
       rel="stylesheet"
     />
 
-    <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="{{ asset('assets/admin/vendor/fonts/boxicons.css') }}" />
 
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/core.css') }}" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/core.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/theme-default.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/admin/css/demo.css') }}" />
 
-    <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{ asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
-
-    <!-- Page CSS -->
-    <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/pages/page-auth.css') }}" />
-    <!-- Helpers -->
-    <script src="../assets/vendor/js/helpers.js"></script>
 
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="../assets/vendor/js/helpers.js"></script>
     <script src="{{ asset('assets/admin/js/config.js') }}"></script>
   </head>
 
   <body>
-    <!-- Content -->
 
     <div class="container-xxl">
       <div class="authentication-wrapper authentication-basic container-p-y">
         <div class="authentication-inner">
-          <!-- Register -->
+
           <div class="card">
             <div class="card-body">
-              <!-- Logo -->
-               <div class="app-brand justify-content-center">
-  <div class="app-brand-link gap-2 d-flex align-items-center">
 
-    <span class="app-brand-logo demo d-flex align-items-center">
-      <svg
-        width="64"
-        height="64"
-        viewBox="0 0 64 64"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <!-- Building (School) -->
-        <rect x="8" y="18" width="30" height="38" rx="3" fill="#696cff"/>
-        <rect x="14" y="24" width="6" height="6" fill="#ffffff"/>
-        <rect x="24" y="24" width="6" height="6" fill="#ffffff"/>
-        <rect x="14" y="34" width="6" height="6" fill="#ffffff"/>
-        <rect x="24" y="34" width="6" height="6" fill="#ffffff"/>
+              <div class="app-brand justify-content-center">
+                <div class="app-brand-link gap-2 d-flex align-items-center">
+                  <span class="app-brand-logo demo d-flex align-items-center">
+                    <svg width="64" height="64" viewBox="0 0 64 64">
+                      <rect x="8" y="18" width="30" height="38" rx="3" fill="#696cff"/>
+                      <rect x="14" y="24" width="6" height="6" fill="#ffffff"/>
+                      <rect x="24" y="24" width="6" height="6" fill="#ffffff"/>
+                      <rect x="14" y="34" width="6" height="6" fill="#ffffff"/>
+                      <rect x="24" y="34" width="6" height="6" fill="#ffffff"/>
+                      <rect x="42" y="22" width="14" height="28" rx="2" fill="#696cff" opacity="0.85"/>
+                      <rect x="45" y="26" width="8" height="2" fill="#ffffff"/>
+                      <rect x="45" y="32" width="8" height="2" fill="#ffffff"/>
+                      <rect x="45" y="38" width="6" height="2" fill="#ffffff"/>
+                    </svg>
+                  </span>
+                  <span class="app-brand-text demo text-body fw-bolder fs-2 ms-2">SFR</span>
+                </div>
+              </div>
 
-        <!-- Report / Clipboard -->
-        <rect x="42" y="22" width="14" height="28" rx="2" fill="#696cff" opacity="0.85"/>
-        <rect x="45" y="26" width="8" height="2" fill="#ffffff"/>
-        <rect x="45" y="32" width="8" height="2" fill="#ffffff"/>
-        <rect x="45" y="38" width="6" height="2" fill="#ffffff"/>
-      </svg>
-    </span>
-
-    <span class="app-brand-text demo text-body fw-bolder fs-2 ms-2">
-      SFR
-    </span>
-
-  </div>
-</div>
-              <!-- /Logo -->
               <p class="mb-4">Please sign-in to your account</p>
 
               <form id="formAuthentication" class="mb-3" action="{{ route('login.process') }}" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input
-                        type="email"
-                        class="form-control"
-                        id="email"
-                        name="email"
-                        placeholder="Enter your email"
-                        required
-                        autofocus
-                        />
-                    </div>
+                @csrf
 
-                    <div class="mb-3 form-password-toggle">
-                        <div class="d-flex justify-content-between">
-                        <label class="form-label" for="password">Password</label>
-                        </div>
-                        <div class="input-group input-group-merge">
-                        <input
-                            type="password"
-                            id="password"
-                            class="form-control"
-                            name="password"
-                            placeholder="••••••••"
-                            required
-                        />
-                        <span class="input-group-text cursor-pointer">
-                            <i class="bx bx-hide"></i>
-                        </span>
-                        </div>
-                    </div>
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                    autofocus
+                  />
+                </div>
 
-                    <div class="mb-3">
-                        <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="remember" name="remember">
-                        <label class="form-check-label" for="remember">
-                            Remember Me
-                        </label>
-                        </div>
-                    </div>
+                <div class="mb-3 form-password-toggle">
+                  <label class="form-label" for="password">Password</label>
+                  <div class="input-group input-group-merge">
+                    <input
+                      type="password"
+                      id="password"
+                      class="form-control"
+                      name="password"
+                      placeholder="••••••••"
+                      required
+                    />
+                    <span class="input-group-text cursor-pointer">
+                      <i class="bx bx-hide"></i>
+                    </span>
+                  </div>
+                </div>
 
-                    <div class="mb-3">
-                        <button class="btn btn-primary d-grid w-100" type="submit">
-                        Sign in
-                        </button>
-                    </div>
-            </form>
-            <p class="text-center">
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                    <label class="form-check-label" for="remember">
+                      Remember Me
+                    </label>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <button class="btn btn-primary d-grid w-100" type="submit">
+                    Sign in
+                  </button>
+                </div>
+              </form>
+
+              <p class="text-center">
                 <span>New on our platform?</span>
                 <a href="{{ route('register') }}">
                   <span>Create an account</span>
@@ -163,31 +126,43 @@
 
             </div>
           </div>
-          <!-- /Register -->
+
         </div>
       </div>
     </div>
 
-    <!-- / Content -->
-
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
     <script src="{{ asset('assets/admin/vendor/libs/jquery/jquery.js') }}"></script>
     <script src="{{ asset('assets/admin/vendor/libs/popper/popper.js') }}"></script>
     <script src="{{ asset('assets/admin/vendor/js/bootstrap.js') }}"></script>
     <script src="{{ asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-
     <script src="{{ asset('assets/admin/vendor/js/menu.js') }}"></script>
-    <!-- endbuild -->
-
-    <!-- Vendors JS -->
-
-    <!-- Main JS -->
     <script src="{{ asset('assets/admin/js/main.js') }}"></script>
 
-    <!-- Page JS -->
-
-    <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <!-- ✅ SCRIPT TOGGLE PASSWORD (AKU TAMBAHIN INI DOANG) -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const toggle = document.querySelector(".input-group-text");
+        const password = document.getElementById("password");
+
+        if (toggle && password) {
+          const icon = toggle.querySelector("i");
+
+          toggle.addEventListener("click", function () {
+            if (password.type === "password") {
+              password.type = "text";
+              icon.classList.remove("bx-hide");
+              icon.classList.add("bx-show");
+            } else {
+              password.type = "password";
+              icon.classList.remove("bx-show");
+              icon.classList.add("bx-hide");
+            }
+          });
+        }
+      });
+    </script>
+
   </body>
 </html>

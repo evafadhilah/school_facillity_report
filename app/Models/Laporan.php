@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Laporan extends Model
@@ -11,6 +12,7 @@ class Laporan extends Model
     protected $fillable = [
         'user_id',
         'fasilitas_id',
+        'kelas_id',        // ← TAMBAH INI
         'teknisi_id',
         'deskripsi',
         'foto',
@@ -19,28 +21,27 @@ class Laporan extends Model
         'tanggal_selesai',
     ];
 
-    protected $casts = [
-        'tanggal_selesai' => 'datetime',
-    ];
-
-    // 🔗 Relasi
-    public function pelapor()
+    // Relasi ke User (Pelapor)
+    public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function teknisi()
-    {
-        return $this->belongsTo(User::class, 'teknisi_id');
-    }
-
+    // Relasi ke Fasilitas
     public function fasilitas()
     {
         return $this->belongsTo(Fasilitas::class);
     }
 
-    public function riwayat()
+    // Relasi ke Kelas
+    public function kelas()
     {
-        return $this->hasMany(RiwayatLaporan::class);
+        return $this->belongsTo(Kelas::class);
+    }
+
+    // Relasi ke Teknisi
+    public function teknisi()
+    {
+        return $this->belongsTo(User::class, 'teknisi_id');
     }
 }

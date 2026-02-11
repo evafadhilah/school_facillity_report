@@ -87,79 +87,89 @@
         border: none;
         border-radius: 20px;
         box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        overflow: hidden;
+        overflow: visible;
     }
 
     .table-card .card-body {
         padding: 0;
+        overflow: hidden;
+        border-radius: 20px;
     }
 
-    .table {
-        margin-bottom: 0;
+    .table-responsive {
+        margin: 0;
+        padding: 0;
+        border-radius: 20px;
+        overflow-x: auto;
     }
 
-    .table thead th {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
+    .custom-table {
+        margin: 0;
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    .custom-table thead {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .custom-table thead th {
         padding: 1.25rem 1rem;
+        font-weight: 700;
+        color: #4338ca;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
         border: none;
+        border-bottom: 2px solid #e5e7eb;
+        background: transparent;
     }
 
-    .table tbody td {
+    .custom-table tbody td {
         padding: 1rem;
         vertical-align: middle;
         border-bottom: 1px solid #f3f4f6;
         color: #4b5563;
+        font-size: 0.95rem;
+        background: white;
     }
 
-    .table tbody tr:last-child td {
+    .custom-table tbody tr {
+        transition: all 0.3s ease;
+    }
+
+    .custom-table tbody tr:hover {
+        background: linear-gradient(to right, #f9fafb 0%, #ffffff 100%);
+        transform: scale(1.01);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .custom-table tbody tr:last-child td {
         border-bottom: none;
     }
 
-    .table tbody tr {
-        transition: all 0.3s ease;
-    }
-
-    .table tbody tr:hover {
-        background-color: #f9fafb;
-        transform: translateX(5px);
-    }
-
-    .badge-number {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 0.5rem 0.75rem;
-        border-radius: 8px;
-        font-weight: 600;
-        display: inline-block;
-        min-width: 40px;
-        text-align: center;
-    }
-
     .btn-action {
-        padding: 0.5rem 0.75rem;
+        padding: 0.5rem 1rem;
         border-radius: 8px;
-        border: none;
-        font-size: 0.875rem;
         font-weight: 600;
+        font-size: 0.85rem;
+        border: none;
         transition: all 0.3s ease;
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.25rem;
+        text-decoration: none;
     }
 
     .btn-edit {
-        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
         color: white;
     }
 
     .btn-edit:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
         color: white;
     }
 
@@ -174,12 +184,36 @@
         color: white;
     }
 
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .empty-state {
+        padding: 3rem 1rem;
+        text-align: center;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        color: #d1d5db;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+        color: #9ca3af;
+        font-size: 1rem;
+        margin: 0;
+    }
+
     .alert-success {
         background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
         border: 2px solid #6ee7b7;
         border-radius: 12px;
         color: #065f46;
         padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
     }
 
     .alert-error {
@@ -188,23 +222,7 @@
         border-radius: 12px;
         color: #991b1b;
         padding: 1rem 1.5rem;
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 3rem 1rem;
-        color: #9ca3af;
-    }
-
-    .empty-state i {
-        font-size: 4rem;
-        margin-bottom: 1rem;
-        opacity: 0.5;
-    }
-
-    .empty-state p {
-        font-size: 1.1rem;
-        margin: 0;
+        margin-bottom: 1.5rem;
     }
 
     @media (max-width: 768px) {
@@ -219,13 +237,26 @@
             justify-content: center;
         }
 
-        .table {
-            font-size: 0.875rem;
+        .custom-table {
+            font-size: 0.85rem;
         }
 
-        .table thead th,
-        .table tbody td {
+        .custom-table thead th {
+            padding: 1rem 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .custom-table tbody td {
             padding: 0.75rem 0.5rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .action-buttons .btn-action {
+            width: 100%;
+            justify-content: center;
         }
     }
 
@@ -240,11 +271,6 @@
 
         .header-title p {
             font-size: 0.85rem;
-        }
-
-        .btn-action {
-            padding: 0.4rem 0.6rem;
-            font-size: 0.8rem;
         }
     }
 </style>
@@ -267,7 +293,7 @@
 
     <!-- Success Alert -->
     @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class='bx bx-check-circle me-2'></i>
             <strong>Berhasil!</strong> {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -276,58 +302,63 @@
 
     <!-- Error Alert -->
     @if (session('error'))
-        <div class="alert alert-error alert-dismissible fade show mb-4" role="alert">
+        <div class="alert alert-error alert-dismissible fade show" role="alert">
             <i class='bx bx-error-circle me-2'></i>
             <strong>Gagal!</strong> {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
 
-    <!-- Card Table -->
+    <!-- Table Card -->
     <div class="card table-card">
         <div class="card-body">
-            @if($lokasis->count() > 0)
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
+            <div class="table-responsive">
+                <table class="table custom-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">No</th>
+                            <th>Nama Lokasi</th>
+                            <th style="width: 200px;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($lokasis as $lokasi)
                             <tr>
-                                <th style="width: 80px;">NO</th>
-                                <th>NAMA LOKASI</th>
-                                <th style="width: 200px;" class="text-center">AKSI</th>
+                                <td class="text-center"><strong>{{ $loop->iteration }}</strong></td>
+                                <td><strong>{{ $lokasi->nama_lokasi }}</strong></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="{{ route('admin.lokasi.edit', $lokasi->id) }}"
+                                           class="btn-action btn-edit">
+                                            <i class='bx bx-edit'></i> Edit
+                                        </a>
+
+                                        <form action="{{ route('admin.lokasi.destroy', $lokasi->id) }}"
+                                              method="POST"
+                                              class="d-inline"
+                                              onsubmit="return confirm('Yakin ingin menghapus lokasi ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-action btn-delete">
+                                                <i class='bx bx-trash'></i> Hapus
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($lokasis as $lokasi)
+                        @empty
                             <tr>
-                                <td>
-                                    <span class="badge-number">{{ $loop->iteration }}</span>
-                                </td>
-                                <td>
-                                    <strong>{{ $lokasi->nama_lokasi }}</strong>
-                                </td>
-                                <td class="text-center">
-                                    <a href="{{ route('admin.lokasi.edit', $lokasi->id) }}" class="btn-action btn-edit">
-                                        <i class='bx bx-edit'></i> Edit
-                                    </a>
-                                    <form action="{{ route('admin.lokasi.destroy', $lokasi->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus lokasi ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-action btn-delete">
-                                            <i class='bx bx-trash'></i> Hapus
-                                        </button>
-                                    </form>
+                                <td colspan="3">
+                                    <div class="empty-state">
+                                        <i class='bx bx-map'></i>
+                                        <p>Belum ada data lokasi</p>
+                                    </div>
                                 </td>
                             </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @else
-                <div class="empty-state">
-                    <i class='bx bx-map'></i>
-                    <p>Belum ada data lokasi</p>
-                </div>
-            @endif
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

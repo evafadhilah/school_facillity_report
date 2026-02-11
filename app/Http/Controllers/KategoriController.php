@@ -35,12 +35,6 @@ class KategoriController extends Controller
             ->with('success', 'Kategori berhasil ditambahkan');
     }
 
-    // Tampilkan detail kategori
-    public function show(Kategori $kategori)
-    {
-        return view('admin.kategori.show', compact('kategori'));
-    }
-
     // Form edit kategori
     public function edit(Kategori $kategori)
     {
