@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html
   lang="en"
   class="light-style customizer-hide"
@@ -26,11 +25,9 @@
     />
 
     <link rel="stylesheet" href="{{ asset('assets/admin/vendor/fonts/boxicons.css') }}" />
-
     <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/core.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/theme-default.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/admin/css/demo.css') }}" />
-
     <link rel="stylesheet" href="{{ asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/pages/page-auth.css') }}" />
 
@@ -39,11 +36,9 @@
   </head>
 
   <body>
-
     <div class="container-xxl">
       <div class="authentication-wrapper authentication-basic container-p-y">
         <div class="authentication-inner">
-
           <div class="card">
             <div class="card-body">
 
@@ -66,7 +61,28 @@
                 </div>
               </div>
 
-              <p class="mb-4">Please sign-in to your account</p>
+              <h4 class="mb-2">Selamat Datang! 👋</h4>
+              <p class="mb-4">Silakan login ke akun Anda</p>
+
+              {{-- ALERT SUCCESS --}}
+              @if (session('success'))
+                  <div class="alert alert-success alert-dismissible" role="alert">
+                      {{ session('success') }}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+              @endif
+
+              {{-- ALERT ERROR --}}
+              @if ($errors->any())
+                  <div class="alert alert-danger alert-dismissible" role="alert">
+                      <ul class="mb-0">
+                          @foreach ($errors->all() as $error)
+                              <li>{{ $error }}</li>
+                          @endforeach
+                      </ul>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+              @endif
 
               <form id="formAuthentication" class="mb-3" action="{{ route('login.process') }}" method="POST">
                 @csrf
@@ -79,6 +95,7 @@
                     id="email"
                     name="email"
                     placeholder="Enter your email"
+                    value="{{ old('email') }}"
                     required
                     autofocus
                   />
@@ -126,7 +143,6 @@
 
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -138,16 +154,15 @@
     <script src="{{ asset('assets/admin/vendor/js/menu.js') }}"></script>
     <script src="{{ asset('assets/admin/js/main.js') }}"></script>
 
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-
-    <!-- ✅ SCRIPT TOGGLE PASSWORD (AKU TAMBAHIN INI DOANG) -->
+    {{-- Script Toggle Password --}}
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        const toggle = document.querySelector(".input-group-text");
-        const password = document.getElementById("password");
+        const toggles = document.querySelectorAll(".form-password-toggle");
 
-        if (toggle && password) {
-          const icon = toggle.querySelector("i");
+        toggles.forEach(function (wrapper) {
+          const toggle = wrapper.querySelector(".input-group-text");
+          const password = wrapper.querySelector("input");
+          const icon = wrapper.querySelector("i");
 
           toggle.addEventListener("click", function () {
             if (password.type === "password") {
@@ -160,7 +175,7 @@
               icon.classList.add("bx-hide");
             }
           });
-        }
+        });
       });
     </script>
 

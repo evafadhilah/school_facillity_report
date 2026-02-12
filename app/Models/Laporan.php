@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Fasilitas;
+use App\Models\Kelas;
+use App\Models\Kategori;
+use App\Models\Lokasi;
 
 class Laporan extends Model
 {
@@ -11,8 +16,10 @@ class Laporan extends Model
 
     protected $fillable = [
         'user_id',
+        'kelas_id',
+        'kategori_id', // tambah
         'fasilitas_id',
-        'kelas_id',        // ← TAMBAH INI
+        'lokasi_id', // tambah
         'teknisi_id',
         'deskripsi',
         'foto',
@@ -44,4 +51,15 @@ class Laporan extends Model
     {
         return $this->belongsTo(User::class, 'teknisi_id');
     }
+
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class);
+    }
+
+    public function lokasi()
+    {
+        return $this->belongsTo(Lokasi::class);
+    }
+
 }
