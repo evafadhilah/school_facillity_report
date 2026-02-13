@@ -4,11 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Fasilitas;
-use App\Models\Kelas;
-use App\Models\Kategori;
-use App\Models\Lokasi;
 
 class Laporan extends Model
 {
@@ -16,10 +11,11 @@ class Laporan extends Model
 
     protected $fillable = [
         'user_id',
+        'nama_pelapor', // ✅ FIX: tambahkan agar bisa tersimpan ke database
         'kelas_id',
-        'kategori_id', // tambah
+        'kategori_id',
         'fasilitas_id',
-        'lokasi_id', // tambah
+        'lokasi_id',
         'teknisi_id',
         'deskripsi',
         'foto',
@@ -28,28 +24,23 @@ class Laporan extends Model
         'tanggal_selesai',
     ];
 
-    // Relasi ke User (Pelapor)
+    protected $casts = [
+        'tanggal_selesai' => 'datetime',
+    ];
+
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 
-    // Relasi ke Fasilitas
-    public function fasilitas()
-    {
-        return $this->belongsTo(Fasilitas::class);
-    }
-
-    // Relasi ke Kelas
-    public function kelas()
-    {
-        return $this->belongsTo(Kelas::class);
-    }
-
-    // Relasi ke Teknisi
     public function teknisi()
     {
         return $this->belongsTo(User::class, 'teknisi_id');
+    }
+
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class);
     }
 
     public function kategori()
@@ -57,9 +48,13 @@ class Laporan extends Model
         return $this->belongsTo(Kategori::class);
     }
 
+    public function fasilitas()
+    {
+        return $this->belongsTo(Fasilitas::class);
+    }
+
     public function lokasi()
     {
         return $this->belongsTo(Lokasi::class);
     }
-
 }

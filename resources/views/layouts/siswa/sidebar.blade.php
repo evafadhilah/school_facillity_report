@@ -30,7 +30,7 @@
     </li>
 
     <li class="menu-item {{ request()->routeIs('siswa.laporan.*') ? 'active' : '' }}">
-      <a href="{{ route('siswa.laporan.create') }}" class="menu-link">
+      <a href="{{ route('siswa.laporan.index') }}" class="menu-link">
         <i class="menu-icon tf-icons bx bx-file"></i>
         <div>Laporan</div>
       </a>

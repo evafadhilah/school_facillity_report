@@ -13,12 +13,13 @@ return new class extends Migration
 
             // pelapor
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('nama_pelapor')->nullable(); // ✅ tambah
 
             // data laporan
             $table->foreignId('kelas_id')->constrained('kelas')->cascadeOnDelete();
-            $table->foreignId('kategori_id')->constrained('kategoris')->cascadeOnDelete(); // tambah
+            $table->foreignId('kategori_id')->constrained('kategoris')->cascadeOnDelete();
             $table->foreignId('fasilitas_id')->constrained('fasilitas')->cascadeOnDelete();
-            $table->foreignId('lokasi_id')->constrained('lokasis')->cascadeOnDelete(); // tambah
+            $table->foreignId('lokasi_id')->constrained('lokasis')->cascadeOnDelete();
 
             // teknisi (opsional)
             $table->foreignId('teknisi_id')->nullable()->constrained('users')->nullOnDelete();

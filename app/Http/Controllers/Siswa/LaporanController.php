@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 
 class LaporanController extends Controller
 {
-    // Biar cuma user login yang bisa akses
     public function __construct()
     {
         $this->middleware('auth');
@@ -22,7 +21,9 @@ class LaporanController extends Controller
     // Tampilkan laporan milik siswa
     public function index()
     {
-        $laporan = Laporan::where('user_id', Auth::id())
+        // ✅ FIX: tambah with() agar relasi tidak null di tabel
+        $laporan = Laporan::with(['user', 'kelas', 'kategori', 'fasilitas', 'lokasi'])
+            ->where('user_id', Auth::id())
             ->latest()
             ->get();
 
@@ -31,37 +32,64 @@ class LaporanController extends Controller
 
     // Form tambah laporan
     public function create()
-{
-    $kelas = Kelas::all();
-    $kategori = Kategori::all();
-    $fasilitas = Fasilitas::all();
-    $lokasi = Lokasi::all();
+    {
+        $kelas    = Kelas::all();
+        $kategori = Kategori::all();
+        $fasilitas = Fasilitas::all();
+        $lokasi   = Lokasi::all();
 
-    return view('siswa.laporan.create', compact(
-        'kelas',
-        'kategori',
-        'fasilitas',
-        'lokasi'
-    ));
-}
+        return view('siswa.laporan.create', compact(
+            'kelas',
+            'kategori',
+            'fasilitas',
+            'lokasi'
+        ));
+    }
 
     // Simpan laporan
     public function store(Request $request)
-{
-    $request->validate([
-        'kelas_id' => 'required',
-        'fasilitas_id' => 'required',
-        'deskripsi' => 'required'
-    ]);
+    {
+        $request->validate([
+            'nama_pelapor' => 'required',
+            'kelas_id'     => 'required',
+            'kategori_id'  => 'required',
+            'fasilitas_id' => 'required',
+            'lokasi_id'    => 'required',
+            'deskripsi'    => 'required',
+            'foto'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
-    $data = $request->all();
-    $data['user_id'] = auth()->id();
-    $data['status'] = 'pending';
+        // ✅ FIX: ambil hanya field yang diperlukan, bukan $request->all()
+        $data = $request->only([
+            'nama_pelapor',
+            'kelas_id',
+            'kategori_id',
+            'fasilitas_id',
+            'lokasi_id',
+            'deskripsi',
+        ]);
 
-    Laporan::create($data);
+        if ($request->hasFile('foto')) {
+            $data['foto'] = $request->file('foto')->store('laporan', 'public');
+        }
 
-    return redirect()->route('siswa.laporan.index')
-        ->with('success', 'Laporan berhasil dikirim');
-}
+        $data['user_id'] = Auth::id();
+        $data['status']  = 'pending';
 
+        Laporan::create($data);
+
+        return redirect()->route('siswa.laporan.index')
+            ->with('success', 'Laporan berhasil dikirim');
+    }
+
+    // Detail laporan milik siswa
+    public function show($id)
+    {
+        // ✅ FIX: tambah with() agar semua relasi termuat
+        $laporan = Laporan::with(['user', 'kelas', 'kategori', 'fasilitas', 'lokasi'])
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
+        return view('siswa.laporan.show', compact('laporan'));
+    }
 }

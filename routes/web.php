@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -14,9 +15,7 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
 use App\Http\Controllers\Siswa\LaporanController as SiswaLaporanController;
 
-/*
-| HALAMAN UTAMA
-*/
+// Halaman utama
 Route::get('/', function () {
     if (!auth()->check()) {
         return redirect()->route('login');
@@ -36,9 +35,7 @@ Route::get('/', function () {
     }
 });
 
-/*
-| AUTH - TAMBAHKAN MIDDLEWARE GUEST BIAR YANG UDAH LOGIN GA BISA AKSES
-*/
+// AUTH - middleware guest
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->name('login.process');
@@ -47,12 +44,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [RegisterController::class, 'register'])->name('register.process');
 });
 
-// LOGOUT (harus login dulu baru bisa logout)
+// LOGOUT
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
-/*
-| ADMIN ROUTES
-*/
+// Admin routes
 Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
@@ -66,9 +61,7 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('riwayatlaporan', RiwayatLaporanController::class);
     });
 
-/*
-| TEKNISI ROUTES
-*/
+// Teknisi routes
 Route::middleware(['auth', 'role:teknisi'])
     ->prefix('teknisi')
     ->name('teknisi.')
@@ -77,9 +70,7 @@ Route::middleware(['auth', 'role:teknisi'])
         Route::resource('laporan', AdminLaporanController::class)->only(['index', 'edit', 'update']);
     });
 
-/*
-| GURU ROUTES
-*/
+// Guru routes
 Route::middleware(['auth', 'role:guru'])
     ->prefix('guru')
     ->name('guru.')
@@ -87,9 +78,7 @@ Route::middleware(['auth', 'role:guru'])
         Route::resource('laporan', AdminLaporanController::class)->only(['index', 'create', 'store']);
     });
 
-/*
-| SISWA ROUTES
-*/
+// Siswa routes
 Route::prefix('siswa')
     ->middleware(['auth', 'role:siswa'])
     ->name('siswa.')
@@ -100,12 +89,11 @@ Route::prefix('siswa')
             Route::get('/', [SiswaLaporanController::class, 'index'])->name('index');
             Route::get('/create', [SiswaLaporanController::class, 'create'])->name('create');
             Route::post('/', [SiswaLaporanController::class, 'store'])->name('store');
+            Route::get('/{id}', [SiswaLaporanController::class, 'show'])->name('show');
         });
     });
 
-/*
-| ROUTE UMUM (SEMUA ROLE LOGIN)
-*/
+// Route umum semua role login
 Route::middleware('auth')->group(function () {
     Route::get('/riwayatlaporan', [RiwayatLaporanController::class, 'index'])->name('riwayatlaporan.index');
 });
