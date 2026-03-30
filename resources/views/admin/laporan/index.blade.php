@@ -13,7 +13,7 @@
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
     <h5 class="mb-0">Data Laporan</h5>
-    <a href="{{ route('laporan.create') }}" class="btn btn-primary">
+    <a href="{{ route('admin.laporan.create') }}" class="btn btn-primary">
       + Buat Laporan
     </a>
   </div>
@@ -36,15 +36,15 @@
           @foreach($laporans as $laporan)
           <tr>
             <td>{{ $loop->iteration }}</td>
-            <td>{{ $laporan->pelapor->nama ?? '-' }}</td>
+            <td>{{ $laporan->user->name ?? '-' }}</td>
             <td>{{ $laporan->fasilitas->nama_fasilitas ?? '-' }}</td>
-            <td>{{ $laporan->teknisi->nama ?? '-' }}</td>
+            <td>{{ $laporan->teknisi->name ?? '-' }}</td>
             <td>{{ ucfirst($laporan->tingkat_urgency) }}</td>
             <td>{{ ucfirst($laporan->status) }}</td>
             <td>
-              <a href="{{ route('laporan.show', $laporan->id) }}" class="btn btn-sm btn-info">Detail</a>
-              <a href="{{ route('laporan.edit', $laporan->id) }}" class="btn btn-sm btn-warning">Edit</a>
-              <form action="{{ route('laporan.destroy', $laporan->id) }}" method="POST" class="d-inline">
+              <a href="{{ route('admin.laporan.show', $laporan->id) }}" class="btn btn-sm btn-info">Detail</a>
+              <a href="{{ route('admin.laporan.edit', $laporan->id) }}" class="btn btn-sm btn-warning">Edit</a>
+              <form action="{{ route('admin.laporan.destroy', $laporan->id) }}" method="POST" class="d-inline">
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus laporan?')">

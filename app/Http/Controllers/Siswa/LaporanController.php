@@ -8,6 +8,7 @@ use App\Models\Kelas;
 use App\Models\Fasilitas;
 use App\Models\Kategori;
 use App\Models\Lokasi;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,10 +19,8 @@ class LaporanController extends Controller
         $this->middleware('auth');
     }
 
-    // Tampilkan laporan milik siswa
     public function index()
     {
-        // ✅ FIX: tambah with() agar relasi tidak null di tabel
         $laporan = Laporan::with(['user', 'kelas', 'kategori', 'fasilitas', 'lokasi'])
             ->where('user_id', Auth::id())
             ->latest()
@@ -30,23 +29,16 @@ class LaporanController extends Controller
         return view('siswa.laporan.index', compact('laporan'));
     }
 
-    // Form tambah laporan
     public function create()
     {
-        $kelas    = Kelas::all();
-        $kategori = Kategori::all();
+        $kelas     = Kelas::all();
+        $kategori  = Kategori::all();
         $fasilitas = Fasilitas::all();
-        $lokasi   = Lokasi::all();
+        $lokasi    = Lokasi::all();
 
-        return view('siswa.laporan.create', compact(
-            'kelas',
-            'kategori',
-            'fasilitas',
-            'lokasi'
-        ));
+        return view('siswa.laporan.create', compact('kelas', 'kategori', 'fasilitas', 'lokasi'));
     }
 
-    // Simpan laporan
     public function store(Request $request)
     {
         $request->validate([
@@ -56,10 +48,9 @@ class LaporanController extends Controller
             'fasilitas_id' => 'required',
             'lokasi_id'    => 'required',
             'deskripsi'    => 'required',
-            'foto'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto.*'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // ✅ FIX: ambil hanya field yang diperlukan, bukan $request->all()
         $data = $request->only([
             'nama_pelapor',
             'kelas_id',
@@ -70,7 +61,11 @@ class LaporanController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-            $data['foto'] = $request->file('foto')->store('laporan', 'public');
+            $paths = [];
+            foreach ($request->file('foto') as $file) {
+                $paths[] = $file->store('laporan', 'public');
+            }
+            $data['foto'] = json_encode($paths);
         }
 
         $data['user_id'] = Auth::id();
@@ -82,14 +77,96 @@ class LaporanController extends Controller
             ->with('success', 'Laporan berhasil dikirim');
     }
 
-    // Detail laporan milik siswa
+    public function edit($id)
+    {
+        $laporan = Laporan::where('user_id', Auth::id())
+            ->where('status', 'pending')
+            ->findOrFail($id);
+
+        $kelas     = Kelas::all();
+        $kategori  = Kategori::all();
+        $fasilitas = Fasilitas::all();
+        $lokasi    = Lokasi::all();
+
+        return view('siswa.laporan.edit', compact('laporan', 'kelas', 'kategori', 'fasilitas', 'lokasi'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $laporan = Laporan::where('user_id', Auth::id())
+            ->where('status', 'pending')
+            ->findOrFail($id);
+
+        $request->validate([
+            'nama_pelapor' => 'required',
+            'kelas_id'     => 'required',
+            'kategori_id'  => 'required',
+            'fasilitas_id' => 'required',
+            'lokasi_id'    => 'required',
+            'deskripsi'    => 'required',
+            'foto.*'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $data = $request->only([
+            'nama_pelapor',
+            'kelas_id',
+            'kategori_id',
+            'fasilitas_id',
+            'lokasi_id',
+            'deskripsi',
+        ]);
+
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama
+            $fotoLama = json_decode($laporan->foto, true);
+            if ($fotoLama) {
+                foreach ($fotoLama as $foto) {
+                    Storage::disk('public')->delete($foto);
+                }
+            }
+            // Simpan foto baru
+            $fotoTersimpan = [];
+            foreach ($request->file('foto') as $file) {
+                $fotoTersimpan[] = $file->store('laporan', 'public');
+            }
+            $data['foto'] = json_encode($fotoTersimpan);
+        } else {
+            // Tetap pakai foto lama
+            $data['foto'] = $laporan->foto;
+        }
+
+        $laporan->update($data);
+
+        return redirect()->route('siswa.laporan.index')
+            ->with('success', 'Laporan berhasil diperbarui');
+    }
+
     public function show($id)
     {
-        // ✅ FIX: tambah with() agar semua relasi termuat
         $laporan = Laporan::with(['user', 'kelas', 'kategori', 'fasilitas', 'lokasi'])
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
         return view('siswa.laporan.show', compact('laporan'));
     }
+
+    public function destroy($id)
+{
+    $laporan = Laporan::where('user_id', Auth::id())
+        ->where('status', 'pending')
+        ->findOrFail($id);
+
+    // Hapus foto dari storage
+    $fotoLama = json_decode($laporan->foto, true);
+    if ($fotoLama) {
+        foreach ($fotoLama as $foto) {
+            Storage::disk('public')->delete($foto);
+        }
+    }
+
+    $laporan->delete();
+
+    return redirect()->route('siswa.laporan.index')
+        ->with('success', 'Laporan berhasil dihapus');
+}
 }

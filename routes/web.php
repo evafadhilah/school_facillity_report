@@ -89,7 +89,11 @@ Route::prefix('siswa')
             Route::get('/', [SiswaLaporanController::class, 'index'])->name('index');
             Route::get('/create', [SiswaLaporanController::class, 'create'])->name('create');
             Route::post('/', [SiswaLaporanController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [SiswaLaporanController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [SiswaLaporanController::class, 'update'])->name('update');
             Route::get('/{id}', [SiswaLaporanController::class, 'show'])->name('show');
+            Route::delete('/{id}', [SiswaLaporanController::class, 'destroy'])->name('destroy');
+
         });
     });
 

@@ -406,22 +406,46 @@
             </div>
         </div>
 
-        <!-- Card 5: Foto (Full Width) -->
+       <!-- Card 5: Foto (Full Width) -->
         <div class="detail-card full-width-card">
             <div class="card-header-custom">
                 <i class='bx bx-camera'></i>
                 <h5>Foto Laporan</h5>
             </div>
-            <div class="photo-wrapper">
-                @if($laporan->foto)
-                    <img src="{{ asset('storage/' . $laporan->foto) }}" alt="Foto Laporan">
-                @else
+
+            @php
+                $fotoRaw = $laporan->foto;
+                $fotos = [];
+                if ($fotoRaw) {
+                    $decoded = json_decode($fotoRaw, true);
+                    if (is_array($decoded)) {
+                        $fotos = $decoded;
+                    } else {
+                        $fotos = [$fotoRaw];
+                    }
+                }
+            @endphp
+
+            @if(count($fotos) > 0)
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; padding: 1rem; background: #f9fafb; border-radius: 12px;">
+                    @foreach($fotos as $foto)
+                        <a href="{{ asset('storage/' . $foto) }}" target="_blank">
+                            <img src="{{ asset('storage/' . $foto) }}"
+                                style="width:100%; height:200px; object-fit:cover; border-radius:10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s;"
+                                onmouseover="this.style.transform='scale(1.03)'"
+                                onmouseout="this.style.transform='scale(1)'"
+                                alt="Foto Laporan">
+                        </a>
+                    @endforeach
+                </div>
+            @else
+                <div class="photo-wrapper">
                     <div class="no-photo">
                         <i class='bx bx-image'></i>
                         <p>Tidak ada foto</p>
                     </div>
-                @endif
-            </div>
+                </div>
+            @endif
         </div>
 
     </div>

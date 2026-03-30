@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Laporan;
 use App\Models\Fasilitas;
-use App\Models\Kelas;  // ← TAMBAH INI
+use App\Models\Kelas;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -24,15 +24,14 @@ class LaporanController extends Controller
         }
 
         // Admin & role lain lihat semua laporan
-        $laporans = Laporan::with(['pelapor', 'fasilitas', 'kelas', 'teknisi'])->latest()->get();  // ← TAMBAH 'kelas'
-        return view('laporan.index', compact('laporans'));
-    }
+        $laporans = Laporan::with(['user', 'fasilitas', 'kelas', 'teknisi'])->latest()->get();  // ← TAMBAH 'kelas'
+        return view('admin.laporan.index', compact('laporans'));    }
 
     // Form membuat laporan
     public function create()
     {
         $fasilitas = Fasilitas::all();
-        $kelas = Kelas::all();  // ← TAMBAH INI
+        $kelas = Kelas::all();
         $teknisi = User::where('role', 'teknisi')->get();
 
         if(auth()->user()->role == 'siswa'){
@@ -47,16 +46,16 @@ class LaporanController extends Controller
     {
         $request->validate([
             'fasilitas_id' => 'required|exists:fasilitas,id',
-            'kelas_id' => 'required|exists:kelas,id',  // ← TAMBAH INI
+            'kelas_id' => 'required|exists:kelas,id',
             'deskripsi' => 'required',
             'tingkat_urgency' => 'required|in:rendah,sedang,tinggi',
-            'foto' => 'nullable|image|max:2048',  // ← TAMBAH INI (optional)
+            'foto' => 'nullable|image|max:2048',   (optional)
         ]);
 
         $data = [
             'user_id' => auth()->id(),
             'fasilitas_id' => $request->fasilitas_id,
-            'kelas_id' => $request->kelas_id,  // ← TAMBAH INI
+            'kelas_id' => $request->kelas_id,
             'teknisi_id' => $request->teknisi_id,
             'deskripsi' => $request->deskripsi,
             'tingkat_urgency' => $request->tingkat_urgency,
@@ -83,7 +82,7 @@ class LaporanController extends Controller
     // Lihat detail laporan
     public function show(Laporan $laporan)
     {
-        $laporan->load(['pelapor', 'fasilitas', 'kelas', 'teknisi', 'riwayat']);  // ← TAMBAH 'kelas'
+        $laporan->load(['user', 'fasilitas', 'kelas', 'teknisi', 'riwayat']);  // ← TAMBAH 'kelas'
         return view('laporan.show', compact('laporan'));
     }
 
@@ -91,7 +90,7 @@ class LaporanController extends Controller
     public function edit(Laporan $laporan)
     {
         $fasilitas = Fasilitas::all();
-        $kelas = Kelas::all();  // ← TAMBAH INI
+        $kelas = Kelas::all();
         $teknisi = User::where('role', 'teknisi')->get();
 
         return view('laporan.edit', compact('laporan', 'fasilitas', 'kelas', 'teknisi'));  // ← TAMBAH 'kelas'

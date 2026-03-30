@@ -149,7 +149,6 @@
         border-bottom: none;
     }
 
-    /* Badge Status */
     .badge {
         padding: 0.5rem 0.875rem;
         border-radius: 8px;
@@ -175,7 +174,6 @@
         color: white;
     }
 
-    /* Foto Thumbnail */
     .foto-thumb {
         width: 60px;
         height: 60px;
@@ -190,7 +188,6 @@
         transform: scale(1.1);
     }
 
-    /* Action Buttons */
     .btn-action {
         padding: 0.5rem 1rem;
         border-radius: 8px;
@@ -202,6 +199,7 @@
         align-items: center;
         gap: 0.25rem;
         text-decoration: none;
+        cursor: pointer;
     }
 
     .btn-detail {
@@ -215,13 +213,34 @@
         color: white;
     }
 
+    .btn-edit {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+    }
+
+    .btn-edit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        color: white;
+    }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
+    .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        color: white;
+    }
+
     .action-buttons {
         display: flex;
         gap: 0.5rem;
         flex-wrap: wrap;
     }
 
-    /* Empty State */
     .empty-state {
         padding: 3rem 1rem;
         text-align: center;
@@ -239,7 +258,6 @@
         margin: 0;
     }
 
-    /* Alert */
     .alert-success {
         background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
         border: none;
@@ -249,7 +267,6 @@
         font-weight: 500;
     }
 
-    /* Deskripsi truncate */
     .desc-cell {
         max-width: 200px;
         white-space: nowrap;
@@ -353,7 +370,7 @@
                             <th>Deskripsi</th>
                             <th>Tanggal</th>
                             <th>Status</th>
-                            <th style="width: 120px;">Aksi</th>
+                            <th style="width: 180px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -371,8 +388,29 @@
 
                             {{-- FOTO --}}
                             <td>
-                                @if($item->foto)
-                                    <img src="{{ asset('storage/'.$item->foto) }}" class="foto-thumb" alt="Foto Laporan">
+                                @php
+                                    $fotoRaw = $item->foto;
+                                    $fotos = [];
+                                    if ($fotoRaw) {
+                                        $decoded = json_decode($fotoRaw, true);
+                                        if (is_array($decoded)) {
+                                            $fotos = $decoded;
+                                        } else {
+                                            $fotos = [$fotoRaw];
+                                        }
+                                    }
+                                @endphp
+                                @if(count($fotos) > 0)
+                                    <a href="{{ asset('storage/' . $fotos[0]) }}" target="_blank">
+                                        <img src="{{ asset('storage/' . $fotos[0]) }}"
+                                            class="foto-thumb"
+                                            alt="Foto Laporan">
+                                    </a>
+                                    @if(count($fotos) > 1)
+                                        <span style="font-size:0.75rem; color:#6b7280; display:block; margin-top:4px;">
+                                            +{{ count($fotos) - 1 }} foto
+                                        </span>
+                                    @endif
                                 @else
                                     <span style="color:#d1d5db;">-</span>
                                 @endif
@@ -412,6 +450,22 @@
                             {{-- AKSI --}}
                             <td>
                                 <div class="action-buttons">
+                                    @if($item->status == 'pending')
+                                        <a href="{{ route('siswa.laporan.edit', $item->id) }}"
+                                           class="btn-action btn-edit">
+                                            <i class='bx bx-edit'></i> Edit
+                                        </a>
+
+                                        <form action="{{ route('siswa.laporan.destroy', $item->id) }}" method="POST"
+                                              onsubmit="return confirm('Yakin mau hapus laporan ini?')" style="margin:0;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-action btn-delete">
+                                                <i class='bx bx-trash'></i> Hapus
+                                            </button>
+                                        </form>
+                                    @endif
+
                                     <a href="{{ route('siswa.laporan.show', $item->id) }}"
                                        class="btn-action btn-detail">
                                         <i class='bx bx-show'></i> Detail

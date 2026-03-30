@@ -10,8 +10,6 @@ class LokasiSeeder extends Seeder
     public function run()
     {
         $lokasi = [];
-
-        // 1. KELAS (berurutan: angkatan 10, 11, 12)
         $struktur_kelas = [
             10 => [
                 'TSM' => 1,
@@ -42,9 +40,9 @@ class LokasiSeeder extends Seeder
             }
         }
 
-       //lab
+
         $lab = [
-            // labotarium
+
             'Lab 1',
             'Lab 2',
             'Lab 3',
@@ -59,7 +57,7 @@ class LokasiSeeder extends Seeder
             ];
         }
 
-        // bengkel
+        
         $bengkel = [
             'Bengkel TSM',
             'Bengkel TKR',

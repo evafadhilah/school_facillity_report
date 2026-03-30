@@ -11,11 +11,10 @@ class FasilitasSeeder extends Seeder
     {
         $fasilitas = [
             // ELEKTRONIK
-            'Proyektor',
             'Laptop',
             'Komputer',
             'Printer',
-            'Scanner',
+            'Scanner Absen',
             'Speaker',
             'Microphone',
             'AC (Air Conditioner)',
@@ -42,8 +41,7 @@ class FasilitasSeeder extends Seeder
             'Bola Voli',
             'Net Voli',
             'Ring Basket',
-            'Matras',
-
+            
             // ALAT PRAKTIK (TSM)
             'Toolbox',
             'Tang',
@@ -60,7 +58,7 @@ class FasilitasSeeder extends Seeder
             'Sapu',
             'Pel',
             'Tempat Sampah',
-            'Kemoceng',
+
         ];
 
         foreach ($fasilitas as $nama) {
