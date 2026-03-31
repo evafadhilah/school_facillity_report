@@ -280,52 +280,22 @@
             gap: 1rem;
             align-items: flex-start;
         }
-
         .btn-add {
             width: 100%;
             justify-content: center;
         }
-
-        .custom-table {
-            font-size: 0.85rem;
-        }
-
-        .custom-table thead th {
-            padding: 1rem 0.75rem;
-            font-size: 0.8rem;
-        }
-
-        .custom-table tbody td {
-            padding: 0.75rem 0.5rem;
-        }
-
-        .action-buttons {
-            flex-direction: column;
-        }
-
-        .action-buttons .btn-action {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .badge {
-            font-size: 0.75rem;
-            padding: 0.4rem 0.75rem;
-        }
+        .custom-table { font-size: 0.85rem; }
+        .custom-table thead th { padding: 1rem 0.75rem; font-size: 0.8rem; }
+        .custom-table tbody td { padding: 0.75rem 0.5rem; }
+        .action-buttons { flex-direction: column; }
+        .action-buttons .btn-action { width: 100%; justify-content: center; }
+        .badge { font-size: 0.75rem; padding: 0.4rem 0.75rem; }
     }
 
     @media (max-width: 576px) {
-        .index-header {
-            padding: 1.5rem;
-        }
-
-        .header-title h4 {
-            font-size: 1.5rem;
-        }
-
-        .header-title p {
-            font-size: 0.85rem;
-        }
+        .index-header { padding: 1.5rem; }
+        .header-title h4 { font-size: 1.5rem; }
+        .header-title p { font-size: 0.85rem; }
     }
 </style>
 
@@ -353,6 +323,7 @@
         </div>
     @endif
 
+    
     <!-- Table Card -->
     <div class="card table-card">
         <div class="card-body">
@@ -377,13 +348,9 @@
                         @forelse($laporan as $item)
                         <tr>
                             <td class="text-center"><strong>{{ $loop->iteration }}</strong></td>
-
                             <td><strong>{{ $item->user->name ?? '-' }}</strong></td>
-
                             <td>{{ $item->kelas->nama_kelas ?? '-' }}</td>
-
                             <td>{{ $item->kategori->nama_kategori ?? '-' }}</td>
-
                             <td>{{ $item->fasilitas->nama_fasilitas ?? '-' }}</td>
 
                             {{-- FOTO --}}
@@ -403,8 +370,7 @@
                                 @if(count($fotos) > 0)
                                     <a href="{{ asset('storage/' . $fotos[0]) }}" target="_blank">
                                         <img src="{{ asset('storage/' . $fotos[0]) }}"
-                                            class="foto-thumb"
-                                            alt="Foto Laporan">
+                                            class="foto-thumb" alt="Foto Laporan">
                                     </a>
                                     @if(count($fotos) > 1)
                                         <span style="font-size:0.75rem; color:#6b7280; display:block; margin-top:4px;">
@@ -416,19 +382,13 @@
                                 @endif
                             </td>
 
-                            {{-- LOKASI --}}
                             <td>{{ $item->lokasi->nama_lokasi ?? '-' }}</td>
-
                             <td>
                                 <div class="desc-cell" title="{{ $item->deskripsi }}">
                                     {{ $item->deskripsi }}
                                 </div>
                             </td>
-
-                            <td>
-                                {{ $item->created_at ? $item->created_at->format('d-m-Y') : '-' }}
-                            </td>
-
+                            <td>{{ $item->created_at ? $item->created_at->format('d-m-Y') : '-' }}</td>
                             <td>
                                 @if($item->status == 'pending')
                                     <span class="badge badge-pending">
@@ -455,7 +415,6 @@
                                            class="btn-action btn-edit">
                                             <i class='bx bx-edit'></i> Edit
                                         </a>
-
                                         <form action="{{ route('siswa.laporan.destroy', $item->id) }}" method="POST"
                                               onsubmit="return confirm('Yakin mau hapus laporan ini?')" style="margin:0;">
                                             @csrf
@@ -465,14 +424,12 @@
                                             </button>
                                         </form>
                                     @endif
-
                                     <a href="{{ route('siswa.laporan.show', $item->id) }}"
                                        class="btn-action btn-detail">
                                         <i class='bx bx-show'></i> Detail
                                     </a>
                                 </div>
                             </td>
-
                         </tr>
 
                         @empty
@@ -480,7 +437,13 @@
                             <td colspan="11">
                                 <div class="empty-state">
                                     <i class='bx bx-folder-open'></i>
-                                    <p>Belum ada laporan yang dikirim</p>
+                                    <p>
+                                        @if($search ?? false)
+                                            Tidak ada laporan yang cocok dengan "{{ $search }}"
+                                        @else
+                                            Belum ada laporan yang dikirim
+                                        @endif
+                                    </p>
                                 </div>
                             </td>
                         </tr>

@@ -381,13 +381,17 @@
                             <span class="status-badge status-pending">
                                 <i class='bx bx-time-five'></i> Menunggu Proses
                             </span>
-                        @elseif($laporan->status == 'proses')
+                        @elseif($laporan->status == 'diproses')
                             <span class="status-badge status-proses">
                                 <i class='bx bx-loader-alt bx-spin'></i> Sedang Diproses
                             </span>
-                        @else
+                        @elseif($laporan->status == 'selesai')
                             <span class="status-badge status-selesai">
                                 <i class='bx bx-check-circle'></i> Selesai Diperbaiki
+                            </span>
+                        @else
+                            <span class="status-badge status-pending">
+                                <i class='bx bx-question-mark'></i> {{ $laporan->status }}
                             </span>
                         @endif
                     </div>

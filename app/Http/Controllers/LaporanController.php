@@ -13,19 +13,20 @@ class LaporanController extends Controller
     // Menampilkan daftar laporan
     public function index()
     {
-        if(auth()->user()->role == 'siswa'){
-            // Siswa hanya lihat laporan sendiri
-            $laporans = Laporan::with(['fasilitas', 'kelas', 'teknisi'])  // ← TAMBAH 'kelas'
-                ->where('user_id', auth()->id())
+        if (auth()->user()->role == 'teknisi') {
+            $laporans = Laporan::with(['user', 'kelas', 'kategori', 'fasilitas', 'lokasi'])
+                ->where('teknisi_id', auth()->id())
                 ->latest()
                 ->get();
-
-            return view('siswa.laporan.index', compact('laporans'));
+            return view('admin.laporan.index', compact('laporans'));
         }
 
-        // Admin & role lain lihat semua laporan
-        $laporans = Laporan::with(['user', 'fasilitas', 'kelas', 'teknisi'])->latest()->get();  // ← TAMBAH 'kelas'
-        return view('admin.laporan.index', compact('laporans'));    }
+        $laporans = Laporan::with(['user', 'kelas', 'kategori', 'fasilitas', 'lokasi'])
+            ->latest()
+            ->get();
+
+        return view('admin.laporan.index', compact('laporans'));
+    }
 
     // Form membuat laporan
     public function create()
@@ -34,56 +35,54 @@ class LaporanController extends Controller
         $kelas = Kelas::all();
         $teknisi = User::where('role', 'teknisi')->get();
 
-        if(auth()->user()->role == 'siswa'){
-            return view('siswa.laporan.create', compact('fasilitas', 'kelas', 'teknisi'));  // ← TAMBAH 'kelas'
+        if (auth()->user()->role == 'siswa') {
+            return view('siswa.laporan.create', compact('fasilitas', 'kelas', 'teknisi'));
         }
 
-        return view('laporan.create', compact('fasilitas', 'kelas', 'teknisi'));  // ← TAMBAH 'kelas'
+        return view('admin.laporan.create', compact('fasilitas', 'kelas', 'teknisi'));
     }
 
     // Simpan laporan
     public function store(Request $request)
     {
         $request->validate([
-            'fasilitas_id' => 'required|exists:fasilitas,id',
-            'kelas_id' => 'required|exists:kelas,id',
-            'deskripsi' => 'required',
+            'fasilitas_id'    => 'required|exists:fasilitas,id',
+            'kelas_id'        => 'required|exists:kelas,id',
+            'deskripsi'       => 'required',
             'tingkat_urgency' => 'required|in:rendah,sedang,tinggi',
-            'foto' => 'nullable|image|max:2048',   (optional)
+            'foto'            => 'nullable|image|max:2048',
         ]);
 
         $data = [
-            'user_id' => auth()->id(),
-            'fasilitas_id' => $request->fasilitas_id,
-            'kelas_id' => $request->kelas_id,
-            'teknisi_id' => $request->teknisi_id,
-            'deskripsi' => $request->deskripsi,
+            'user_id'         => auth()->id(),
+            'fasilitas_id'    => $request->fasilitas_id,
+            'kelas_id'        => $request->kelas_id,
+            'teknisi_id'      => $request->teknisi_id,
+            'deskripsi'       => $request->deskripsi,
             'tingkat_urgency' => $request->tingkat_urgency,
-            'status' => 'pending',
+            'status'          => 'pending',
         ];
 
-        // Upload foto jika ada
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('laporan', 'public');
         }
 
         Laporan::create($data);
 
-        // Redirect sesuai role
-        if(auth()->user()->role == 'siswa'){
+        if (auth()->user()->role == 'siswa') {
             return redirect()->route('siswa.laporan.index')
                 ->with('success', 'Laporan berhasil dikirim');
         }
 
-        return redirect()->route('laporan.index')
+        return redirect()->route('admin.laporan.index')
             ->with('success', 'Laporan berhasil dikirim');
     }
 
     // Lihat detail laporan
     public function show(Laporan $laporan)
     {
-        $laporan->load(['user', 'fasilitas', 'kelas', 'teknisi', 'riwayat']);  // ← TAMBAH 'kelas'
-        return view('laporan.show', compact('laporan'));
+        $laporan->load(['user', 'fasilitas', 'kelas', 'kategori', 'lokasi', 'teknisi']);
+        return view('admin.laporan.show', compact('laporan'));
     }
 
     // Form edit laporan
@@ -93,19 +92,19 @@ class LaporanController extends Controller
         $kelas = Kelas::all();
         $teknisi = User::where('role', 'teknisi')->get();
 
-        return view('laporan.edit', compact('laporan', 'fasilitas', 'kelas', 'teknisi'));  // ← TAMBAH 'kelas'
+        return view('admin.laporan.edit', compact('laporan', 'fasilitas', 'kelas', 'teknisi'));
     }
 
-    // Update laporan (status)
+    // Update laporan
     public function update(Request $request, Laporan $laporan)
     {
         $request->validate([
             'status' => 'required|in:pending,ditugaskan,diproses,selesai,ditolak',
         ]);
 
-        $laporan->update($request->all());
+        $laporan->update($request->only(['status', 'teknisi_id']));
 
-        return redirect()->route('laporan.index')
+        return redirect()->route('admin.laporan.index')
             ->with('success', 'Laporan berhasil diperbarui');
     }
 
@@ -114,7 +113,7 @@ class LaporanController extends Controller
     {
         $laporan->delete();
 
-        return redirect()->route('laporan.index')
+        return redirect()->route('admin.laporan.index')
             ->with('success', 'Laporan berhasil dihapus');
     }
 }

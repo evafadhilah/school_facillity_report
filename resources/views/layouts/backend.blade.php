@@ -49,13 +49,12 @@
 
     <style>
         .menu-item.active > .menu-link {
-    background-color: #7367F0; /* warna background saat aktif */
-    color: #fff; /* warna teks */
-}
-.menu-item.active > .menu-link i {
-    color: #fff; /* warna icon */
-}
-
+            background-color: #7367F0;
+            color: #fff;
+        }
+        .menu-item.active > .menu-link i {
+            color: #fff;
+        }
     </style>
   </head>
 
@@ -63,21 +62,26 @@
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
-        <!-- Sidebar -->
-       <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-    @if(Auth::user()->role == 'admin')
-        @include('layouts.admin.sidebar')
-    @elseif(Auth::user()->role == 'siswa')
-        @include('layouts.siswa.sidebar')
-    @endif
-</aside>
 
+        <!-- Sidebar -->
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+            @if(Auth::user()->role == 'admin')
+                @include('layouts.admin.sidebar')
+            @elseif(Auth::user()->role == 'siswa')
+                @include('layouts.siswa.sidebar')
+            @endif
+        </aside>
         <!-- / Sidebar -->
 
         <!-- Layout container -->
         <div class="layout-page">
+
           <!-- Navbar -->
-          @include('layouts.admin.navbar')
+          @if(Auth::user()->role == 'siswa')
+              @include('layouts.siswa.navbar')
+          @else
+              @include('layouts.admin.navbar')
+          @endif
           <!-- / Navbar -->
 
           <!-- Content wrapper -->
@@ -89,6 +93,7 @@
             <div class="content-backdrop fade"></div>
           </div>
           <!-- Content wrapper -->
+
         </div>
         <!-- / Layout page -->
       </div>

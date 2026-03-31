@@ -19,15 +19,29 @@ class LaporanController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
-    {
-        $laporan = Laporan::with(['user', 'kelas', 'kategori', 'fasilitas', 'lokasi'])
-            ->where('user_id', Auth::id())
-            ->latest()
-            ->get();
+    public function index(Request $request)
+{
+    $search = $request->get('search');
+   
 
-        return view('siswa.laporan.index', compact('laporan'));
-    }
+    $laporan = Laporan::with(['user', 'kelas', 'kategori', 'fasilitas', 'lokasi'])
+        ->where('user_id', Auth::id())
+        ->when($search, function ($query) use ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_pelapor', 'like', "%$search%")
+                  ->orWhere('deskripsi', 'like', "%$search%")
+                  ->orWhere('status', 'like', "%$search%")
+                  ->orWhereHas('kelas', fn($q) => $q->where('nama_kelas', 'like', "%$search%"))
+                  ->orWhereHas('kategori', fn($q) => $q->where('nama_kategori', 'like', "%$search%"))
+                  ->orWhereHas('fasilitas', fn($q) => $q->where('nama_fasilitas', 'like', "%$search%"))
+                  ->orWhereHas('lokasi', fn($q) => $q->where('nama_lokasi', 'like', "%$search%"));
+            });
+        })
+        ->latest()
+        ->get();
+
+    return view('siswa.laporan.index', compact('laporan', 'search'));
+}
 
     public function create()
     {
