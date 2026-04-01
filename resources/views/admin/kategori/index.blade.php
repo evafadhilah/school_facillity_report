@@ -56,7 +56,6 @@
 
     .header-title p {
         margin: 0.5rem 0 0 0;
-        opacity: 1;
         font-size: 0.95rem;
         color: white;
         text-shadow: 0 1px 2px rgba(0,0,0,0.1);
@@ -75,6 +74,7 @@
         align-items: center;
         gap: 0.5rem;
         text-decoration: none;
+        white-space: nowrap;
     }
 
     .btn-add:hover {
@@ -141,7 +141,6 @@
 
     .custom-table tbody tr:hover {
         background: linear-gradient(to right, #f9fafb 0%, #ffffff 100%);
-        transform: scale(1.01);
         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
@@ -149,42 +148,28 @@
         border-bottom: none;
     }
 
-    .badge {
-        padding: 0.5rem 0.875rem;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.8rem;
-        display: inline-flex;
+    .action-buttons {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: nowrap;
         align-items: center;
-        gap: 0.25rem;
-    }
-
-    .badge-success {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        color: white;
-    }
-
-    .badge-warning {
-        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-        color: white;
-    }
-
-    .badge-danger {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: white;
+        justify-content: center;
     }
 
     .btn-action {
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
+        padding: 0.4rem 0.55rem;
+        border-radius: 6px;
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         border: none;
         transition: all 0.3s ease;
         display: inline-flex;
         align-items: center;
-        gap: 0.25rem;
+        justify-content: center;
         text-decoration: none;
+        cursor: pointer;
+        white-space: nowrap;
+        line-height: 1;
     }
 
     .btn-detail {
@@ -220,12 +205,6 @@
         color: white;
     }
 
-    .action-buttons {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-    }
-
     .empty-state {
         padding: 3rem 1rem;
         text-align: center;
@@ -235,6 +214,7 @@
         font-size: 4rem;
         color: #d1d5db;
         margin-bottom: 1rem;
+        display: block;
     }
 
     .empty-state p {
@@ -254,47 +234,12 @@
             width: 100%;
             justify-content: center;
         }
-
-        .custom-table {
-            font-size: 0.85rem;
-        }
-
-        .custom-table thead th {
-            padding: 1rem 0.75rem;
-            font-size: 0.8rem;
-        }
-
-        .custom-table tbody td {
-            padding: 0.75rem 0.5rem;
-        }
-
-        .action-buttons {
-            flex-direction: column;
-        }
-
-        .action-buttons .btn-action {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .badge {
-            font-size: 0.75rem;
-            padding: 0.4rem 0.75rem;
-        }
     }
 
     @media (max-width: 576px) {
-        .index-header {
-            padding: 1.5rem;
-        }
-
-        .header-title h4 {
-            font-size: 1.5rem;
-        }
-
-        .header-title p {
-            font-size: 0.85rem;
-        }
+        .index-header { padding: 1.5rem; }
+        .header-title h4 { font-size: 1.5rem; }
+        .header-title p { font-size: 0.85rem; }
     }
 </style>
 
@@ -323,7 +268,7 @@
                         <tr>
                             <th style="width: 60px;">No</th>
                             <th>Nama Kategori</th>
-                            <th style="width: 280px;">Aksi</th>
+                            <th style="width: 90px;" class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -331,16 +276,11 @@
                             <tr>
                                 <td class="text-center"><strong>{{ $loop->iteration }}</strong></td>
                                 <td><strong>{{ $kategori->nama_kategori }}</strong></td>
-                                <td>
+                                <td class="text-center">
                                     <div class="action-buttons">
-                                        <a href="{{ route('admin.kategori.show', $kategori->id) }}"
-                                           class="btn-action btn-detail">
-                                            <i class='bx bx-show'></i> Detail
-                                        </a>
-
                                         <a href="{{ route('admin.kategori.edit', $kategori->id) }}"
-                                           class="btn-action btn-edit">
-                                            <i class='bx bx-edit'></i> Edit
+                                           class="btn-action btn-edit" title="Edit">
+                                            <i class='bx bx-edit'></i>
                                         </a>
 
                                         <form action="{{ route('admin.kategori.destroy', $kategori->id) }}"
@@ -349,8 +289,8 @@
                                               onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn-action btn-delete">
-                                                <i class='bx bx-trash'></i> Hapus
+                                            <button type="submit" class="btn-action btn-delete" title="Hapus">
+                                                <i class='bx bx-trash'></i>
                                             </button>
                                         </form>
                                     </div>

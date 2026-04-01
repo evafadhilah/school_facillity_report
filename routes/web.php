@@ -53,7 +53,7 @@ Route::middleware(['auth', 'role:admin'])
     ->name('admin.')
     ->group(function () {
         Route::get('/dashboard', [HomeController::class, 'adminDashboard'])->name('dashboard');
-        Route::resource('kategori', KategoriController::class);
+        Route::resource('kategori', KategoriController::class)->except(['show']);
         Route::resource('lokasi', LokasiController::class);
         Route::resource('laporan', AdminLaporanController::class);
         Route::resource('fasilitas', FasilitasController::class);
@@ -93,7 +93,6 @@ Route::prefix('siswa')
             Route::put('/{id}', [SiswaLaporanController::class, 'update'])->name('update');
             Route::get('/{id}', [SiswaLaporanController::class, 'show'])->name('show');
             Route::delete('/{id}', [SiswaLaporanController::class, 'destroy'])->name('destroy');
-
         });
     });
 

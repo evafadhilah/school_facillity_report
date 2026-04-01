@@ -32,23 +32,23 @@ class FasilitasController extends Controller
             ->with('success', 'Fasilitas berhasil ditambahkan');
     }
 
-    public function show(Fasilitas $fasilitas)
+    public function show(Fasilitas $fasilita)
     {
-        return view('admin.fasilitas.show', compact('fasilitas'));
+        return view('admin.fasilitas.show', ['fasilitas' => $fasilita]);
     }
 
-    public function edit(Fasilitas $fasilitas)
+    public function edit(Fasilitas $fasilita)
     {
-        return view('admin.fasilitas.edit', compact('fasilitas'));
+        return view('admin.fasilitas.edit', ['fasilitas' => $fasilita]);
     }
 
-    public function update(Request $request, Fasilitas $fasilitas)
+    public function update(Request $request, Fasilitas $fasilita)
     {
         $request->validate([
             'nama_fasilitas' => 'required|string|max:255',
         ]);
 
-        $fasilitas->update([
+        $fasilita->update([
             'nama_fasilitas' => $request->nama_fasilitas,
         ]);
 
@@ -56,9 +56,9 @@ class FasilitasController extends Controller
             ->with('success', 'Fasilitas berhasil diperbarui');
     }
 
-    public function destroy(Fasilitas $fasilitas)
+    public function destroy(Fasilitas $fasilita)
     {
-        $fasilitas->delete();
+        $fasilita->delete();
 
         return redirect()->route('admin.fasilitas.index')
             ->with('success', 'Fasilitas berhasil dihapus');

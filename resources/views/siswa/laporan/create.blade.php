@@ -511,7 +511,10 @@ function addFiles(newFiles) {
     renderPreview();
 }
 
-fotoInput.addEventListener('change', e => { addFiles(e.target.files); fotoInput.value = ''; });
+// ✅ Fix: hapus fotoInput.value = '' yang menyebabkan file ter-reset
+fotoInput.addEventListener('change', e => {
+    addFiles(e.target.files);
+});
 
 dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.style.background = '#ede9ff'; dropZone.style.borderColor = '#764ba2'; });
 dropZone.addEventListener('dragleave', () => { dropZone.style.background = '#fafafa'; dropZone.style.borderColor = '#667eea'; });

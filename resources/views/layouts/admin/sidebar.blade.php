@@ -17,11 +17,11 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
   <div class="app-brand demo">
     <a href="{{ route('admin.dashboard') }}" class="app-brand-link">
-       {{-- <span class="app-brand-logo demo">
-            <img src="{{ asset('storage/laporan/school_facility_report_logo.svg') }}"
+       <span class="app-brand-logo demo">
+            <img src="{{ asset('storage/laporan/school_facility_logo_lighter.svg') }}"
            alt="Logo"
            style="height: 120px; width: auto;">
-        </span> --}}
+        </span>
     </a>
 
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
