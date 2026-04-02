@@ -15,19 +15,13 @@
 </style>
 
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-  <div class="app-brand demo">
-    <a href="{{ route('admin.dashboard') }}" class="app-brand-link">
-       <span class="app-brand-logo demo">
-            <img src="{{ asset('storage/laporan/school_facility_logo_lighter.svg') }}"
-           alt="Logo"
-           style="height: 120px; width: auto;">
-        </span>
-    </a>
-
-    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-      <i class="bx bx-chevron-left bx-sm align-middle"></i>
-    </a>
-  </div>
+ <div class="app-brand demo" style="display: flex; justify-content: center; width: 100%;">
+    <span style="justify-content: center;">
+        <img src="{{ asset('storage/laporan/school_facility_report_logo (1).png') }}"
+            alt="Logo"
+            style="height: 70px; width: auto;">
+    </span>
+</div>
 
   <div class="menu-inner-shadow"></div>
 
