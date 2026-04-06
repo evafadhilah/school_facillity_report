@@ -323,7 +323,6 @@
         </div>
     @endif
 
-    
     <!-- Table Card -->
     <div class="card table-card">
         <div class="card-body">
@@ -353,34 +352,18 @@
                             <td>{{ $item->kategori->nama_kategori ?? '-' }}</td>
                             <td>{{ $item->fasilitas->nama_fasilitas ?? '-' }}</td>
 
-                            {{-- FOTO --}}
+                            {{-- COVER --}}
+
                             <td>
-                                @php
-                                    $fotoRaw = $item->foto;
-                                    $fotos = [];
-                                    if ($fotoRaw) {
-                                        $decoded = json_decode($fotoRaw, true);
-                                        if (is_array($decoded)) {
-                                            $fotos = $decoded;
-                                        } else {
-                                            $fotos = [$fotoRaw];
-                                        }
-                                    }
-                                @endphp
-                                @if(count($fotos) > 0)
-                                    <a href="{{ asset('storage/' . $fotos[0]) }}" target="_blank">
-                                        <img src="{{ asset('storage/' . $fotos[0]) }}"
-                                            class="foto-thumb" alt="Foto Laporan">
-                                    </a>
-                                    @if(count($fotos) > 1)
-                                        <span style="font-size:0.75rem; color:#6b7280; display:block; margin-top:4px;">
-                                            +{{ count($fotos) - 1 }} foto
-                                        </span>
-                                    @endif
-                                @else
-                                    <span style="color:#d1d5db;">-</span>
-                                @endif
-                            </td>
+    @if($item->foto)
+        <a href="{{ asset('storage/' . $item->foto) }}" target="_blank">
+<img src="{{ asset('storage/' . $item->cover) }}" target="_blank">
+                class="foto-thumb" alt="Foto Laporan">
+        </a>
+    @else
+        <span style="color:#d1d5db;">-</span>
+    @endif
+</td>
 
                             <td>{{ $item->lokasi->nama_lokasi ?? '-' }}</td>
                             <td>

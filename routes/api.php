@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Api\DashboardController; 
 use App\Http\Controllers\Api\AuthController;
 
 /*
@@ -32,5 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/admin/dashboard', [DashboardController::class, 'index']);
+
 
 });

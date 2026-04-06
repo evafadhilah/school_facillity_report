@@ -56,7 +56,6 @@
 
     .header-title p {
         margin: 0.5rem 0 0 0;
-        opacity: 1;
         font-size: 0.95rem;
         color: white;
         text-shadow: 0 1px 2px rgba(0,0,0,0.1);
@@ -75,6 +74,7 @@
         align-items: center;
         gap: 0.5rem;
         text-decoration: none;
+        white-space: nowrap;
     }
 
     .btn-add:hover {
@@ -141,7 +141,6 @@
 
     .custom-table tbody tr:hover {
         background: linear-gradient(to right, #f9fafb 0%, #ffffff 100%);
-        transform: scale(1.01);
         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
@@ -149,17 +148,28 @@
         border-bottom: none;
     }
 
+    .action-buttons {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+    }
+
     .btn-action {
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
+        padding: 0.4rem 0.55rem;
+        border-radius: 6px;
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         border: none;
         transition: all 0.3s ease;
         display: inline-flex;
         align-items: center;
-        gap: 0.25rem;
+        justify-content: center;
         text-decoration: none;
+        cursor: pointer;
+        white-space: nowrap;
+        line-height: 1;
     }
 
     .btn-edit {
@@ -184,12 +194,6 @@
         color: white;
     }
 
-    .action-buttons {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-    }
-
     .empty-state {
         padding: 3rem 1rem;
         text-align: center;
@@ -199,30 +203,13 @@
         font-size: 4rem;
         color: #d1d5db;
         margin-bottom: 1rem;
+        display: block;
     }
 
     .empty-state p {
         color: #9ca3af;
         font-size: 1rem;
         margin: 0;
-    }
-
-    .alert-success {
-        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-        border: 2px solid #6ee7b7;
-        border-radius: 12px;
-        color: #065f46;
-        padding: 1rem 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .alert-error {
-        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-        border: 2px solid #fca5a5;
-        border-radius: 12px;
-        color: #991b1b;
-        padding: 1rem 1.5rem;
-        margin-bottom: 1.5rem;
     }
 
     @media (max-width: 768px) {
@@ -236,42 +223,12 @@
             width: 100%;
             justify-content: center;
         }
-
-        .custom-table {
-            font-size: 0.85rem;
-        }
-
-        .custom-table thead th {
-            padding: 1rem 0.75rem;
-            font-size: 0.8rem;
-        }
-
-        .custom-table tbody td {
-            padding: 0.75rem 0.5rem;
-        }
-
-        .action-buttons {
-            flex-direction: column;
-        }
-
-        .action-buttons .btn-action {
-            width: 100%;
-            justify-content: center;
-        }
     }
 
     @media (max-width: 576px) {
-        .index-header {
-            padding: 1.5rem;
-        }
-
-        .header-title h4 {
-            font-size: 1.5rem;
-        }
-
-        .header-title p {
-            font-size: 0.85rem;
-        }
+        .index-header { padding: 1.5rem; }
+        .header-title h4 { font-size: 1.5rem; }
+        .header-title p { font-size: 0.85rem; }
     }
 </style>
 
@@ -293,7 +250,8 @@
 
     <!-- Success Alert -->
     @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-dismissible fade show mb-4" role="alert"
+             style="border-radius:12px; border:none; background:#d1e7dd; color:#0f5132;">
             <i class='bx bx-check-circle me-2'></i>
             <strong>Berhasil!</strong> {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -302,7 +260,8 @@
 
     <!-- Error Alert -->
     @if (session('error'))
-        <div class="alert alert-error alert-dismissible fade show" role="alert">
+        <div class="alert alert-dismissible fade show mb-4" role="alert"
+             style="border-radius:12px; border:none; background:#f8d7da; color:#842029;">
             <i class='bx bx-error-circle me-2'></i>
             <strong>Gagal!</strong> {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -318,7 +277,7 @@
                         <tr>
                             <th style="width: 60px;">No</th>
                             <th>Nama Lokasi</th>
-                            <th style="width: 200px;">Aksi</th>
+                            <th style="width: 100px;" class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -326,11 +285,11 @@
                             <tr>
                                 <td class="text-center"><strong>{{ $loop->iteration }}</strong></td>
                                 <td><strong>{{ $lokasi->nama_lokasi }}</strong></td>
-                                <td>
+                                <td class="text-center">
                                     <div class="action-buttons">
                                         <a href="{{ route('admin.lokasi.edit', $lokasi->id) }}"
-                                           class="btn-action btn-edit">
-                                            <i class='bx bx-edit'></i> Edit
+                                           class="btn-action btn-edit" title="Edit">
+                                            <i class='bx bx-edit'></i>
                                         </a>
 
                                         <form action="{{ route('admin.lokasi.destroy', $lokasi->id) }}"
@@ -339,8 +298,8 @@
                                               onsubmit="return confirm('Yakin ingin menghapus lokasi ini?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn-action btn-delete">
-                                                <i class='bx bx-trash'></i> Hapus
+                                            <button type="submit" class="btn-action btn-delete" title="Hapus">
+                                                <i class='bx bx-trash'></i>
                                             </button>
                                         </form>
                                     </div>

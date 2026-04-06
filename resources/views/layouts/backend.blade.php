@@ -69,20 +69,25 @@
                 @include('layouts.admin.sidebar')
             @elseif(Auth::user()->role == 'siswa')
                 @include('layouts.siswa.sidebar')
+            @elseif(Auth::user()->role == 'teknisi')
+                @include('layouts.teknisi.sidebar')
             @endif
         </aside>
         <!-- / Sidebar -->
 
+
         <!-- Layout container -->
         <div class="layout-page">
 
-          <!-- Navbar -->
-          @if(Auth::user()->role == 'siswa')
-              @include('layouts.siswa.navbar')
-          @else
-              @include('layouts.admin.navbar')
-          @endif
-          <!-- / Navbar -->
+        <!-- Navbar -->
+            @if(Auth::user()->role == 'siswa')
+                @include('layouts.siswa.navbar')
+            @elseif(Auth::user()->role == 'teknisi')
+                @include('layouts.teknisi.navbar')
+            @else
+                @include('layouts.admin.navbar')
+            @endif
+        <!-- / Navbar -->
 
           <!-- Content wrapper -->
           <div class="content-wrapper">

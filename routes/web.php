@@ -15,6 +15,9 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
 use App\Http\Controllers\Siswa\LaporanController as SiswaLaporanController;
 
+// Teknisi Controllers
+use App\Http\Controllers\Teknisi\DashboardController as TeknisiDashboardController;
+
 // Halaman utama
 Route::get('/', function () {
     if (!auth()->check()) {
@@ -53,7 +56,7 @@ Route::middleware(['auth', 'role:admin'])
     ->name('admin.')
     ->group(function () {
         Route::get('/dashboard', [HomeController::class, 'adminDashboard'])->name('dashboard');
-        Route::resource('kategori', KategoriController::class);
+        Route::resource('kategori', KategoriController::class)->except(['show']);
         Route::resource('lokasi', LokasiController::class);
         Route::resource('laporan', AdminLaporanController::class);
         Route::resource('fasilitas', FasilitasController::class);
@@ -66,7 +69,7 @@ Route::middleware(['auth', 'role:teknisi'])
     ->prefix('teknisi')
     ->name('teknisi.')
     ->group(function () {
-        Route::get('/dashboard', [HomeController::class, 'teknisiDashboard'])->name('dashboard');
+        Route::get('/dashboard', [TeknisiDashboardController::class, 'index'])->name('dashboard');
         Route::resource('laporan', AdminLaporanController::class)->only(['index', 'edit', 'update']);
     });
 
@@ -93,7 +96,6 @@ Route::prefix('siswa')
             Route::put('/{id}', [SiswaLaporanController::class, 'update'])->name('update');
             Route::get('/{id}', [SiswaLaporanController::class, 'show'])->name('show');
             Route::delete('/{id}', [SiswaLaporanController::class, 'destroy'])->name('destroy');
-
         });
     });
 

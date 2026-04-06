@@ -26,7 +26,7 @@ return new class extends Migration
 
             // isi laporan
             $table->text('deskripsi');
-            $table->string('foto')->nullable();
+            $table->string('cover')->nullable();
             $table->enum('tingkat_urgency', ['rendah', 'sedang', 'tinggi']);
 
             // status laporan
