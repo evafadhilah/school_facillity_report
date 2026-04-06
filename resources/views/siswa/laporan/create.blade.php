@@ -411,20 +411,21 @@
                     {{-- Upload Foto --}}
                     <div class="mb-4">
                         <label class="form-label">
-                            <i class='bx bx-camera me-1'></i> Foto Laporan
+                            <i class='bx bx-image me-1'></i> Cover Laporan
                         </label>
 
                         <div id="dropZone" style="border: 2px dashed #667eea; border-radius: 12px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; background: #fafafa; transition: all 0.3s; position: relative;">
-                            <input type="file" name="foto[]" id="fotoInput" accept="image/*" multiple style="position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;">
-                            <div onclick="document.getElementById('fotoInput').click()">
+<input type="file" name="foto" id="coverInput" accept="image/*" style="position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;">                            <div>
                                 <i class='bx bx-cloud-upload' style="font-size: 2rem; color: #667eea; pointer-events:none;"></i>
                                 <p style="margin: 0.4rem 0 0; font-size: 0.9rem; color: #667eea; font-weight: 600; pointer-events:none;">Klik atau drag foto ke sini</p>
-                                <p style="margin: 0.2rem 0 0; font-size: 0.8rem; color: #9ca3af; pointer-events:none;">JPG, PNG · Bisa pilih beberapa foto sekaligus</p>
+                                <p style="margin: 0.2rem 0 0; font-size: 0.8rem; color: #9ca3af; pointer-events:none;">JPG, PNG · Satu foto sebagai cover laporan</p>
                             </div>
                         </div>
 
-                        <div id="previewGrid" style="display:none; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; margin-top: 10px;"></div>
-                        <p id="fotoCounter" style="font-size: 0.8rem; color: #9ca3af; margin-top: 6px; display:none;"></p>
+                        <div id="previewWrap" style="display:none; margin-top:10px; position:relative; display:none;">
+                            <img id="previewImg" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; border:1.5px solid #e5e7eb;">
+                            <button type="button" id="hapusCover" style="position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.55);border:none;cursor:pointer;color:#fff;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;">&times;</button>
+                        </div>
                     </div>
                 </div>{{-- /.form-row-2 (Row 3) --}}
 
@@ -462,58 +463,26 @@
 </div>
 
 <script>
-const fotoInput = document.getElementById('fotoInput');
-const dropZone  = document.getElementById('dropZone');
-const grid      = document.getElementById('previewGrid');
-const counter   = document.getElementById('fotoCounter');
-let files = [];
+const coverInput  = document.getElementById('coverInput');
+const dropZone    = document.getElementById('dropZone');
+const previewWrap = document.getElementById('previewWrap');
+const previewImg  = document.getElementById('previewImg');
+const hapusCover  = document.getElementById('hapusCover');
 
-function syncInput() {
-    const dt = new DataTransfer();
-    files.forEach(f => dt.items.add(f));
-    fotoInput.files = dt.files;
+function showPreview(file) {
+    if (!file) return;
+    previewImg.src = URL.createObjectURL(file);
+    previewWrap.style.display = 'block';
 }
 
-function renderPreview() {
-    grid.innerHTML = '';
-    if (files.length === 0) {
-        grid.style.display = 'none';
-        counter.style.display = 'none';
-        return;
-    }
-    grid.style.display = 'grid';
-    counter.style.display = 'block';
-    counter.textContent = files.length + ' foto dipilih';
+coverInput.addEventListener('change', e => {
+    if (e.target.files[0]) showPreview(e.target.files[0]);
+});
 
-    files.forEach((f, i) => {
-        const url = URL.createObjectURL(f);
-        const wrap = document.createElement('div');
-        wrap.style.cssText = 'position:relative; border-radius:10px; overflow:hidden; aspect-ratio:1; border:1.5px solid #e5e7eb;';
-        wrap.innerHTML = `
-            <img src="${url}" style="width:100%;height:100%;object-fit:cover;display:block;">
-            <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.5);padding:3px 6px;font-size:10px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${f.name}</div>
-            <button type="button" data-i="${i}" style="position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,0.55);border:none;cursor:pointer;color:#fff;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;">&times;</button>
-        `;
-        wrap.querySelector('button').addEventListener('click', () => {
-            files.splice(i, 1);
-            syncInput();
-            renderPreview();
-        });
-        grid.appendChild(wrap);
-    });
-}
-
-function addFiles(newFiles) {
-    Array.from(newFiles)
-        .filter(f => f.type.startsWith('image/'))
-        .forEach(f => files.push(f));
-    syncInput();
-    renderPreview();
-}
-
-// ✅ Fix: hapus fotoInput.value = '' yang menyebabkan file ter-reset
-fotoInput.addEventListener('change', e => {
-    addFiles(e.target.files);
+hapusCover.addEventListener('click', () => {
+    coverInput.value = '';
+    previewWrap.style.display = 'none';
+    previewImg.src = '';
 });
 
 dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.style.background = '#ede9ff'; dropZone.style.borderColor = '#764ba2'; });
@@ -522,7 +491,13 @@ dropZone.addEventListener('drop', e => {
     e.preventDefault();
     dropZone.style.background = '#fafafa';
     dropZone.style.borderColor = '#667eea';
-    addFiles(e.dataTransfer.files);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        coverInput.files = dt.files;
+        showPreview(file);
+    }
 });
 </script>
 

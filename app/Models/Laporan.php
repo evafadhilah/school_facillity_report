@@ -11,14 +11,16 @@ class Laporan extends Model
 
     protected $fillable = [
         'user_id',
-        'nama_pelapor', // ✅ FIX: tambahkan agar bisa tersimpan ke database
+        'nama_pelapor',
         'kelas_id',
         'kategori_id',
         'fasilitas_id',
         'lokasi_id',
         'teknisi_id',
         'deskripsi',
-        'foto',
+        'cover',        // ← ganti dari 'foto'
+        'foto_sesudah',
+        'catatan',
         'tingkat_urgency',
         'status',
         'tanggal_selesai',
@@ -56,5 +58,11 @@ class Laporan extends Model
     public function lokasi()
     {
         return $this->belongsTo(Lokasi::class);
+    }
+
+    // Relasi ke foto laporan (banyak)
+    public function fotoLaporan()
+    {
+        return $this->hasMany(FotoLaporan::class);
     }
 }

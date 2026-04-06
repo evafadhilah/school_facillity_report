@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Siswa;
-
 use App\Http\Controllers\Controller;
 use App\Models\Laporan;
 use App\Models\Kelas;
@@ -20,28 +19,27 @@ class LaporanController extends Controller
     }
 
     public function index(Request $request)
-{
-    $search = $request->get('search');
-   
+    {
+        $search = $request->get('search');
 
-    $laporan = Laporan::with(['user', 'kelas', 'kategori', 'fasilitas', 'lokasi'])
-        ->where('user_id', Auth::id())
-        ->when($search, function ($query) use ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('nama_pelapor', 'like', "%$search%")
-                  ->orWhere('deskripsi', 'like', "%$search%")
-                  ->orWhere('status', 'like', "%$search%")
-                  ->orWhereHas('kelas', fn($q) => $q->where('nama_kelas', 'like', "%$search%"))
-                  ->orWhereHas('kategori', fn($q) => $q->where('nama_kategori', 'like', "%$search%"))
-                  ->orWhereHas('fasilitas', fn($q) => $q->where('nama_fasilitas', 'like', "%$search%"))
-                  ->orWhereHas('lokasi', fn($q) => $q->where('nama_lokasi', 'like', "%$search%"));
-            });
-        })
-        ->latest()
-        ->get();
+        $laporan = Laporan::with(['user', 'kelas', 'kategori', 'fasilitas', 'lokasi'])
+            ->where('user_id', Auth::id())
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama_pelapor', 'like', "%$search%")
+                      ->orWhere('deskripsi', 'like', "%$search%")
+                      ->orWhere('status', 'like', "%$search%")
+                      ->orWhereHas('kelas', fn($q) => $q->where('nama_kelas', 'like', "%$search%"))
+                      ->orWhereHas('kategori', fn($q) => $q->where('nama_kategori', 'like', "%$search%"))
+                      ->orWhereHas('fasilitas', fn($q) => $q->where('nama_fasilitas', 'like', "%$search%"))
+                      ->orWhereHas('lokasi', fn($q) => $q->where('nama_lokasi', 'like', "%$search%"));
+                });
+            })
+            ->latest()
+            ->get();
 
-    return view('siswa.laporan.index', compact('laporan', 'search'));
-}
+        return view('siswa.laporan.index', compact('laporan', 'search'));
+    }
 
     public function create()
     {
@@ -53,43 +51,40 @@ class LaporanController extends Controller
         return view('siswa.laporan.create', compact('kelas', 'kategori', 'fasilitas', 'lokasi'));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nama_pelapor' => 'required',
-            'kelas_id'     => 'required',
-            'kategori_id'  => 'required',
-            'fasilitas_id' => 'required',
-            'lokasi_id'    => 'required',
-            'deskripsi'    => 'required',
-            'foto.*'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+   public function store(Request $request)
+{
+    $request->validate([
+        'nama_pelapor' => 'required',
+        'kelas_id'     => 'required',
+        'kategori_id'  => 'required',
+        'fasilitas_id' => 'required',
+        'lokasi_id'    => 'required',
+        'deskripsi'    => 'required',
+        'cover'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        $data = $request->only([
-            'nama_pelapor',
-            'kelas_id',
-            'kategori_id',
-            'fasilitas_id',
-            'lokasi_id',
-            'deskripsi',
-        ]);
+    $data = $request->only([
+        'nama_pelapor',
+        'kelas_id',
+        'kategori_id',
+        'fasilitas_id',
+        'lokasi_id',
+        'deskripsi',
+    ]);
 
-        if ($request->hasFile('foto')) {
-            $paths = [];
-            foreach ($request->file('foto') as $file) {
-                $paths[] = $file->store('laporan', 'public');
-            }
-            $data['foto'] = json_encode($paths);
-        }
-
-        $data['user_id'] = Auth::id();
-        $data['status']  = 'pending';
-
-        Laporan::create($data);
-
-        return redirect()->route('siswa.laporan.index')
-            ->with('success', 'Laporan berhasil dikirim');
+    // ✅ Simpan cover
+    if ($request->hasFile('cover')) {
+        $data['cover'] = $request->file('cover')->store('laporan', 'public');
     }
+
+    $data['user_id'] = Auth::id();
+    $data['status']  = 'pending';
+
+    Laporan::create($data);
+
+    return redirect()->route('siswa.laporan.index')
+        ->with('success', 'Laporan berhasil dikirim');
+}
 
     public function edit($id)
     {
@@ -106,54 +101,48 @@ class LaporanController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $laporan = Laporan::where('user_id', Auth::id())
-            ->where('status', 'pending')
-            ->findOrFail($id);
+{
+    $laporan = Laporan::where('user_id', Auth::id())
+        ->where('status', 'pending')
+        ->findOrFail($id);
 
-        $request->validate([
-            'nama_pelapor' => 'required',
-            'kelas_id'     => 'required',
-            'kategori_id'  => 'required',
-            'fasilitas_id' => 'required',
-            'lokasi_id'    => 'required',
-            'deskripsi'    => 'required',
-            'foto.*'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+    $request->validate([
+        'nama_pelapor' => 'required',
+        'kelas_id'     => 'required',
+        'kategori_id'  => 'required',
+        'fasilitas_id' => 'required',
+        'lokasi_id'    => 'required',
+        'deskripsi'    => 'required',
+        'cover'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        $data = $request->only([
-            'nama_pelapor',
-            'kelas_id',
-            'kategori_id',
-            'fasilitas_id',
-            'lokasi_id',
-            'deskripsi',
-        ]);
+    $data = $request->only([
+        'nama_pelapor',
+        'kelas_id',
+        'kategori_id',
+        'fasilitas_id',
+        'lokasi_id',
+        'deskripsi',
+    ]);
 
-        if ($request->hasFile('foto')) {
-            // Hapus foto lama
-            $fotoLama = json_decode($laporan->foto, true);
-            if ($fotoLama) {
-                foreach ($fotoLama as $foto) {
-                    Storage::disk('public')->delete($foto);
-                }
-            }
-            // Simpan foto baru
-            $fotoTersimpan = [];
-            foreach ($request->file('foto') as $file) {
-                $fotoTersimpan[] = $file->store('laporan', 'public');
-            }
-            $data['foto'] = json_encode($fotoTersimpan);
-        } else {
-            // Tetap pakai foto lama
-            $data['foto'] = $laporan->foto;
+    // ✅ Update cover
+    if ($request->hasFile('cover')) {
+        // Hapus cover lama
+        if ($laporan->cover) {
+            Storage::disk('public')->delete($laporan->cover);
         }
-
-        $laporan->update($data);
-
-        return redirect()->route('siswa.laporan.index')
-            ->with('success', 'Laporan berhasil diperbarui');
+        // Simpan cover baru
+        $data['cover'] = $request->file('cover')->store('laporan', 'public');
+    } else {
+        // Tetap pakai cover lama
+        $data['cover'] = $laporan->cover;
     }
+
+    $laporan->update($data);
+
+    return redirect()->route('siswa.laporan.index')
+        ->with('success', 'Laporan berhasil diperbarui');
+}
 
     public function show($id)
     {
@@ -165,22 +154,19 @@ class LaporanController extends Controller
     }
 
     public function destroy($id)
-{
-    $laporan = Laporan::where('user_id', Auth::id())
-        ->where('status', 'pending')
-        ->findOrFail($id);
+    {
+        $laporan = Laporan::where('user_id', Auth::id())
+            ->where('status', 'pending')
+            ->findOrFail($id);
 
-    // Hapus foto dari storage
-    $fotoLama = json_decode($laporan->foto, true);
-    if ($fotoLama) {
-        foreach ($fotoLama as $foto) {
-            Storage::disk('public')->delete($foto);
+        // ✅ Hapus cover dari storage
+        if ($laporan->cover) {
+            Storage::disk('public')->delete($laporan->cover);
         }
+
+        $laporan->delete();
+
+        return redirect()->route('siswa.laporan.index')
+            ->with('success', 'Laporan berhasil dihapus');
     }
-
-    $laporan->delete();
-
-    return redirect()->route('siswa.laporan.index')
-        ->with('success', 'Laporan berhasil dihapus');
-}
 }

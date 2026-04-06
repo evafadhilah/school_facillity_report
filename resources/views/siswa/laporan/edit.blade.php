@@ -212,42 +212,6 @@
         gap: 1.25rem;
     }
 
-    .existing-photos-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-        gap: 8px;
-        margin-top: 10px;
-    }
-
-    .existing-photo-item {
-        position: relative;
-        border-radius: 10px;
-        overflow: hidden;
-        aspect-ratio: 1;
-        border: 1.5px solid #e5e7eb;
-    }
-
-    .existing-photo-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-    .existing-photo-item .photo-name {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(0,0,0,0.5);
-        padding: 3px 6px;
-        font-size: 10px;
-        color: #fff;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
     .photo-section-label {
         font-size: 0.8rem;
         font-weight: 600;
@@ -273,89 +237,12 @@
         border-color: #764ba2;
     }
 
-    .drop-zone i {
-        font-size: 2rem;
-        color: #667eea;
-    }
-
-    .drop-zone p {
-        margin: 0.4rem 0 0;
-        font-size: 0.9rem;
-        color: #667eea;
-        font-weight: 600;
-    }
-
-    .drop-zone small {
-        font-size: 0.8rem;
-        color: #9ca3af;
-    }
-
-    .preview-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-        gap: 8px;
-        margin-top: 10px;
-    }
-
-    .preview-item {
-        position: relative;
-        border-radius: 10px;
-        overflow: hidden;
-        aspect-ratio: 1;
-        border: 1.5px solid #667eea;
-    }
-
-    .preview-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-    .preview-item .preview-name {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(0,0,0,0.5);
-        padding: 3px 6px;
-        font-size: 10px;
-        color: #fff;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        z-index: 1;
-    }
-
-    .preview-item .btn-remove {
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background: rgba(239, 68, 68, 0.9);
-        border: none;
-        cursor: pointer;
-        color: #fff;
-        font-size: 16px;
-        line-height: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10;
-    }
-
-    .preview-item .btn-remove:hover {
-        background: rgba(220, 38, 38, 1);
-    }
+    .drop-zone i { font-size: 2rem; color: #667eea; }
+    .drop-zone p { margin: 0.4rem 0 0; font-size: 0.9rem; color: #667eea; font-weight: 600; }
+    .drop-zone small { font-size: 0.8rem; color: #9ca3af; }
 
     @media (max-width: 768px) {
-        .header-content {
-            flex-direction: column;
-            gap: 1rem;
-            align-items: flex-start;
-        }
+        .header-content { flex-direction: column; gap: 1rem; align-items: flex-start; }
         .btn-back { width: 100%; justify-content: center; }
         .form-card .card-body { padding: 1.25rem; }
         .form-row-2 { grid-template-columns: 1fr; }
@@ -399,7 +286,7 @@
     <div class="card form-card">
         <div class="card-body">
 
-            <form action="{{ route('siswa.laporan.update', $laporan->id) }}" method="POST" enctype="multipart/form-data" id="formLaporan">
+            <form action="{{ route('siswa.laporan.update', $laporan->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -466,43 +353,34 @@
                         </select>
                     </div>
 
+                    {{-- Cover --}}
                     <div class="mb-4">
-                        <label class="form-label"><i class='bx bx-camera me-1'></i> Foto Laporan</label>
+                        <label class="form-label"><i class='bx bx-image me-1'></i> Cover Laporan</label>
 
-                        @php
-                            $fotoLama = [];
-                            if ($laporan->foto) {
-                                $decoded = json_decode($laporan->foto, true);
-                                $fotoLama = is_array($decoded) ? $decoded : [$laporan->foto];
-                            }
-                        @endphp
-
-                        @if(count($fotoLama) > 0)
-                            <p class="photo-section-label">Foto saat ini</p>
-                            <div class="existing-photos-grid">
-                                @foreach ($fotoLama as $fotoPath)
-                                    <div class="existing-photo-item">
-                                        <img src="{{ asset('storage/' . $fotoPath) }}" alt="Foto laporan">
-                                        <span class="photo-name">{{ basename($fotoPath) }}</span>
-                                    </div>
-                                @endforeach
+                        {{-- Preview cover lama --}}
+                        @if($laporan->cover)
+                            <p class="photo-section-label">Cover saat ini</p>
+                            <div style="margin-bottom:0.75rem; position:relative; display:inline-block;">
+                                <img src="{{ Storage::url($laporan->cover) }}"
+                                    style="height:100px; border-radius:10px; object-fit:cover; border:2px solid #e5e7eb;">
                             </div>
-                            <hr class="form-divider" style="margin: 1rem 0;">
+                            <p style="font-size:0.75rem; color:#9ca3af; margin-bottom:0.5rem;">Upload foto baru untuk mengganti cover</p>
                         @endif
 
-                        <p class="photo-section-label">Tambah foto baru (akan menggantikan semua foto lama)</p>
+                        {{-- Input file disembunyikan, di luar drop zone --}}
+                        <input type="file" name="cover" id="coverInput" accept="image/*" style="display:none;">
 
-                        {{-- Input file hidden, di-trigger oleh dropzone --}}
-                        <input type="file" name="foto[]" id="fotoInput" accept="image/jpeg,image/png" multiple style="display:none;">
-
-                        <div class="drop-zone" id="dropZone">
+                        <div id="dropZone" class="drop-zone">
                             <i class='bx bx-cloud-upload'></i>
                             <p>Klik atau drag foto ke sini</p>
-                            <small>JPG, PNG · Bisa pilih beberapa foto sekaligus</small>
+                            <small>JPG, PNG · Satu foto sebagai cover laporan</small>
                         </div>
 
-                        <div class="preview-grid" id="previewGrid" style="display:none;"></div>
-                        <p id="fotoCounter" style="font-size:0.8rem; color:#9ca3af; margin-top:6px; display:none;"></p>
+                        <div id="previewWrap" style="display:none; margin-top:10px; position:relative;">
+                            <img id="previewImg" style="width:100%; max-height:150px; object-fit:cover; border-radius:10px; border:1.5px solid #667eea;">
+                            <button type="button" id="hapusCover"
+                                style="position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.55);border:none;cursor:pointer;color:#fff;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;">&times;</button>
+                        </div>
                     </div>
                 </div>
 
@@ -531,62 +409,47 @@
 </div>
 
 <script>
-    const dropZone   = document.getElementById('dropZone');
-    const fotoInput  = document.getElementById('fotoInput');
-    const previewGrid = document.getElementById('previewGrid');
-    const fotoCounter = document.getElementById('fotoCounter');
+const coverInput  = document.getElementById('coverInput');
+const dropZone    = document.getElementById('dropZone');
+const previewWrap = document.getElementById('previewWrap');
+const previewImg  = document.getElementById('previewImg');
+const hapusCover  = document.getElementById('hapusCover');
 
-    // Klik dropzone → buka file picker
-    dropZone.addEventListener('click', () => fotoInput.click());
+function showPreview(file) {
+    if (!file) return;
+    previewImg.src = URL.createObjectURL(file);
+    previewWrap.style.display = 'block';
+}
 
-    // Drag over styling
-    dropZone.addEventListener('dragover', e => {
-        e.preventDefault();
-        dropZone.classList.add('dragover');
-    });
-    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+// Klik drop zone → trigger input file secara manual (fix double file picker)
+dropZone.addEventListener('click', () => coverInput.click());
 
-    // Drop file
-    dropZone.addEventListener('drop', e => {
-        e.preventDefault();
-        dropZone.classList.remove('dragover');
-        handleFiles(e.dataTransfer.files);
-    });
+// Setelah file dipilih dari file picker
+coverInput.addEventListener('change', e => {
+    if (e.target.files[0]) showPreview(e.target.files[0]);
+});
 
-    // Pilih file via picker
-    fotoInput.addEventListener('change', e => {
-        handleFiles(e.target.files);
-    });
+// Hapus preview
+hapusCover.addEventListener('click', () => {
+    coverInput.value = '';
+    previewWrap.style.display = 'none';
+    previewImg.src = '';
+});
 
-    function handleFiles(newFiles) {
-        // Langsung render preview dari files yang dipilih
-        // (tidak hapus yang lama, bisa pilih berkali-kali = akumulasi)
-        renderPreview(newFiles);
+// Drag & drop
+dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        coverInput.files = dt.files;
+        showPreview(file);
     }
-
-    function renderPreview(fileList) {
-        previewGrid.innerHTML = '';
-        if (!fileList || fileList.length === 0) {
-            previewGrid.style.display = 'none';
-            fotoCounter.style.display = 'none';
-            return;
-        }
-
-        previewGrid.style.display = 'grid';
-        fotoCounter.style.display = 'block';
-        fotoCounter.textContent = fileList.length + ' foto dipilih';
-
-        Array.from(fileList).forEach(f => {
-            const url  = URL.createObjectURL(f);
-            const wrap = document.createElement('div');
-            wrap.className = 'preview-item';
-            wrap.innerHTML = `
-                <img src="${url}" alt="${f.name}">
-                <span class="preview-name">${f.name}</span>
-            `;
-            previewGrid.appendChild(wrap);
-        });
-    }
+});
 </script>
 
 @endsection

@@ -15,6 +15,9 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
 use App\Http\Controllers\Siswa\LaporanController as SiswaLaporanController;
 
+// Teknisi Controllers
+use App\Http\Controllers\Teknisi\DashboardController as TeknisiDashboardController;
+
 // Halaman utama
 Route::get('/', function () {
     if (!auth()->check()) {
@@ -66,7 +69,7 @@ Route::middleware(['auth', 'role:teknisi'])
     ->prefix('teknisi')
     ->name('teknisi.')
     ->group(function () {
-        Route::get('/dashboard', [HomeController::class, 'teknisiDashboard'])->name('dashboard');
+        Route::get('/dashboard', [TeknisiDashboardController::class, 'index'])->name('dashboard');
         Route::resource('laporan', AdminLaporanController::class)->only(['index', 'edit', 'update']);
     });
 
