@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html
-  lang="en"
+  lang="id"
   class="light-style customizer-hide"
   dir="ltr"
   data-theme="theme-default"
@@ -9,27 +9,63 @@
 >
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-    />
-    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Halaman Login SFR" />
+
+    <title>Login - SFR</title>
 
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
 
+    <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans&display=swap" rel="stylesheet" />
 
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('assets/admin/vendor/fonts/boxicons.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/core.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/theme-default.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/admin/css/demo.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/pages/page-auth.css') }}" />
+
+    <!-- STYLE ELEGANT -->
+    <style>
+      body {
+        background: #f5f6fa;
+      }
+
+      .card {
+        border-radius: 18px;
+        border: none;
+        background: linear-gradient(135deg, #696cff, #8f94fb);
+        padding: 2px;
+      }
+
+      .card-body {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 30px;
+      }
+
+      .btn-primary {
+        border-radius: 10px;
+        font-weight: 500;
+        background: linear-gradient(135deg, #696cff, #8f94fb);
+        border: none;
+      }
+
+      .btn-primary:hover {
+        opacity: 0.9;
+      }
+
+      .form-control {
+        border-radius: 10px;
+      }
+
+      .app-brand-text {
+        letter-spacing: 1px;
+      }
+    </style>
 
     <script src="../assets/vendor/js/helpers.js"></script>
     <script src="{{ asset('assets/admin/js/config.js') }}"></script>
@@ -42,6 +78,7 @@
           <div class="card">
             <div class="card-body">
 
+              <!-- LOGO -->
               <div class="app-brand justify-content-center">
                 <div class="app-brand-link gap-2 d-flex align-items-center">
                   <span class="app-brand-logo demo d-flex align-items-center">
@@ -52,27 +89,24 @@
                       <rect x="14" y="34" width="6" height="6" fill="#ffffff"/>
                       <rect x="24" y="34" width="6" height="6" fill="#ffffff"/>
                       <rect x="42" y="22" width="14" height="28" rx="2" fill="#696cff" opacity="0.85"/>
-                      <rect x="45" y="26" width="8" height="2" fill="#ffffff"/>
-                      <rect x="45" y="32" width="8" height="2" fill="#ffffff"/>
-                      <rect x="45" y="38" width="6" height="2" fill="#ffffff"/>
                     </svg>
                   </span>
                   <span class="app-brand-text demo text-body fw-bolder fs-2 ms-2">SFR</span>
                 </div>
               </div>
 
-              <h4 class="mb-2">Selamat Datang! 👋</h4>
-              <p class="mb-4">Silakan login ke akun Anda</p>
+              <!-- JUDUL -->
+              <h4 class="mb-2 text-center">Selamat Datang di SFR 👋</h4>
+              <p class="mb-4 text-center">Silakan masuk ke akun Anda</p>
 
-              {{-- ALERT SUCCESS --}}
+              <!-- ALERT -->
               @if (session('success'))
                   <div class="alert alert-success alert-dismissible" role="alert">
                       {{ session('success') }}
-                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                   </div>
               @endif
 
-              {{-- ALERT ERROR --}}
               @if ($errors->any())
                   <div class="alert alert-danger alert-dismissible" role="alert">
                       <ul class="mb-0">
@@ -80,13 +114,15 @@
                               <li>{{ $error }}</li>
                           @endforeach
                       </ul>
-                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                   </div>
               @endif
 
-              <form id="formAuthentication" class="mb-3" action="{{ route('login.process') }}" method="POST">
+              <!-- FORM -->
+              <form action="{{ route('login.process') }}" method="POST">
                 @csrf
 
+                <!-- EMAIL -->
                 <div class="mb-3">
                   <label for="email" class="form-label">Email</label>
                   <input
@@ -94,22 +130,22 @@
                     class="form-control"
                     id="email"
                     name="email"
-                    placeholder="Enter your email"
+                    placeholder="Masukkan email Anda"
                     value="{{ old('email') }}"
                     required
-                    autofocus
                   />
                 </div>
 
+                <!-- PASSWORD -->
                 <div class="mb-3 form-password-toggle">
-                  <label class="form-label" for="password">Password</label>
+                  <label class="form-label" for="password">Kata Sandi</label>
                   <div class="input-group input-group-merge">
                     <input
                       type="password"
                       id="password"
                       class="form-control"
                       name="password"
-                      placeholder="••••••••"
+                      placeholder="Masukkan kata sandi"
                       required
                     />
                     <span class="input-group-text cursor-pointer">
@@ -118,26 +154,29 @@
                   </div>
                 </div>
 
+                <!-- REMEMBER -->
                 <div class="mb-3">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="remember" name="remember">
                     <label class="form-check-label" for="remember">
-                      Remember Me
+                      Ingat saya
                     </label>
                   </div>
                 </div>
 
+                <!-- BUTTON -->
                 <div class="mb-3">
                   <button class="btn btn-primary d-grid w-100" type="submit">
-                    Sign in
+                    Masuk
                   </button>
                 </div>
               </form>
 
+              <!-- REGISTER -->
               <p class="text-center">
-                <span>New on our platform?</span>
+                <span>Belum punya akun?</span>
                 <a href="{{ route('register') }}">
-                  <span>Create an account</span>
+                  <span>Daftar sekarang</span>
                 </a>
               </p>
 
@@ -147,6 +186,7 @@
       </div>
     </div>
 
+    <!-- JS -->
     <script src="{{ asset('assets/admin/vendor/libs/jquery/jquery.js') }}"></script>
     <script src="{{ asset('assets/admin/vendor/libs/popper/popper.js') }}"></script>
     <script src="{{ asset('assets/admin/vendor/js/bootstrap.js') }}"></script>
@@ -154,27 +194,21 @@
     <script src="{{ asset('assets/admin/vendor/js/menu.js') }}"></script>
     <script src="{{ asset('assets/admin/js/main.js') }}"></script>
 
-    {{-- Script Toggle Password --}}
+    <!-- TOGGLE PASSWORD -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        const toggles = document.querySelectorAll(".form-password-toggle");
+        const toggle = document.querySelector(".input-group-text");
+        const password = document.querySelector("#password");
+        const icon = document.querySelector(".input-group-text i");
 
-        toggles.forEach(function (wrapper) {
-          const toggle = wrapper.querySelector(".input-group-text");
-          const password = wrapper.querySelector("input");
-          const icon = wrapper.querySelector("i");
-
-          toggle.addEventListener("click", function () {
-            if (password.type === "password") {
-              password.type = "text";
-              icon.classList.remove("bx-hide");
-              icon.classList.add("bx-show");
-            } else {
-              password.type = "password";
-              icon.classList.remove("bx-show");
-              icon.classList.add("bx-hide");
-            }
-          });
+        toggle.addEventListener("click", function () {
+          if (password.type === "password") {
+            password.type = "text";
+            icon.classList.replace("bx-hide", "bx-show");
+          } else {
+            password.type = "password";
+            icon.classList.replace("bx-show", "bx-hide");
+          }
         });
       });
     </script>
