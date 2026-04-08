@@ -17,6 +17,7 @@ use App\Http\Controllers\Siswa\LaporanController as SiswaLaporanController;
 
 // Teknisi Controllers
 use App\Http\Controllers\Teknisi\DashboardController as TeknisiDashboardController;
+use App\Http\Controllers\Teknisi\LaporanController as TeknisiLaporanController; // ← DITAMBAH
 
 // Halaman utama
 Route::get('/', function () {
@@ -70,7 +71,7 @@ Route::middleware(['auth', 'role:teknisi'])
     ->name('teknisi.')
     ->group(function () {
         Route::get('/dashboard', [TeknisiDashboardController::class, 'index'])->name('dashboard');
-        Route::resource('laporan', AdminLaporanController::class)->only(['index', 'edit', 'update']);
+        Route::resource('laporan', TeknisiLaporanController::class)->only(['index', 'edit', 'update']); // ← DIUBAH
     });
 
 // Guru routes
