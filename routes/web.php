@@ -71,7 +71,9 @@ Route::middleware(['auth', 'role:teknisi'])
     ->name('teknisi.')
     ->group(function () {
         Route::get('/dashboard', [TeknisiDashboardController::class, 'index'])->name('dashboard');
-        Route::resource('laporan', TeknisiLaporanController::class)->only(['index', 'edit', 'update']); // ← DIUBAH
+        Route::resource('laporan', TeknisiLaporanController::class)->only(['index', 'edit', 'update']);
+        Route::get('/riwayat-laporan', [TeknisiLaporanController::class, 'riwayat'])->name('laporan.riwayat'); // ← TAMBAH INI
+// ← DIUBAH
     });
 
 // Guru routes

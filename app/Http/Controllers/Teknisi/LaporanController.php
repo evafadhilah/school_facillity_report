@@ -38,15 +38,32 @@ class LaporanController extends Controller
         $request->validate([
             'status' => 'required|in:ditugaskan,diproses,selesai',
             'catatan_teknisi' => 'nullable|string|max:500',
+            'foto_sesudah' => 'nullable|image|max:2048',
         ]);
 
         $laporan->update([
-            'status' => $request->status,
-            'catatan_teknisi' => $request->catatan_teknisi,
-            'tanggal_selesai' => $request->status === 'selesai' ? now() : $laporan->tanggal_selesai,
+            'status'          => $request->status,
+            'catatan'         => $request->catatan_teknisi,
+            'tanggal_selesai' => $request->tanggal_selesai ?: ($request->status === 'selesai' ? now()->toDateString() : $laporan->tanggal_selesai),
         ]);
+
+        if ($request->hasFile('foto_sesudah')) {
+            $path = $request->file('foto_sesudah')->store('foto_sesudah', 'public');
+            $laporan->update(['foto_sesudah' => $path]);
+        }
 
         return redirect()->route('teknisi.laporan.index')
             ->with('success', 'Status laporan berhasil diperbarui!');
+    }
+
+    public function riwayat()
+    {
+        $riwayats = Laporan::where('teknisi_id', auth()->id())
+            ->where('status', 'selesai')
+            ->with(['fasilitas', 'lokasi', 'kelas', 'user'])
+            ->orderBy('tanggal_selesai', 'desc')
+            ->paginate(10);
+
+        return view('teknisi.laporan.riwayat', compact('riwayats'));
     }
 }

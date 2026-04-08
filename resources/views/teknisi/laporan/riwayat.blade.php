@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Laporan Saya')
+@section('title', 'Riwayat Laporan')
 
 @section('content')
 
@@ -28,9 +28,6 @@
     .header-content {
         position: relative;
         z-index: 1;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
     }
     .header-title h4 { margin: 0; font-size: 1.8rem; font-weight: 700; color: white; }
     .header-title p  { margin: 0.5rem 0 0 0; font-size: 0.95rem; color: white; opacity: 0.9; }
@@ -59,29 +56,19 @@
     .table tbody tr:hover { background: #f8f7ff; }
     .table tbody tr:last-child td { border-bottom: none; }
 
-    .badge-urgency {
-        display: inline-block;
-        padding: 4px 12px;
+    .badge-selesai {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 5px 14px;
         border-radius: 20px;
         font-size: 0.78rem;
         font-weight: 700;
+        background: #d1fae5;
+        color: #059669;
     }
-    .badge-tinggi  { background: #fee2e2; color: #dc2626; }
-    .badge-sedang  { background: #fef3c7; color: #d97706; }
-    .badge-rendah  { background: #d1fae5; color: #059669; }
 
-    .badge-status {
-        display: inline-block;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 0.78rem;
-        font-weight: 700;
-    }
-    .badge-ditugaskan { background: #dbeafe; color: #1d4ed8; }
-    .badge-diproses   { background: #fef3c7; color: #d97706; }
-    .badge-selesai    { background: #d1fae5; color: #059669; }
-
-    .btn-edit {
+    .btn-detail {
         background: linear-gradient(135deg, #667eea, #764ba2);
         color: white;
         border: none;
@@ -95,7 +82,7 @@
         gap: 0.3rem;
         transition: all 0.2s;
     }
-    .btn-edit:hover { transform: translateY(-1px); color: white; opacity: 0.9; }
+    .btn-detail:hover { transform: translateY(-1px); color: white; opacity: 0.9; }
 
     .empty-state {
         text-align: center;
@@ -104,14 +91,14 @@
     }
     .empty-state i { font-size: 3rem; margin-bottom: 1rem; display: block; }
 
-    .alert-success {
-        background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-        border: none;
+    .stat-badge {
+        background: rgba(255,255,255,0.2);
         border-radius: 12px;
-        color: #065f46;
-        padding: 1rem 1.5rem;
-        margin-bottom: 1.5rem;
+        padding: 0.75rem 1.25rem;
+        display: inline-block;
     }
+    .stat-badge span { font-size: 1.8rem; font-weight: 700; display: block; }
+    .stat-badge p { margin: 0; font-size: 0.85rem; opacity: 0.9; }
 </style>
 
 <div class="container-xxl flex-grow-1 container-p-y">
@@ -119,21 +106,21 @@
     <div class="index-header">
         <div class="header-content">
             <div class="header-title">
-                <h4><i class='bx bx-clipboard me-2'></i>Laporan Saya</h4>
-                <p>Daftar laporan yang ditugaskan kepada kamu</p>
+                <h4><i class='bx bx-history me-2'></i>Riwayat Laporan</h4>
+                <p>Laporan yang telah kamu selesaikan</p>
+            </div>
+            <div class="mt-3">
+                <div class="stat-badge">
+                    <span>{{ $riwayats->total() }}</span>
+                    <p>Total Selesai</p>
+                </div>
             </div>
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="alert-success">
-            <i class='bx bx-check-circle me-2'></i>{{ session('success') }}
-        </div>
-    @endif
-
     <div class="card table-card">
         <div class="card-body">
-            @if($laporans->count() > 0)
+            @if($riwayats->count() > 0)
                 <div class="table-responsive">
                     <table class="table mb-0">
                         <thead>
@@ -143,34 +130,34 @@
                                 <th>Fasilitas</th>
                                 <th>Lokasi</th>
                                 <th>Deskripsi</th>
-                                <th>Urgency</th>
                                 <th>Status</th>
-                                <th>Tanggal</th>
+                                <th>Tanggal Selesai</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($laporans as $i => $laporan)
+                            @foreach($riwayats as $i => $laporan)
                             <tr>
-                                <td>{{ $laporans->firstItem() + $i }}</td>
+                                <td>{{ $riwayats->firstItem() + $i }}</td>
                                 <td>{{ $laporan->nama_pelapor ?? $laporan->user->name ?? '-' }}</td>
-                                <td>{{ $laporan->fasilitas->nama_fasilitas ?? '-' }}</td> {{-- ← dibenerin --}}
-                                <td>{{ $laporan->lokasi->nama_lokasi ?? '-' }}</td> {{-- ← dibenerin --}}
+                                <td>{{ $laporan->fasilitas->nama_fasilitas ?? '-' }}</td>
+                                <td>{{ $laporan->lokasi->nama_lokasi ?? '-' }}</td>
                                 <td>{{ Str::limit($laporan->deskripsi, 40) }}</td>
                                 <td>
-                                    <span class="badge-urgency badge-{{ $laporan->tingkat_urgency }}">
-                                        {{ ucfirst($laporan->tingkat_urgency) }}
+                                    <span class="badge-selesai">
+                                        <i class='bx bx-check-circle'></i> Selesai
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="badge-status badge-{{ $laporan->status }}">
-                                        {{ ucfirst($laporan->status) }}
-                                    </span>
+                                    @if($laporan->tanggal_selesai)
+                                        {{ \Carbon\Carbon::parse($laporan->tanggal_selesai)->format('d M Y') }}
+                                    @else
+                                        -
+                                    @endif
                                 </td>
-                                <td>{{ $laporan->created_at->format('d-m-Y') }}</td>
                                 <td>
-                                    <a href="{{ route('teknisi.laporan.edit', $laporan->id) }}" class="btn-edit">
-                                        <i class='bx bx-edit'></i> Update
+                                    <a href="{{ route('teknisi.laporan.edit', $laporan->id) }}" class="btn-detail">
+                                        <i class='bx bx-show'></i> Detail
                                     </a>
                                 </td>
                             </tr>
@@ -180,14 +167,14 @@
                 </div>
 
                 <div style="padding: 1.25rem; border-top: 1px solid #f3f4f6;">
-                    {{ $laporans->links() }}
+                    {{ $riwayats->links() }}
                 </div>
 
             @else
                 <div class="empty-state">
-                    <i class='bx bx-clipboard'></i>
-                    <p style="font-size:1.1rem; font-weight:600; color:#6b7280;">Belum ada laporan yang ditugaskan</p>
-                    <p style="font-size:0.9rem;">Laporan akan muncul di sini setelah admin menugaskan ke kamu</p>
+                    <i class='bx bx-history'></i>
+                    <p style="font-size:1.1rem; font-weight:600; color:#6b7280;">Belum ada laporan yang diselesaikan</p>
+                    <p style="font-size:0.9rem;">Laporan yang sudah kamu tandai selesai akan muncul di sini</p>
                 </div>
             @endif
         </div>

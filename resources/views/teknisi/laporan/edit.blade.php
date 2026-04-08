@@ -105,11 +105,11 @@
             </div>
             <div class="info-item">
                 <label>Fasilitas</label>
-                <span>{{ $laporan->fasilitas->nama ?? '-' }}</span>
+                <span>{{ $laporan->fasilitas->nama_fasilitas ?? '-' }}</span> {{-- ← dibenerin --}}
             </div>
             <div class="info-item">
                 <label>Lokasi</label>
-                <span>{{ $laporan->lokasi->nama ?? '-' }}</span>
+                <span>{{ $laporan->lokasi->nama_lokasi ?? '-' }}</span> {{-- ← dibenerin --}}
             </div>
             <div class="info-item">
                 <label>Urgency</label>
@@ -151,7 +151,6 @@
                     <label class="form-label"><i class='bx bx-note me-1'></i> Catatan Teknisi</label>
                     <textarea name="catatan_teknisi" class="form-control @error('catatan_teknisi') is-invalid @enderror"
                         rows="3" placeholder="Tuliskan catatan penanganan...">{{ old('catatan_teknisi', $laporan->catatan) }}</textarea>
-                        {{-- ↑ diambil dari $laporan->catatan (nama kolom di database) --}}
                 </div>
 
                 <hr class="form-divider">
