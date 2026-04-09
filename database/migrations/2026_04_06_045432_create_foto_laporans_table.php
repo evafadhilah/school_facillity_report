@@ -8,10 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('laporans', function (Blueprint $table) {
-            $table->renameColumn('foto', 'cover');
-        });
-
         Schema::create('foto_laporans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('laporan_id')->constrained('laporans')->cascadeOnDelete();
@@ -23,9 +19,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('foto_laporans');
-
-        Schema::table('laporans', function (Blueprint $table) {
-            $table->renameColumn('cover', 'foto');
-        });
     }
 };
