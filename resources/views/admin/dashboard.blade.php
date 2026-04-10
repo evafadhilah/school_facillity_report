@@ -13,6 +13,7 @@
         overflow: hidden;
         box-shadow: 0 8px 30px rgba(0,0,0,0.08);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
     }
     .stat-card:hover {
         transform: translateY(-4px);
@@ -52,10 +53,9 @@
         color: rgba(255,255,255,0.65);
         margin-top: 0.5rem;
     }
-    .card-total    { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-    .card-pending  { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
-    .card-proses   { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
-    .card-selesai  { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    .card-total   { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .card-proses  { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+    .card-selesai { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
 
     /* ── Welcome Banner ── */
     .welcome-banner {
@@ -93,13 +93,91 @@
         color: rgba(255,255,255,0.82); position: relative; z-index: 1;
     }
 
+    /* ── Chart Cards ── */
+    .chart-card {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+        overflow: hidden;
+        background: white;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .chart-card .chart-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 1rem 1.25rem;
+        border-bottom: 2px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+    }
+    .chart-card .chart-header h6 {
+        margin: 0;
+        font-weight: 700;
+        color: #4338ca;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .chart-card .chart-header span {
+        font-size: 0.8rem;
+        color: #9ca3af;
+    }
+    .chart-body {
+        padding: 1.25rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .chart-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 1rem;
+        flex-shrink: 0;
+    }
+    .chart-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.78rem;
+        color: #6b7280;
+    }
+    .chart-legend-dot {
+        width: 10px; height: 10px;
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
+    .donut-legend-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.4rem 0;
+        border-bottom: 1px solid #f9fafb;
+        font-size: 0.82rem;
+    }
+    .donut-legend-row:last-child { border-bottom: none; }
+    .donut-legend-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #4b5563;
+    }
+    .donut-legend-val { font-weight: 700; color: #111827; }
+    .donut-legend-pct { font-size: 0.73rem; color: #9ca3af; margin-left: 4px; }
+
     /* ── Section Tables ── */
     .section-card {
         border: none;
         border-radius: 20px;
         box-shadow: 0 8px 30px rgba(0,0,0,0.07);
         overflow: hidden;
-        margin-bottom: 1.75rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
     .section-card .section-header {
         background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -108,6 +186,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        flex-shrink: 0;
     }
     .section-card .section-header h6 {
         margin: 0;
@@ -125,6 +204,9 @@
         font-weight: 600;
     }
     .section-card .section-header a:hover { text-decoration: underline; }
+    .section-card .table-responsive {
+        flex: 1;
+    }
 
     .dash-table {
         margin: 0; width: 100%;
@@ -188,19 +270,33 @@
 
     .reporter-name { font-weight: 600; color: #111827; font-size: 0.85rem; }
     .reporter-sub  { font-size: 0.73rem; color: #9ca3af; }
+
+    /* ── Row stretch fix ── */
+    .row-stretch {
+        align-items: stretch;
+    }
+    .row-stretch > [class*="col"] {
+        display: flex;
+        flex-direction: column;
+    }
+    .row-stretch > [class*="col"] > .card,
+    .row-stretch > [class*="col"] > .chart-card,
+    .row-stretch > [class*="col"] > .section-card {
+        flex: 1;
+    }
 </style>
 
 <div class="container-xxl flex-grow-1 container-p-y">
 
     {{-- Welcome Banner --}}
     <div class="welcome-banner">
-        <h4>Selamat datang, {{ auth()->user()?->name ?? 'Admin' }}! 👋</h4>
+        <h4>Selamat datang, {{ auth()->user()?->name ?? 'Admin' }}!</h4>
         <p>Berikut ringkasan laporan kerusakan fasilitas sekolah hari ini.</p>
     </div>
 
     {{-- Stat Cards --}}
-    <div class="row g-4 mb-4">
-        <div class="col-6 col-lg-3">
+    <div class="row g-4 mb-4 row-stretch">
+        <div class="col-12 col-md-4">
             <div class="stat-card card-total">
                 <div class="stat-icon"><i class='bx bx-file'></i></div>
                 <div class="stat-value">{{ $totalLaporan ?? 0 }}</div>
@@ -208,23 +304,15 @@
                 <div class="stat-sub">Semua laporan masuk</div>
             </div>
         </div>
-        <div class="col-6 col-lg-3">
-            <div class="stat-card card-pending">
-                <div class="stat-icon"><i class='bx bx-time-five'></i></div>
-                <div class="stat-value">{{ $totalPending ?? 0 }}</div>
-                <div class="stat-label">Laporan Pending</div>
-                <div class="stat-sub">Menunggu ditindaklanjuti</div>
-            </div>
-        </div>
-        <div class="col-6 col-lg-3">
+        <div class="col-12 col-md-4">
             <div class="stat-card card-proses">
                 <div class="stat-icon"><i class='bx bx-loader-alt'></i></div>
                 <div class="stat-value">{{ $totalDiproses ?? 0 }}</div>
-                <div class="stat-label">Sedang Diproses</div>
-                <div class="stat-sub">Dalam penanganan teknisi</div>
+                <div class="stat-label">Dalam Penanganan Teknisi</div>
+                <div class="stat-sub">Sedang dikerjakan</div>
             </div>
         </div>
-        <div class="col-6 col-lg-3">
+        <div class="col-12 col-md-4">
             <div class="stat-card card-selesai">
                 <div class="stat-icon"><i class='bx bx-check-circle'></i></div>
                 <div class="stat-value">{{ $totalSelesai ?? 0 }}</div>
@@ -234,8 +322,75 @@
         </div>
     </div>
 
-    {{-- Row: Laporan Terbaru + Urgency Tinggi --}}
-    <div class="row g-4 mb-2">
+    {{-- Charts Row --}}
+    <div class="row g-4 mb-4 row-stretch">
+
+        {{-- Bar Chart --}}
+        <div class="col-12 col-xl-7">
+            <div class="card chart-card">
+                <div class="chart-header">
+                    <h6><i class='bx bx-bar-chart-alt-2'></i> Laporan per Bulan</h6>
+                    <span>{{ now()->year }}</span>
+                </div>
+                <div class="chart-body">
+                    <div class="chart-legend">
+                        <div class="chart-legend-item">
+                            <div class="chart-legend-dot" style="background:#667eea;"></div>
+                            Laporan masuk
+                        </div>
+                        <div class="chart-legend-item">
+                            <div class="chart-legend-dot" style="background:#10b981;"></div>
+                            Selesai
+                        </div>
+                    </div>
+                    <div style="position:relative; width:100%; flex:1; min-height:220px;">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Donut Chart --}}
+        <div class="col-12 col-xl-5">
+            <div class="card chart-card">
+                <div class="chart-header">
+                    <h6><i class='bx bx-pie-chart-alt-2'></i> Status Laporan</h6>
+                    <span>Semua waktu</span>
+                </div>
+                <div class="chart-body">
+                    <div style="position:relative; width:100%; height:180px; flex-shrink:0;">
+                        <canvas id="donutChart"></canvas>
+                    </div>
+                    <div class="mt-3">
+                        @php
+                            $statusLabels = ['Pending','Ditugaskan','Diproses','Selesai','Ditolak'];
+                            $statusColors = ['#f59e0b','#8b5cf6','#3b82f6','#10b981','#ef4444'];
+                            $totalStatus  = array_sum($statusData ?? [0,0,0,0,0]);
+                        @endphp
+                        @foreach($statusLabels as $i => $label)
+                        <div class="donut-legend-row">
+                            <div class="donut-legend-left">
+                                <div class="chart-legend-dot" style="background:{{ $statusColors[$i] }};"></div>
+                                {{ $label }}
+                            </div>
+                            <div>
+                                <span class="donut-legend-val">{{ $statusData[$i] ?? 0 }}</span>
+                                <span class="donut-legend-pct">
+                                    ({{ $totalStatus > 0 ? round((($statusData[$i] ?? 0) / $totalStatus) * 100) : 0 }}%)
+                                </span>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {{-- End Charts Row --}}
+
+    {{-- Tables Row --}}
+    <div class="row g-4 mb-4 row-stretch">
 
         {{-- Laporan Terbaru --}}
         <div class="col-12 col-xl-7">
@@ -290,7 +445,7 @@
             </div>
         </div>
 
-        {{-- Laporan Urgency Tinggi --}}
+        {{-- Urgency Tinggi --}}
         <div class="col-12 col-xl-5">
             <div class="card section-card">
                 <div class="section-header">
@@ -331,99 +486,75 @@
         </div>
 
     </div>
-
-    {{-- Row: Laporan Pending + Riwayat Selesai --}}
-    <div class="row g-4">
-
-        {{-- Laporan Pending --}}
-        <div class="col-12 col-xl-6">
-            <div class="card section-card">
-                <div class="section-header">
-                    <h6><i class='bx bx-time-five' style="color:#f59e0b;"></i> Laporan Pending</h6>
-                    <a href="{{ route('admin.laporan.index') }}">Lihat semua →</a>
-                </div>
-                <div class="table-responsive">
-                    <table class="dash-table">
-                        <thead>
-                            <tr>
-                                <th>Pelapor</th>
-                                <th>Fasilitas</th>
-                                <th>Urgency</th>
-                                <th>Tanggal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($laporanPending ?? [] as $lap)
-                            <tr>
-                                <td>
-                                    <div class="reporter-name">{{ $lap->user->name ?? '-' }}</div>
-                                    <div class="reporter-sub">{{ $lap->kelas->nama_kelas ?? '' }}</div>
-                                </td>
-                                <td>{{ $lap->fasilitas->nama_fasilitas ?? '-' }}</td>
-                                <td>
-                                    @php $u = strtolower($lap->tingkat_urgency ?? '') @endphp
-                                    @if($u)
-                                        <span class="badge-urgency badge-{{ $u }}">{{ ucfirst($lap->tingkat_urgency) }}</span>
-                                    @else <span style="color:#d1d5db;">-</span> @endif
-                                </td>
-                                <td style="white-space:nowrap; color:#9ca3af; font-size:0.78rem;">
-                                    {{ $lap->created_at?->format('d M Y') }}
-                                </td>
-                            </tr>
-                            @empty
-                            <tr><td colspan="4">
-                                <div class="empty-state"><i class='bx bx-check-double'></i>Tidak ada laporan pending</div>
-                            </td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        {{-- Riwayat Selesai --}}
-        <div class="col-12 col-xl-6">
-            <div class="card section-card">
-                <div class="section-header">
-                    <h6><i class='bx bx-history' style="color:#10b981;"></i> Riwayat Selesai</h6>
-                    <a href="{{ route('admin.riwayatlaporan.index') }}">Lihat semua →</a>
-                </div>
-                <div class="table-responsive">
-                    <table class="dash-table">
-                        <thead>
-                            <tr>
-                                <th>Pelapor</th>
-                                <th>Fasilitas</th>
-                                <th>Lokasi</th>
-                                <th>Selesai</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($riwayatSelesai ?? [] as $lap)
-                            <tr>
-                                <td>
-                                    <div class="reporter-name">{{ $lap->user->name ?? '-' }}</div>
-                                    <div class="reporter-sub">{{ $lap->kelas->nama_kelas ?? '' }}</div>
-                                </td>
-                                <td>{{ $lap->fasilitas->nama_fasilitas ?? '-' }}</td>
-                                <td>{{ $lap->lokasi->nama_lokasi ?? '-' }}</td>
-                                <td style="white-space:nowrap; color:#9ca3af; font-size:0.78rem;">
-                                    {{ $lap->updated_at?->format('d M Y') }}
-                                </td>
-                            </tr>
-                            @empty
-                            <tr><td colspan="4">
-                                <div class="empty-state"><i class='bx bx-history'></i>Belum ada riwayat selesai</div>
-                            </td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-    </div>
+    {{-- End Tables Row --}}
 
 </div>
+
+{{-- Chart.js --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+    const dataMasuk   = @json($chartMasuk ?? array_fill(0, 12, 0));
+    const dataSelesai = @json($chartSelesai ?? array_fill(0, 12, 0));
+    const dataStatus  = @json($statusData ?? array_fill(0, 5, 0));
+
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'],
+            datasets: [
+                {
+                    label: 'Laporan masuk',
+                    data: dataMasuk,
+                    backgroundColor: 'rgba(102,126,234,0.85)',
+                    borderRadius: 6,
+                    borderSkipped: false,
+                },
+                {
+                    label: 'Selesai',
+                    data: dataSelesai,
+                    backgroundColor: 'rgba(16,185,129,0.85)',
+                    borderRadius: 6,
+                    borderSkipped: false,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { size: 11 }, color: '#9ca3af', autoSkip: false }
+                },
+                y: {
+                    grid: { color: 'rgba(0,0,0,0.05)' },
+                    ticks: { font: { size: 11 }, color: '#9ca3af', precision: 0 },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('donutChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Pending','Ditugaskan','Diproses','Selesai','Ditolak'],
+            datasets: [{
+                data: dataStatus,
+                backgroundColor: ['#f59e0b','#8b5cf6','#3b82f6','#10b981','#ef4444'],
+                borderWidth: 2,
+                borderColor: '#ffffff',
+                hoverOffset: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '68%',
+            plugins: { legend: { display: false } }
+        }
+    });
+</script>
 
 @endsection

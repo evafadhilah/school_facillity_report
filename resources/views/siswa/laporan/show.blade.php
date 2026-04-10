@@ -399,6 +399,25 @@
             </div>
         </div>
 
+        {{-- Card: Catatan Teknisi --}}
+        @if($laporan->catatan)
+        <div class="detail-card full-width-card">
+            <div class="card-header-custom">
+                <i class='bx bx-wrench'></i>
+                <h5>Catatan Teknisi</h5>
+            </div>
+            <div class="description-content" style="border-left-color: #10b981;">
+                {{ $laporan->catatan }}
+            </div>
+            @if($laporan->tanggal_selesai)
+            <div style="margin-top: 0.75rem; font-size: 0.85rem; color: #9ca3af;">
+                <i class='bx bx-calendar-check'></i>
+                Selesai: {{ \Carbon\Carbon::parse($laporan->tanggal_selesai)->format('d M Y, H:i') }} WIB
+            </div>
+            @endif
+        </div>
+        @endif
+
         <!-- Card 4: Deskripsi (Full Width) -->
         <div class="detail-card full-width-card">
             <div class="card-header-custom">
@@ -410,35 +429,34 @@
             </div>
         </div>
 
-       
         <!-- Card 5: Foto (Full Width) -->
-<div class="detail-card full-width-card">
-    <div class="card-header-custom">
-        <i class='bx bx-camera'></i>
-        <h5>Foto Laporan</h5>
-    </div>
-
-    @if($laporan->fotoLaporan->count() > 0)
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; padding: 1rem; background: #f9fafb; border-radius: 12px;">
-            @foreach($laporan->fotoLaporan as $item)
-                <a href="{{ Storage::url($item->foto) }}" target="_blank">
-                    <img src="{{ Storage::url($item->foto) }}"
-                        style="width:100%; height:200px; object-fit:cover; border-radius:10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s;"
-                        onmouseover="this.style.transform='scale(1.03)'"
-                        onmouseout="this.style.transform='scale(1)'"
-                        alt="Foto Laporan">
-                </a>
-            @endforeach
-        </div>
-    @else
-        <div class="photo-wrapper">
-            <div class="no-photo">
-                <i class='bx bx-image'></i>
-                <p>Tidak ada foto</p>
+        <div class="detail-card full-width-card">
+            <div class="card-header-custom">
+                <i class='bx bx-camera'></i>
+                <h5>Foto Laporan</h5>
             </div>
+
+            @if($laporan->fotoLaporan->count() > 0)
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; padding: 1rem; background: #f9fafb; border-radius: 12px;">
+                    @foreach($laporan->fotoLaporan as $item)
+                        <a href="{{ Storage::url($item->foto) }}" target="_blank">
+                            <img src="{{ Storage::url($item->foto) }}"
+                                style="width:100%; height:200px; object-fit:cover; border-radius:10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s;"
+                                onmouseover="this.style.transform='scale(1.03)'"
+                                onmouseout="this.style.transform='scale(1)'"
+                                alt="Foto Laporan">
+                        </a>
+                    @endforeach
+                </div>
+            @else
+                <div class="photo-wrapper">
+                    <div class="no-photo">
+                        <i class='bx bx-image'></i>
+                        <p>Tidak ada foto</p>
+                    </div>
+                </div>
+            @endif
         </div>
-    @endif
-</div>
 
     </div>
 

@@ -40,5 +40,15 @@
       </a>
     </li>
 
+    <!-- riwayat -->
+    <li class="menu-item {{ request()->routeIs('teknisi.laporan.riwayat') ? 'active' : '' }}">
+        <a href="{{ route('teknisi.laporan.riwayat') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-history"></i>
+            <div data-i18n="Riwayat Laporan">Riwayat Laporan</div>
+        </a>
+    </li>
+
+
+
   </ul>
-</aside>    
+</aside>

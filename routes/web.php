@@ -10,6 +10,7 @@ use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\LokasiController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 // Siswa Controllers
 use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Siswa\LaporanController as SiswaLaporanController;
 
 // Teknisi Controllers
 use App\Http\Controllers\Teknisi\DashboardController as TeknisiDashboardController;
+use App\Http\Controllers\Teknisi\LaporanController as TeknisiLaporanController;
 
 // Halaman utama
 Route::get('/', function () {
@@ -55,7 +57,7 @@ Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::get('/dashboard', [HomeController::class, 'adminDashboard'])->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::resource('kategori', KategoriController::class)->except(['show']);
         Route::resource('lokasi', LokasiController::class);
         Route::resource('laporan', AdminLaporanController::class);
@@ -70,7 +72,8 @@ Route::middleware(['auth', 'role:teknisi'])
     ->name('teknisi.')
     ->group(function () {
         Route::get('/dashboard', [TeknisiDashboardController::class, 'index'])->name('dashboard');
-        Route::resource('laporan', AdminLaporanController::class)->only(['index', 'edit', 'update']);
+        Route::resource('laporan', TeknisiLaporanController::class)->only(['index', 'edit', 'update']);
+        Route::get('/riwayat-laporan', [TeknisiLaporanController::class, 'riwayat'])->name('laporan.riwayat');
     });
 
 // Guru routes
