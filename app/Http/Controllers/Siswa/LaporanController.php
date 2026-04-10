@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Siswa;
+
 use App\Http\Controllers\Controller;
 use App\Models\Laporan;
 use App\Models\Kelas;
@@ -51,40 +52,39 @@ class LaporanController extends Controller
         return view('siswa.laporan.create', compact('kelas', 'kategori', 'fasilitas', 'lokasi'));
     }
 
-   public function store(Request $request)
-{
-    $request->validate([
-        'nama_pelapor' => 'required',
-        'kelas_id'     => 'required',
-        'kategori_id'  => 'required',
-        'fasilitas_id' => 'required',
-        'lokasi_id'    => 'required',
-        'deskripsi'    => 'required',
-        'cover'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-    ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nama_pelapor' => 'required',
+            'kelas_id'     => 'required',
+            'kategori_id'  => 'required',
+            'fasilitas_id' => 'required',
+            'lokasi_id'    => 'required',
+            'deskripsi'    => 'required',
+            'cover'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
-    $data = $request->only([
-        'nama_pelapor',
-        'kelas_id',
-        'kategori_id',
-        'fasilitas_id',
-        'lokasi_id',
-        'deskripsi',
-    ]);
+        $data = $request->only([
+            'nama_pelapor',
+            'kelas_id',
+            'kategori_id',
+            'fasilitas_id',
+            'lokasi_id',
+            'deskripsi',
+        ]);
 
-    // ✅ Simpan cover
-    if ($request->hasFile('cover')) {
-        $data['cover'] = $request->file('cover')->store('laporan', 'public');
+        if ($request->hasFile('cover')) {
+            $data['cover'] = $request->file('cover')->store('laporan/cover', 'public');
+        }
+
+        $data['user_id'] = Auth::id();
+        $data['status']  = 'pending';
+
+        Laporan::create($data);
+
+        return redirect()->route('siswa.laporan.index')
+            ->with('success', 'Laporan berhasil dikirim');
     }
-
-    $data['user_id'] = Auth::id();
-    $data['status']  = 'pending';
-
-    Laporan::create($data);
-
-    return redirect()->route('siswa.laporan.index')
-        ->with('success', 'Laporan berhasil dikirim');
-}
 
     public function edit($id)
     {
@@ -101,48 +101,44 @@ class LaporanController extends Controller
     }
 
     public function update(Request $request, $id)
-{
-    $laporan = Laporan::where('user_id', Auth::id())
-        ->where('status', 'pending')
-        ->findOrFail($id);
+    {
+        $laporan = Laporan::where('user_id', Auth::id())
+            ->where('status', 'pending')
+            ->findOrFail($id);
 
-    $request->validate([
-        'nama_pelapor' => 'required',
-        'kelas_id'     => 'required',
-        'kategori_id'  => 'required',
-        'fasilitas_id' => 'required',
-        'lokasi_id'    => 'required',
-        'deskripsi'    => 'required',
-        'cover'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-    ]);
+        $request->validate([
+            'nama_pelapor' => 'required',
+            'kelas_id'     => 'required',
+            'kategori_id'  => 'required',
+            'fasilitas_id' => 'required',
+            'lokasi_id'    => 'required',
+            'deskripsi'    => 'required',
+            'cover'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
-    $data = $request->only([
-        'nama_pelapor',
-        'kelas_id',
-        'kategori_id',
-        'fasilitas_id',
-        'lokasi_id',
-        'deskripsi',
-    ]);
+        $data = $request->only([
+            'nama_pelapor',
+            'kelas_id',
+            'kategori_id',
+            'fasilitas_id',
+            'lokasi_id',
+            'deskripsi',
+        ]);
 
-    // ✅ Update cover
-    if ($request->hasFile('cover')) {
-        // Hapus cover lama
-        if ($laporan->cover) {
-            Storage::disk('public')->delete($laporan->cover);
+        if ($request->hasFile('cover')) {
+            if ($laporan->cover) {
+                Storage::disk('public')->delete($laporan->cover);
+            }
+            $data['cover'] = $request->file('cover')->store('laporan/cover', 'public');
+        } else {
+            $data['cover'] = $laporan->cover;
         }
-        // Simpan cover baru
-        $data['cover'] = $request->file('cover')->store('laporan', 'public');
-    } else {
-        // Tetap pakai cover lama
-        $data['cover'] = $laporan->cover;
+
+        $laporan->update($data);
+
+        return redirect()->route('siswa.laporan.index')
+            ->with('success', 'Laporan berhasil diperbarui');
     }
-
-    $laporan->update($data);
-
-    return redirect()->route('siswa.laporan.index')
-        ->with('success', 'Laporan berhasil diperbarui');
-}
 
     public function show($id)
     {
@@ -159,7 +155,6 @@ class LaporanController extends Controller
             ->where('status', 'pending')
             ->findOrFail($id);
 
-        // ✅ Hapus cover dari storage
         if ($laporan->cover) {
             Storage::disk('public')->delete($laporan->cover);
         }
