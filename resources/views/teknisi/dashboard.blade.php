@@ -1,538 +1,421 @@
-<!-- resources/views/admin/dashboard.blade.php -->
+{{-- resources/views/teknisi/dashboard.blade.php --}}
 @extends('layouts.backend')
 
 @section('content')
 
+<style>
+    /* ── Penyesuaian Agar Konten Mengecil & Sejajar ── */
+    .tkn-wrap {
+        /* Tambahkan padding kiri-kanan agar konten masuk ke dalam
+           dan lurus dengan bar pencarian di atas */
+        padding: 1.5rem 8.75rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
 
+    /* ── Welcome Banner ── */
+    .tkn-banner {
+        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 1.75rem 2rem;
+        min-height: 90px;
+        margin-bottom: 1.5rem;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 8px 32px rgba(102,126,234,0.25);
+    }
+    .tkn-banner::before {
+        content: '';
+        position: absolute;
+        top: -40px; right: -40px;
+        width: 180px; height: 180px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.1);
+    }
+    .tkn-banner::after {
+        content: '';
+        position: absolute;
+        bottom: -50px; left: 30%;
+        width: 140px; height: 140px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.07);
+    }
+    .tkn-banner-left { position: relative; z-index: 1; }
+    .tkn-banner-left h4 { font-size: 1.35rem; font-weight: 700; margin: 0 0 0.3rem; }
+    .tkn-banner-left p  { font-size: 0.85rem; color: rgba(255,255,255,0.75); margin: 0; }
 
-            <div class="container-xxl flex-grow-1 container-p-y">
-              <div class="row">
-                <div class="col-lg-8 mb-4 order-0">
-                  <div class="card">
-                    <div class="d-flex align-items-end row">
-                      <div class="col-sm-7">
-                        <div class="card-body">
-                        <p>Selamat datang, {{ auth()->user()?->name ?? 'Guest' }}!</p>
-                          <p class="mb-4">
-                            You have done <span class="fw-bold">72%</span> more sales today. Check your new badge in
-                            your profile.
-                          </p>
+    /* ── Stat Cards ── */
+    .tkn-stat {
+        border-radius: 16px;
+        padding: 1.25rem 1.5rem;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+        transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .tkn-stat:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.12); }
+    .tkn-stat::after {
+        content: '';
+        position: absolute;
+        bottom: -20px; right: -20px;
+        width: 90px; height: 90px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.1);
+    }
+    .tkn-stat-icon {
+        width: 44px; height: 44px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.2);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.3rem;
+        color: white;
+        margin-bottom: 0.85rem;
+    }
+    .tkn-stat-val  { font-size: 2rem; font-weight: 700; color: white; line-height: 1; }
+    .tkn-stat-lbl  { font-size: 0.82rem; color: rgba(255,255,255,0.8); margin-top: 0.2rem; font-weight: 500; }
+    .tkn-stat-sub  { font-size: 0.72rem; color: rgba(255,255,255,0.55); margin-top: 0.4rem; }
+    .ts-indigo  { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+    .ts-red     { background: linear-gradient(135deg, #ef4444, #dc2626); }
+    .ts-blue    { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .ts-green   { background: linear-gradient(135deg, #10b981, #059669); }
 
-                          <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>
-                        </div>
-                      </div>
-                      <div class="col-sm-5 text-center text-sm-left">
-                        <div class="card-body pb-0 px-0 px-md-4">
-                          <img
-                            src="{{ asset('assets/admin/img/illustrations/man-with-laptop-light.png')}}"
-                            height="140"
-                            alt="View Badge User"
-                            data-app-dark-img="illustrations/man-with-laptop-dark.png"
-                            data-app-light-img="illustrations/man-with-laptop-light.png"/>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-4 col-md-4 order-1">
-                  <div class="row">
-                    <div class="col-lg-6 col-md-12 col-6 mb-4">
-                      <div class="card">
-                        <div class="card-body">
-                          <div class="card-title d-flex align-items-start justify-content-between">
-                            <div class="avatar flex-shrink-0">
-                              <img
-                                src="{{ asset('assets/admin/img/icons/unicons/chart-success.png')}}"
-                                alt="chart success"
-                                class="rounded"/>
-                            </div>
-                            <div class="dropdown">
-                              <button
-                                class="btn p-0"
-                                type="button"
-                                id="cardOpt3"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                              </button>
-                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
-                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                              </div>
-                            </div>
-                          </div>
-                          <span class="fw-semibold d-block mb-1">Profit</span>
-                          <h3 class="card-title mb-2">$12,628</h3>
-                          <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12 col-6 mb-4">
-                      <div class="card">
-                        <div class="card-body">
-                          <div class="card-title d-flex align-items-start justify-content-between">
-                            <div class="avatar flex-shrink-0">
-                              <img
-                                src="{{ asset('assets/admin/img/icons/unicons/wallet-info.png') }}"
-                                alt="Credit Card"
-                                class="rounded"/>
-                            </div>
-                            <div class="dropdown">
-                              <button
-                                class="btn p-0"
-                                type="button"
-                                id="cardOpt6"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                              >
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                              </button>
-                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
-                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                              </div>
-                            </div>
-                          </div>
-                          <span>Sales</span>
-                          <h3 class="card-title text-nowrap mb-1">$4,679</h3>
-                          <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Total Revenue -->
-                <div class="col-12 col-lg-8 order-2 order-md-3 order-lg-2 mb-4">
-                  <div class="card">
-                    <div class="row row-bordered g-0">
-                      <div class="col-md-8">
-                        <h5 class="card-header m-0 me-2 pb-3">Total Revenue</h5>
-                        <div id="totalRevenueChart" class="px-2"></div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="card-body">
-                          <div class="text-center">
-                            <div class="dropdown">
-                              <button
-                                class="btn btn-sm btn-outline-primary dropdown-toggle"
-                                type="button"
-                                id="growthReportId"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                              >
-                                2022
-                              </button>
-                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="growthReportId">
-                                <a class="dropdown-item" href="javascript:void(0);">2021</a>
-                                <a class="dropdown-item" href="javascript:void(0);">2020</a>
-                                <a class="dropdown-item" href="javascript:void(0);">2019</a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div id="growthChart"></div>
-                        <div class="text-center fw-semibold pt-3 mb-2">62% Company Growth</div>
+    /* ── Cards generic ── */
+    .tkn-card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+        background: white;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .tkn-card-head {
+        padding: 0.9rem 1.25rem;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+        background: #fafbfc;
+    }
+    .tkn-card-head h6 {
+        margin: 0;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #1e293b;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .tkn-card-head a {
+        font-size: 0.76rem;
+        color: #6366f1;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .tkn-card-head a:hover { text-decoration: underline; }
+    .tkn-card-head span {
+        font-size: 0.75rem;
+        color: #94a3b8;
+    }
+    .tkn-card-body {
+        padding: 1.25rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
 
-                        <div class="d-flex px-xxl-4 px-lg-2 p-4 gap-xxl-3 gap-lg-1 gap-3 justify-content-between">
-                          <div class="d-flex">
-                            <div class="me-2">
-                              <span class="badge bg-label-primary p-2"><i class="bx bx-dollar text-primary"></i></span>
-                            </div>
-                            <div class="d-flex flex-column">
-                              <small>2022</small>
-                              <h6 class="mb-0">$32.5k</h6>
-                            </div>
-                          </div>
-                          <div class="d-flex">
-                            <div class="me-2">
-                              <span class="badge bg-label-info p-2"><i class="bx bx-wallet text-info"></i></span>
-                            </div>
-                            <div class="d-flex flex-column">
-                              <small>2021</small>
-                              <h6 class="mb-0">$41.2k</h6>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!--/ Total Revenue -->
-                <div class="col-12 col-md-8 col-lg-4 order-3 order-md-2">
-                  <div class="row">
-                    <div class="col-6 mb-4">
-                      <div class="card">
-                        <div class="card-body">
-                          <div class="card-title d-flex align-items-start justify-content-between">
-                            <div class="avatar flex-shrink-0">
-                              <img src="{{ asset('assets/admin/img/icons/unicons/paypal.png')}}" alt="Credit Card" class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                              <button
-                                class="btn p-0"
-                                type="button"
-                                id="cardOpt4"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                              >
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                              </button>
-                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt4">
-                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                              </div>
-                            </div>
-                          </div>
-                          <span class="d-block mb-1">Payments</span>
-                          <h3 class="card-title text-nowrap mb-2">$2,456</h3>
-                          <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i> -14.82%</small>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-6 mb-4">
-                      <div class="card">
-                        <div class="card-body">
-                          <div class="card-title d-flex align-items-start justify-content-between">
-                            <div class="avatar flex-shrink-0">
-                              <img src="{{ asset('assets/admin/img/icons/unicons/cc-primary.png')}}" alt="Credit Card" class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                              <button
-                                class="btn p-0"
-                                type="button"
-                                id="cardOpt1"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                              >
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                              </button>
-                              <div class="dropdown-menu" aria-labelledby="cardOpt1">
-                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                              </div>
-                            </div>
-                          </div>
-                          <span class="fw-semibold d-block mb-1">Transactions</span>
-                          <h3 class="card-title mb-2">$14,857</h3>
-                          <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.14%</small>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- </div>
-    <div class="row"> -->
-                    <div class="col-12 mb-4">
-                      <div class="card">
-                        <div class="card-body">
-                          <div class="d-flex justify-content-between flex-sm-row flex-column gap-3">
-                            <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-                              <div class="card-title">
-                                <h5 class="text-nowrap mb-2">Profile Report</h5>
-                                <span class="badge bg-label-warning rounded-pill">Year 2021</span>
-                              </div>
-                              <div class="mt-sm-auto">
-                                <small class="text-success text-nowrap fw-semibold"
-                                  ><i class="bx bx-chevron-up"></i> 68.2%</small
-                                >
-                                <h3 class="mb-0">$84,686k</h3>
-                              </div>
-                            </div>
-                            <div id="profileReportChart"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <!-- Order Statistics -->
-                <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
-                  <div class="card h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between pb-0">
-                      <div class="card-title mb-0">
-                        <h5 class="m-0 me-2">Order Statistics</h5>
-                        <small class="text-muted">42.82k Total Sales</small>
-                      </div>
-                      <div class="dropdown">
-                        <button
-                          class="btn p-0"
-                          type="button"
-                          id="orederStatistics"
-                          data-bs-toggle="dropdown"
-                          aria-haspopup="true"
-                          aria-expanded="false"
-                        >
-                          <i class="bx bx-dots-vertical-rounded"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="orederStatistics">
-                          <a class="dropdown-item" href="javascript:void(0);">Select All</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Share</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="d-flex flex-column align-items-center gap-1">
-                          <h2 class="mb-2">8,258</h2>
-                          <span>Total Orders</span>
-                        </div>
-                        <div id="orderStatisticsChart"></div>
-                      </div>
-                      <ul class="p-0 m-0">
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-primary"
-                              ><i class="bx bx-mobile-alt"></i
-                            ></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Electronic</h6>
-                              <small class="text-muted">Mobile, Earbuds, TV</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-semibold">82.5k</small>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-success"><i class="bx bx-closet"></i></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Fashion</h6>
-                              <small class="text-muted">T-shirt, Jeans, Shoes</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-semibold">23.8k</small>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-info"><i class="bx bx-home-alt"></i></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Decor</h6>
-                              <small class="text-muted">Fine Art, Dining</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-semibold">849k</small>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-secondary"
-                              ><i class="bx bx-football"></i
-                            ></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Sports</h6>
-                              <small class="text-muted">Football, Cricket Kit</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-semibold">99</small>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <!--/ Order Statistics -->
+    /* ── Priority List ── */
+    .priority-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f8fafc;
+    }
+    .priority-item:last-child { border-bottom: none; }
+    .pi-urgbar {
+        width: 4px;
+        border-radius: 4px;
+        align-self: stretch;
+        flex-shrink: 0;
+        min-height: 40px;
+    }
+    .pi-urgbar.tinggi { background: #ef4444; }
+    .pi-urgbar.sedang { background: #f59e0b; }
+    .pi-urgbar.rendah { background: #10b981; }
+    .pi-body { flex: 1; min-width: 0; }
+    .pi-title {
+        font-size: 0.84rem;
+        font-weight: 600;
+        color: #1e293b;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .pi-sub {
+        font-size: 0.72rem;
+        color: #94a3b8;
+        margin-top: 1px;
+    }
+    .pi-badge {
+        padding: 0.22rem 0.55rem;
+        border-radius: 6px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+    .pi-badge.tinggi { background: #fee2e2; color: #b91c1c; }
+    .pi-badge.sedang { background: #fef3c7; color: #92400e; }
+    .pi-badge.rendah { background: #d1fae5; color: #065f46; }
+    .pi-status {
+        font-size: 0.68rem;
+        font-weight: 600;
+        padding: 0.2rem 0.5rem;
+        border-radius: 6px;
+        flex-shrink: 0;
+    }
+    .pi-status.ditugaskan { background: #ede9fe; color: #5b21b6; }
+    .pi-status.diproses   { background: #dbeafe; color: #1e40af; }
 
-                <!-- Expense Overview -->
-                <div class="col-md-6 col-lg-4 order-1 mb-4">
-                  <div class="card h-100">
-                    <div class="card-header">
-                      <ul class="nav nav-pills" role="tablist">
-                        <li class="nav-item">
-                          <button
-                            type="button"
-                            class="nav-link active"
-                            role="tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#navs-tabs-line-card-income"
-                            aria-controls="navs-tabs-line-card-income"
-                            aria-selected="true"
-                          >
-                            Income
-                          </button>
-                        </li>
-                        <li class="nav-item">
-                          <button type="button" class="nav-link" role="tab">Expenses</button>
-                        </li>
-                        <li class="nav-item">
-                          <button type="button" class="nav-link" role="tab">Profit</button>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="card-body px-0">
-                      <div class="tab-content p-0">
-                        <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel">
-                          <div class="d-flex p-4 pt-3">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ asset('assets/admin/img/icons/unicons/wallet.png') }}" alt="User" />
-                            </div>
-                            <div>
-                              <small class="text-muted d-block">Total Balance</small>
-                              <div class="d-flex align-items-center">
-                                <h6 class="mb-0 me-1">$459.10</h6>
-                                <small class="text-success fw-semibold">
-                                  <i class="bx bx-chevron-up"></i>
-                                  42.9%
-                                </small>
-                              </div>
-                            </div>
-                          </div>
-                          <div id="incomeChart"></div>
-                          <div class="d-flex justify-content-center pt-4 gap-2">
-                            <div class="flex-shrink-0">
-                              <div id="expensesOfWeek"></div>
-                            </div>
-                            <div>
-                              <p class="mb-n1 mt-1">Expenses This Week</p>
-                              <small class="text-muted">$39 less than last week</small>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!--/ Expense Overview -->
+    /* ── Donut Stat ── */
+    .donut-stat-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.45rem 0;
+        border-bottom: 1px solid #f8fafc;
+        font-size: 0.82rem;
+    }
+    .donut-stat-row:last-child { border-bottom: none; }
+    .dsr-left { display: flex; align-items: center; gap: 8px; color: #475569; }
+    .dsr-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+    .dsr-right { font-weight: 700; color: #1e293b; font-size: 0.85rem; }
+    .dsr-pct { font-size: 0.7rem; color: #94a3b8; margin-left: 4px; font-weight: 400; }
 
-                <!-- Transactions -->
-                <div class="col-md-6 col-lg-4 order-2 mb-4">
-                  <div class="card h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                      <h5 class="card-title m-0 me-2">Transactions</h5>
-                      <div class="dropdown">
-                        <button
-                          class="btn p-0"
-                          type="button"
-                          id="transactionID"
-                          data-bs-toggle="dropdown"
-                          aria-haspopup="true"
-                          aria-expanded="false"
-                        >
-                          <i class="bx bx-dots-vertical-rounded"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
-                          <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-body">
-                      <ul class="p-0 m-0">
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="{{ asset('assets/admin/img/icons/unicons/paypal.png')}}" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="text-muted d-block mb-1">Paypal</small>
-                              <h6 class="mb-0">Send money</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">+82.6</h6>
-                              <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="{{ asset('assets/admin/img/icons/unicons/wallet.png')}}" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="text-muted d-block mb-1">Wallet</small>
-                              <h6 class="mb-0">Mac'D</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">+270.69</h6>
-                              <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="{{ asset('assets/admin/img/icons/unicons/chart.png')}}" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="text-muted d-block mb-1">Transfer</small>
-                              <h6 class="mb-0">Refund</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">+637.91</h6>
-                              <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="{{ asset('assets/admin/img/icons/unicons/cc-success.png')}}" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="text-muted d-block mb-1">Credit Card</small>
-                              <h6 class="mb-0">Ordered Food</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">-838.71</h6>
-                              <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="{{ asset('assets/admin/img/icons/unicons/wallet.png')}}" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="text-muted d-block mb-1">Wallet</small>
-                              <h6 class="mb-0">Starbucks</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">+203.33</h6>
-                              <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="{{ asset('assets/admin/img/icons/unicons/cc-warning.png')}}" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="text-muted d-block mb-1">Mastercard</small>
-                              <h6 class="mb-0">Ordered Food</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">-92.45</h6>
-                              <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <!--/ Transactions -->
-              </div>
+    /* ── Bar Chart ── */
+    .bar-chart-wrap {
+        flex: 1;
+        min-height: 160px;
+        position: relative;
+        width: 100%;
+    }
+
+    /* ── Row stretch ── */
+    .row-stretch { align-items: stretch; }
+    .row-stretch > [class*="col"] { display: flex; flex-direction: column; }
+    .row-stretch > [class*="col"] > * { flex: 1; }
+
+    /* ── Empty state ── */
+    .tkn-empty {
+        padding: 2rem 1rem;
+        text-align: center;
+        color: #94a3b8;
+        font-size: 0.83rem;
+    }
+    .tkn-empty i { font-size: 2rem; display: block; margin-bottom: 0.4rem; color: #cbd5e1; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+        .tkn-banner { flex-direction: column; align-items: flex-start; }
+    }
+</style>
+
+<div class="tkn-wrap">
+
+    {{-- ── Welcome Banner ── --}}
+    <div class="tkn-banner">
+        <div class="tkn-banner-left">
+            <h4>Halo, {{ auth()->user()?->name ?? 'Teknisi' }}!</h4>
+            <p>Berikut ringkasan tugas perbaikan fasilitas kamu hari ini.</p>
+        </div>
+    </div>
+
+    {{-- ── Stat Cards ── --}}
+    <div class="row g-3 mb-4 row-stretch">
+        <div class="col-6 col-md-3">
+            <div class="tkn-stat ts-indigo">
+                <div class="tkn-stat-icon"><i class='bx bx-task'></i></div>
+                <div class="tkn-stat-val">{{ $totalDitugaskan }}</div>
+                <div class="tkn-stat-lbl">Total Ditugaskan</div>
+                <div class="tkn-stat-sub">Aktif ditangani</div>
             </div>
-            <!-- / Content -->
-            @endsection
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="tkn-stat ts-red">
+                <div class="tkn-stat-icon"><i class='bx bx-error'></i></div>
+                <div class="tkn-stat-val">{{ $totalUrgent }}</div>
+                <div class="tkn-stat-lbl">Urgent / Prioritas Tinggi</div>
+                <div class="tkn-stat-sub">
+                    @if($totalUrgent > 0)
+                        ↑ Harus segera ditangani
+                    @else
+                        Tidak ada urgent
+                    @endif
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="tkn-stat ts-blue">
+                <div class="tkn-stat-icon"><i class='bx bx-wrench'></i></div>
+                <div class="tkn-stat-val">{{ $totalDiproses }}</div>
+                <div class="tkn-stat-lbl">Sedang Dikerjakan</div>
+                <div class="tkn-stat-sub">Status diproses</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="tkn-stat ts-green">
+                <div class="tkn-stat-icon"><i class='bx bx-check-circle'></i></div>
+                <div class="tkn-stat-val">{{ $totalSelesaiBulan }}</div>
+                <div class="tkn-stat-lbl">Selesai Bulan Ini</div>
+                <div class="tkn-stat-sub">{{ now()->translatedFormat('F Y') }}</div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ── Main Content Row ── --}}
+    <div class="row g-3 mb-4 row-stretch">
+        <div class="col-12 col-xl-5">
+            <div class="tkn-card">
+                <div class="tkn-card-head">
+                    <h6><i class='bx bx-error-circle' style="color:#ef4444"></i> Laporan Prioritas</h6>
+                    <a href="{{ route('teknisi.laporan.index') }}">Lihat Semua →</a>
+                </div>
+                <div class="tkn-card-body" style="padding-top:0.5rem; padding-bottom:0.5rem;">
+                    @forelse($laporanPrioritas as $lap)
+                    <div class="priority-item">
+                        <div class="pi-urgbar {{ strtolower($lap->tingkat_urgency ?? 'rendah') }}"></div>
+                        <div class="pi-body">
+                            <div class="pi-title">{{ $lap->fasilitas->nama_fasilitas ?? '-' }}</div>
+                            <div class="pi-sub">
+                                {{ $lap->lokasi->nama_lokasi ?? '-' }} &bull;
+                                {{ $lap->created_at?->diffForHumans() }}
+                            </div>
+                        </div>
+                        <span class="pi-badge {{ strtolower($lap->tingkat_urgency ?? 'rendah') }}">
+                            {{ strtoupper($lap->tingkat_urgency ?? '-') }}
+                        </span>
+                        <span class="pi-status {{ strtolower($lap->status ?? '') }}">
+                            {{ ucfirst($lap->status ?? '-') }}
+                        </span>
+                    </div>
+                    @empty
+                    <div class="tkn-empty">
+                        <i class='bx bx-check-shield'></i>
+                        Tidak ada laporan prioritas
+                    </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-4">
+            <div class="tkn-card">
+                <div class="tkn-card-head">
+                    <h6><i class='bx bx-pie-chart-alt-2' style="color:#6366f1"></i> Statistik Perbaikan</h6>
+                    <span>Semua waktu</span>
+                </div>
+                <div class="tkn-card-body">
+                    <div style="position:relative; width:100%; height:170px; flex-shrink:0;">
+                        <canvas id="donutChart"></canvas>
+                    </div>
+                    <div class="mt-3">
+                        <div class="donut-stat-row">
+                            <div class="dsr-left"><div class="dsr-dot" style="background:#10b981;"></div> Selesai</div>
+                            <div class="dsr-right">{{ $statSelesai }} <span class="dsr-pct">({{ $statTotal > 0 ? round(($statSelesai / $statTotal) * 100) : 0 }}%)</span></div>
+                        </div>
+                        <div class="donut-stat-row">
+                            <div class="dsr-left"><div class="dsr-dot" style="background:#3b82f6;"></div> Sedang Dikerjakan</div>
+                            <div class="dsr-right">{{ $statDiproses }} <span class="dsr-pct">({{ $statTotal > 0 ? round(($statDiproses / $statTotal) * 100) : 0 }}%)</span></div>
+                        </div>
+                        <div class="donut-stat-row">
+                            <div class="dsr-left"><div class="dsr-dot" style="background:#f59e0b;"></div> Belum Dikerjakan</div>
+                            <div class="dsr-right">{{ $statDitugaskan }} <span class="dsr-pct">({{ $statTotal > 0 ? round(($statDitugaskan / $statTotal) * 100) : 0 }}%)</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-3">
+            <div class="tkn-card">
+                <div class="tkn-card-head">
+                    <h6><i class='bx bx-trending-up' style="color:#10b981"></i> Performa</h6>
+                    <span>{{ now()->year }}</span>
+                </div>
+                <div class="tkn-card-body">
+                    <p style="font-size:0.75rem; color:#94a3b8; margin:0 0 0.5rem;">Laporan selesai per bulan</p>
+                    <div class="bar-chart-wrap">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Chart.js --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+    const statSelesai    = {{ $statSelesai }};
+    const statDiproses   = {{ $statDiproses }};
+    const statDitugaskan = {{ $statDitugaskan }};
+    const chartSelesai   = @json($chartSelesai ?? array_fill(0, 12, 0));
+
+    new Chart(document.getElementById('donutChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Selesai', 'Dikerjakan', 'Belum'],
+            datasets: [{
+                data: [statSelesai, statDiproses, statDitugaskan],
+                backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
+                borderWidth: 3,
+                borderColor: '#ffffff',
+                hoverOffset: 6,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}` } }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'],
+            datasets: [{
+                label: 'Selesai',
+                data: chartSelesai,
+                backgroundColor: 'rgba(99,102,241,0.8)',
+                borderRadius: 5,
+                borderSkipped: false,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#94a3b8', maxRotation: 0 } },
+                y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { font: { size: 10 }, color: '#94a3b8', precision: 0 }, beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+@endsection

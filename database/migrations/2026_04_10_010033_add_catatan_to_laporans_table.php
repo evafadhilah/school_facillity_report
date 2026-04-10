@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('laporans', function (Blueprint $table) {
-            $table->string('foto_sesudah')->nullable()->after('foto_sebelum'); // letakkan setelah kolom tertentu
+                $table->text('catatan')->nullable()->after('tanggal_selesai');
+
         });
     }
 
@@ -22,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('laporans', function (Blueprint $table) {
-            $table->dropColumn('foto_sesudah');
+                $table->dropColumn('catatan');
         });
     }
 };

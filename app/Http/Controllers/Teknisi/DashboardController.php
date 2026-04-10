@@ -3,43 +3,67 @@
 namespace App\Http\Controllers\Teknisi;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Laporan;
-use Illuminate\Support\Facades\Auth; // ← ini yang kurang
-
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-     public function index()
+    public function index()
     {
-        $user = Auth::user();
+        $teknisiId = auth()->id();
 
-        $totalAssigned = Laporan::where('teknisi_id', $user->id)->count();
-        $totalBaru     = Laporan::where('teknisi_id', $user->id)->where('status', 'ditugaskan')->count();
-        $totalDiproses = Laporan::where('teknisi_id', $user->id)->where('status', 'diproses')->count();
-        $totalSelesai  = Laporan::where('teknisi_id', $user->id)->where('status', 'selesai')->count();
-
-        $laporanPrioritas = Laporan::where('teknisi_id', $user->id)
+        $totalDitugaskan = Laporan::where('teknisi_id', $teknisiId)
             ->whereIn('status', ['ditugaskan', 'diproses'])
-            ->with(['fasilitas', 'kelas', 'lokasi'])
-            ->orderByRaw("FIELD(tingkat_urgency, 'tinggi', 'sedang', 'rendah')")
-            ->take(5)
+            ->count();
+
+        $totalUrgent = Laporan::where('teknisi_id', $teknisiId)
+            ->whereIn('status', ['ditugaskan', 'diproses'])
+            ->where('tingkat_urgency', 'tinggi')
+            ->count();
+
+        $totalDiproses = Laporan::where('teknisi_id', $teknisiId)
+            ->where('status', 'diproses')
+            ->count();
+
+        $totalSelesaiBulan = Laporan::where('teknisi_id', $teknisiId)
+            ->where('status', 'selesai')
+            ->whereMonth('tanggal_selesai', now()->month)
+            ->whereYear('tanggal_selesai', now()->year)
+            ->count();
+
+        $laporanPrioritas = Laporan::where('teknisi_id', $teknisiId)
+            ->whereIn('status', ['ditugaskan', 'diproses'])
+            ->with(['fasilitas', 'lokasi'])
+            ->orderByRaw("CASE tingkat_urgency WHEN 'tinggi' THEN 1 WHEN 'sedang' THEN 2 WHEN 'rendah' THEN 3 ELSE 4 END")
+            ->orderBy('created_at', 'asc')
+            ->limit(5)
             ->get();
 
-        $riwayatSelesai = Laporan::where('teknisi_id', $user->id)
-            ->where('status', 'selesai')
-            ->with(['fasilitas', 'lokasi'])
-            ->latest('tanggal_selesai')
-            ->take(5)
-            ->get();
+        $statSelesai    = Laporan::where('teknisi_id', $teknisiId)->where('status', 'selesai')->count();
+        $statDiproses   = Laporan::where('teknisi_id', $teknisiId)->where('status', 'diproses')->count();
+        $statDitugaskan = Laporan::where('teknisi_id', $teknisiId)->where('status', 'ditugaskan')->count();
+        $statTotal      = $statSelesai + $statDiproses + $statDitugaskan;
+
+        $chartSelesai = [];
+        for ($m = 1; $m <= 12; $m++) {
+            $chartSelesai[] = Laporan::where('teknisi_id', $teknisiId)
+                ->where('status', 'selesai')
+                ->whereMonth('tanggal_selesai', $m)
+                ->whereYear('tanggal_selesai', now()->year)
+                ->count();
+        }
 
         return view('teknisi.dashboard', compact(
-            'totalAssigned',
-            'totalBaru',
+            'totalDitugaskan',
+            'totalUrgent',
             'totalDiproses',
-            'totalSelesai',
+            'totalSelesaiBulan',
             'laporanPrioritas',
-            'riwayatSelesai'
+            'statSelesai',
+            'statDiproses',
+            'statDitugaskan',
+            'statTotal',
+            'chartSelesai'
         ));
     }
 }
