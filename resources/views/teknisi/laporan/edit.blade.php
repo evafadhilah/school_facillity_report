@@ -55,13 +55,38 @@
     .btn-cancel:hover { background: #e5e7eb; color: #374151; transform: translateY(-2px); }
     .alert-danger { background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border: none; border-radius: 12px; color: #991b1b; padding: 1rem 1.5rem; }
     .info-box { background: #f8f7ff; border: 2px solid #e5e7eb; border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }
-    .info-box .info-row { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .info-box .info-row { display: flex; gap: 2rem; flex-wrap: wrap; align-items: flex-start; }
     .info-box .info-item label { font-size: 0.75rem; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 2px; }
     .info-box .info-item span { font-size: 0.95rem; color: #374151; font-weight: 500; }
     .badge-urgency { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
     .badge-tinggi { background: #fee2e2; color: #dc2626; }
     .badge-sedang { background: #fef3c7; color: #d97706; }
     .badge-rendah { background: #d1fae5; color: #059669; }
+
+    .foto-sebelum {
+        height: 90px;
+        width: 110px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 2px solid #e5e7eb;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .foto-sebelum:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    }
+    .no-foto-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        color: #9ca3af;
+        font-size: 0.82rem;
+        background: #f3f4f6;
+        padding: 6px 12px;
+        border-radius: 8px;
+    }
+
     @media (max-width: 768px) {
         .header-content { flex-direction: column; gap: 1rem; }
         .btn-back { width: 100%; justify-content: center; }
@@ -72,17 +97,17 @@
 
 <div class="container-xxl flex-grow-1 container-p-y">
 
-    <div class="index-header">
-        <div class="header-content">
-            <div class="header-title">
-                <h4><i class='bx bx-edit me-2'></i>Edit Laporan</h4>
-                <p>Perbarui status laporan kerusakan fasilitas sekolah</p>
-            </div>
-            <a href="{{ route('teknisi.laporan.index') }}" class="btn-back">
-                <i class='bx bx-arrow-back'></i> Kembali
-            </a>
+        <div class="index-header">
+    <div class="header-content">
+        <div class="header-title">
+            <h4>Edit Laporan</h4>
+            <p>Perbarui status laporan kerusakan fasilitas sekolah</p>
         </div>
+        <a href="{{ route('teknisi.laporan.index') }}" class="btn-back">
+            <i class='bx bx-arrow-back'></i> Kembali
+        </a>
     </div>
+</div>
 
     @if ($errors->any())
         <div class="alert alert-danger mb-4">
@@ -105,11 +130,11 @@
             </div>
             <div class="info-item">
                 <label>Fasilitas</label>
-                <span>{{ $laporan->fasilitas->nama_fasilitas ?? '-' }}</span> {{-- ← dibenerin --}}
+                <span>{{ $laporan->fasilitas->nama_fasilitas ?? '-' }}</span>
             </div>
             <div class="info-item">
                 <label>Lokasi</label>
-                <span>{{ $laporan->lokasi->nama_lokasi ?? '-' }}</span> {{-- ← dibenerin --}}
+                <span>{{ $laporan->lokasi->nama_lokasi ?? '-' }}</span>
             </div>
             <div class="info-item">
                 <label>Urgency</label>
@@ -120,6 +145,22 @@
             <div class="info-item">
                 <label>Deskripsi</label>
                 <span>{{ $laporan->deskripsi }}</span>
+            </div>
+            <div class="info-item">
+                <label>Foto Kerusakan</label>
+                @if($laporan->foto)
+                    <div>
+                        <img src="{{ Storage::url($laporan->foto) }}"
+                            class="foto-sebelum"
+                            onclick="window.open('{{ Storage::url($laporan->foto) }}')"
+                            title="Klik untuk lihat full">
+                        <p style="font-size:0.75rem; color:#9ca3af; margin-top:4px;">Klik untuk perbesar</p>
+                    </div>
+                @else
+                    <span class="no-foto-label">
+                        <i class='bx bx-image-alt'></i> Tidak ada foto
+                    </span>
+                @endif
             </div>
         </div>
     </div>

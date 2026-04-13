@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Tambah Laporan')
+@section('title', 'Buat Laporan')
 
 @section('content')
 
@@ -56,7 +56,6 @@
 
     .header-title p {
         margin: 0.5rem 0 0 0;
-        opacity: 1;
         font-size: 0.95rem;
         color: white;
         text-shadow: 0 1px 2px rgba(0,0,0,0.1);
@@ -83,7 +82,6 @@
         color: #764ba2;
     }
 
-    /* Form Card */
     .form-card {
         border: none;
         border-radius: 20px;
@@ -95,7 +93,6 @@
         padding: 2rem;
     }
 
-    /* Form Label */
     .form-label {
         font-weight: 600;
         color: #4338ca;
@@ -105,7 +102,6 @@
         margin-bottom: 0.5rem;
     }
 
-    /* Form Control */
     .form-control {
         border: 2px solid #e5e7eb;
         border-radius: 12px;
@@ -123,9 +119,7 @@
         outline: none;
     }
 
-    .form-control::placeholder {
-        color: #c0c5d0;
-    }
+    .form-control::placeholder { color: #c0c5d0; }
 
     select.form-control {
         appearance: none;
@@ -141,11 +135,7 @@
         min-height: 120px;
     }
 
-    /* File Input */
-    input[type="file"].form-control {
-        padding: 0.6rem 1rem;
-        cursor: pointer;
-    }
+    input[type="file"].form-control { padding: 0.6rem 1rem; cursor: pointer; }
 
     input[type="file"].form-control::-webkit-file-upload-button {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -160,18 +150,14 @@
         transition: opacity 0.2s;
     }
 
-    input[type="file"].form-control::-webkit-file-upload-button:hover {
-        opacity: 0.85;
-    }
+    input[type="file"].form-control::-webkit-file-upload-button:hover { opacity: 0.85; }
 
-    /* Divider antar section */
     .form-divider {
         border: none;
         border-top: 2px dashed #e5e7eb;
         margin: 1.75rem 0;
     }
 
-    /* Tombol Submit & Cancel */
     .btn-submit {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
@@ -215,7 +201,6 @@
         transform: translateY(-2px);
     }
 
-    /* Alert */
     .alert-danger {
         background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
         border: none;
@@ -225,17 +210,9 @@
         font-weight: 500;
     }
 
-    .alert-danger ul {
-        margin: 0.5rem 0 0 0;
-        padding-left: 1.25rem;
-    }
+    .alert-danger ul { margin: 0.5rem 0 0 0; padding-left: 1.25rem; }
+    .alert-danger li { font-size: 0.9rem; margin-top: 0.25rem; }
 
-    .alert-danger li {
-        font-size: 0.9rem;
-        margin-top: 0.25rem;
-    }
-
-    /* Grid 2 kolom untuk field yang lebih pendek */
     .form-row-2 {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -243,48 +220,18 @@
     }
 
     @media (max-width: 768px) {
-        .header-content {
-            flex-direction: column;
-            gap: 1rem;
-            align-items: flex-start;
-        }
-
-        .btn-back {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .form-card .card-body {
-            padding: 1.25rem;
-        }
-
-        .form-row-2 {
-            grid-template-columns: 1fr;
-        }
-
-        .btn-submit,
-        .btn-cancel {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .d-flex.justify-content-end {
-            flex-direction: column-reverse;
-        }
+        .header-content { flex-direction: column; gap: 1rem; align-items: flex-start; }
+        .btn-back { width: 100%; justify-content: center; }
+        .form-card .card-body { padding: 1.25rem; }
+        .form-row-2 { grid-template-columns: 1fr; }
+        .btn-submit, .btn-cancel { width: 100%; justify-content: center; }
+        .d-flex.justify-content-end { flex-direction: column-reverse; }
     }
 
     @media (max-width: 576px) {
-        .index-header {
-            padding: 1.5rem;
-        }
-
-        .header-title h4 {
-            font-size: 1.5rem;
-        }
-
-        .header-title p {
-            font-size: 0.85rem;
-        }
+        .index-header { padding: 1.5rem; }
+        .header-title h4 { font-size: 1.5rem; }
+        .header-title p { font-size: 0.85rem; }
     }
 </style>
 
@@ -297,7 +244,7 @@
                 <h4>Buat Laporan Fasilitas</h4>
                 <p>Laporkan kerusakan fasilitas sekolah</p>
             </div>
-            <a href="{{ route('siswa.laporan.index') }}" class="btn-back">
+            <a href="{{ route('guru.laporan.index') }}" class="btn-back">
                 <i class='bx bx-arrow-back'></i> Kembali
             </a>
         </div>
@@ -320,114 +267,107 @@
     <div class="card form-card">
         <div class="card-body">
 
-            <form action="{{ route('siswa.laporan.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('guru.laporan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                {{-- Row 1: Nama Pelapor + Kelas --}}
+                {{-- Row 1: Kategori + Fasilitas --}}
                 <div class="form-row-2">
-                    {{-- Nama Pelapor --}}
-                    <div class="mb-4">
-                        <label class="form-label">
-                            <i class='bx bx-user me-1'></i> Nama Pelapor
-                        </label>
-                        <input
-                            type="text"
-                            name="nama_pelapor"
-                            class="form-control @error('nama_pelapor') is-invalid @enderror"
-                            placeholder="Masukkan nama kamu"
-                            value="{{ old('nama_pelapor') }}"
-                            required
-                        >
-                    </div>
-
-                    {{-- Kelas --}}
-                    <div class="mb-4">
-                        <label class="form-label">
-                            <i class='bx bx-book me-1'></i> Kelas
-                        </label>
-                        <select name="kelas_id" class="form-control @error('kelas_id') is-invalid @enderror" required>
-                            <option value="">-- Pilih Kelas --</option>
-                            @foreach ($kelas as $k)
-                                <option value="{{ $k->id }}" {{ old('kelas_id') == $k->id ? 'selected' : '' }}>
-                                    {{ $k->nama_kelas }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>{{-- /.form-row-2 (Row 1) --}}
-
-                <hr class="form-divider">
-
-                {{-- Row 2: Kategori + Fasilitas --}}
-                <div class="form-row-2">
-                    {{-- Kategori --}}
                     <div class="mb-4">
                         <label class="form-label">
                             <i class='bx bx-category me-1'></i> Kategori
                         </label>
                         <select name="kategori_id" class="form-control @error('kategori_id') is-invalid @enderror" required>
                             <option value="">-- Pilih Kategori --</option>
-                            @foreach ($kategori as $k)
+                            @foreach($kategoris as $k)
                                 <option value="{{ $k->id }}" {{ old('kategori_id') == $k->id ? 'selected' : '' }}>
                                     {{ $k->nama_kategori }}
                                 </option>
                             @endforeach
                         </select>
+                        @error('kategori_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    {{-- Fasilitas --}}
                     <div class="mb-4">
                         <label class="form-label">
                             <i class='bx bx-buildings me-1'></i> Fasilitas
                         </label>
                         <select name="fasilitas_id" class="form-control @error('fasilitas_id') is-invalid @enderror" required>
                             <option value="">-- Pilih Fasilitas --</option>
-                            @foreach ($fasilitas as $f)
+                            @foreach($fasilitas as $f)
                                 <option value="{{ $f->id }}" {{ old('fasilitas_id') == $f->id ? 'selected' : '' }}>
                                     {{ $f->nama_fasilitas }}
                                 </option>
                             @endforeach
                         </select>
+                        @error('fasilitas_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
-                </div>{{-- /.form-row-2 (Row 2) --}}
+                </div>
 
-                {{-- Row 3: Lokasi + Upload Foto --}}
+                {{-- Row 2: Lokasi + Urgency --}}
                 <div class="form-row-2">
-                    {{-- Lokasi --}}
                     <div class="mb-4">
                         <label class="form-label">
                             <i class='bx bx-map me-1'></i> Lokasi
                         </label>
                         <select name="lokasi_id" class="form-control @error('lokasi_id') is-invalid @enderror" required>
                             <option value="">-- Pilih Lokasi --</option>
-                            @foreach ($lokasi as $l)
+                            @foreach($lokasis as $l)
                                 <option value="{{ $l->id }}" {{ old('lokasi_id') == $l->id ? 'selected' : '' }}>
                                     {{ $l->nama_lokasi }}
                                 </option>
                             @endforeach
                         </select>
+                        @error('lokasi_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    {{-- Upload Foto --}}
                     <div class="mb-4">
                         <label class="form-label">
-                            <i class='bx bx-image me-1'></i> Cover Laporan
+                            <i class='bx bx-signal-5 me-1'></i> Urgency
                         </label>
+                        <select name="urgency" class="form-control @error('urgency') is-invalid @enderror" required>
+                            <option value="">-- Pilih Urgency --</option>
+                            <option value="rendah"  {{ old('urgency') == 'rendah'  ? 'selected' : '' }}>Rendah</option>
+                            <option value="sedang"  {{ old('urgency') == 'sedang'  ? 'selected' : '' }}>Sedang</option>
+                            <option value="tinggi"  {{ old('urgency') == 'tinggi'  ? 'selected' : '' }}>Tinggi</option>
+                        </select>
+                        @error('urgency')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
 
-                        <div id="dropZone" style="border: 2px dashed #667eea; border-radius: 12px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; background: #fafafa; transition: all 0.3s; position: relative;">
-                                <input type="file" name="cover" id="coverInput" accept="image/*" style="position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;">                            <div>
-                                <i class='bx bx-cloud-upload' style="font-size: 2rem; color: #667eea; pointer-events:none;"></i>
-                                <p style="margin: 0.4rem 0 0; font-size: 0.9rem; color: #667eea; font-weight: 600; pointer-events:none;">Klik atau drag foto ke sini</p>
-                                <p style="margin: 0.2rem 0 0; font-size: 0.8rem; color: #9ca3af; pointer-events:none;">JPG, PNG · Satu foto sebagai cover laporan</p>
-                            </div>
-                        </div>
+                <hr class="form-divider">
 
-                        <div id="previewWrap" style="display:none; margin-top:10px; position:relative; display:none;">
-                            <img id="previewImg" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; border:1.5px solid #e5e7eb;">
-                            <button type="button" id="hapusCover" style="position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.55);border:none;cursor:pointer;color:#fff;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;">&times;</button>
+                {{-- Foto --}}
+                <div class="mb-4">
+                    <label class="form-label">
+                        <i class='bx bx-image me-1'></i> Foto Kerusakan
+                    </label>
+
+                    <div id="dropZone" style="border: 2px dashed #667eea; border-radius: 12px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; background: #fafafa; transition: all 0.3s; position: relative;">
+                        <input type="file" name="foto" id="fotoInput" accept="image/*" style="position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;">
+                        <div>
+                            <i class='bx bx-cloud-upload' style="font-size: 2rem; color: #667eea; pointer-events:none;"></i>
+                            <p style="margin: 0.4rem 0 0; font-size: 0.9rem; color: #667eea; font-weight: 600; pointer-events:none;">Klik atau drag foto ke sini</p>
+                            <p style="margin: 0.2rem 0 0; font-size: 0.8rem; color: #9ca3af; pointer-events:none;">JPG, PNG · Maks 2MB</p>
                         </div>
                     </div>
-                </div>{{-- /.form-row-2 (Row 3) --}}
+
+                    <div id="previewWrap" style="display:none; margin-top:10px; position:relative;">
+                        <img id="previewImg" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; border:1.5px solid #e5e7eb;">
+                        <button type="button" id="hapusFoto" style="position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.55);border:none;cursor:pointer;color:#fff;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;">&times;</button>
+                    </div>
+
+                    @error('foto')
+                        <div class="text-danger mt-1" style="font-size:0.85rem;">{{ $message }}</div>
+                    @enderror
+                </div>
 
                 <hr class="form-divider">
 
@@ -443,31 +383,33 @@
                         placeholder="Contoh: Kursi rusak, AC tidak dingin, dll"
                         required
                     >{{ old('deskripsi') }}</textarea>
+                    @error('deskripsi')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 {{-- Tombol --}}
                 <div class="d-flex justify-content-end gap-2">
-                    <a href="{{ route('siswa.laporan.index') }}" class="btn-cancel">
+                    <a href="{{ route('guru.laporan.index') }}" class="btn-cancel">
                         <i class='bx bx-x'></i> Batal
                     </a>
                     <button type="submit" class="btn-submit">
-                        <i class='bx bx-send'></i> Simpan Laporan
+                        <i class='bx bx-send'></i> Kirim Laporan
                     </button>
                 </div>
 
             </form>
-
         </div>
     </div>
 
 </div>
 
 <script>
-const coverInput  = document.getElementById('coverInput');
-const dropZone    = document.getElementById('dropZone');
+const fotoInput  = document.getElementById('fotoInput');
+const dropZone   = document.getElementById('dropZone');
 const previewWrap = document.getElementById('previewWrap');
 const previewImg  = document.getElementById('previewImg');
-const hapusCover  = document.getElementById('hapusCover');
+const hapusFoto  = document.getElementById('hapusFoto');
 
 function showPreview(file) {
     if (!file) return;
@@ -475,12 +417,12 @@ function showPreview(file) {
     previewWrap.style.display = 'block';
 }
 
-coverInput.addEventListener('change', e => {
+fotoInput.addEventListener('change', e => {
     if (e.target.files[0]) showPreview(e.target.files[0]);
 });
 
-hapusCover.addEventListener('click', () => {
-    coverInput.value = '';
+hapusFoto.addEventListener('click', () => {
+    fotoInput.value = '';
     previewWrap.style.display = 'none';
     previewImg.src = '';
 });
@@ -495,7 +437,7 @@ dropZone.addEventListener('drop', e => {
     if (file && file.type.startsWith('image/')) {
         const dt = new DataTransfer();
         dt.items.add(file);
-        coverInput.files = dt.files;
+        fotoInput.files = dt.files;
         showPreview(file);
     }
 });

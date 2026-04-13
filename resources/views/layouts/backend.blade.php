@@ -63,16 +63,16 @@
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
 
-        <!-- Sidebar -->
-        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-            @if(Auth::user()->role == 'admin')
-                @include('layouts.admin.sidebar')
-            @elseif(Auth::user()->role == 'siswa')
-                @include('layouts.siswa.sidebar')
-            @elseif(Auth::user()->role == 'teknisi')
-                @include('layouts.teknisi.sidebar')
-            @endif
-        </aside>
+       <!-- Sidebar -->
+        @if(Auth::user()->role == 'admin')
+            @include('layouts.admin.sidebar')
+        @elseif(Auth::user()->role == 'siswa')
+            @include('layouts.siswa.sidebar')
+        @elseif(Auth::user()->role == 'teknisi')
+            @include('layouts.teknisi.sidebar')
+        @elseif(Auth::user()->role == 'guru')
+            @include('layouts.guru.sidebar')
+        @endif
         <!-- / Sidebar -->
 
 
@@ -80,13 +80,15 @@
         <div class="layout-page">
 
         <!-- Navbar -->
-            @if(Auth::user()->role == 'siswa')
-                @include('layouts.siswa.navbar')
-            @elseif(Auth::user()->role == 'teknisi')
-                @include('layouts.teknisi.navbar')
-            @else
-                @include('layouts.admin.navbar')
-            @endif
+        @if(Auth::user()->role == 'siswa')
+            @include('layouts.siswa.navbar')
+        @elseif(Auth::user()->role == 'teknisi')
+            @include('layouts.teknisi.navbar')
+        @elseif(Auth::user()->role == 'guru')
+            @include('layouts.guru.navbar')
+        @else
+            @include('layouts.admin.navbar')
+        @endif
         <!-- / Navbar -->
 
           <!-- Content wrapper -->

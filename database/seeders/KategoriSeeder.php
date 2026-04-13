@@ -14,8 +14,6 @@ class KategoriSeeder extends Seeder
             'Furniture',
             'Alat Tulis',
             'Alat Olahraga',
-            'Alat Praktik',
-            'Kendaraan',
             'Peralatan Kebersihan',
             'Audio Visual',
         ];

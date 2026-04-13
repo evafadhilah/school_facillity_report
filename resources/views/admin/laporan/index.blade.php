@@ -319,16 +319,11 @@
                             <td>{{ $laporan->kategori->nama_kategori ?? '-' }}</td>
                             <td>{{ $laporan->fasilitas->nama_fasilitas ?? '-' }}</td>
                             <td>
-                                @php
-                                    $fotos = is_array($laporan->foto)
-                                        ? $laporan->foto
-                                        : json_decode($laporan->foto, true) ?? ($laporan->foto ? [$laporan->foto] : []);
-                                @endphp
-                                @if($fotos && count($fotos) > 0)
-                                    <img src="{{ Storage::url($fotos[0]) }}"
+                                @if($laporan->cover)
+                                    <img src="{{ asset('storage/' . $laporan->cover) }}"
                                          class="foto-thumb"
                                          alt="foto"
-                                         onclick="window.open('{{ Storage::url($fotos[0]) }}', '_blank')">
+                                         onclick="window.open('{{ asset('storage/' . $laporan->cover) }}', '_blank')">
                                 @else
                                     <div class="foto-none"><i class='bx bx-image'></i></div>
                                 @endif
@@ -378,7 +373,7 @@
                                         </button>
                                     </form>
                                 </div>
-                                </td>
+                            </td>
                         </tr>
                         @empty
                         <tr>

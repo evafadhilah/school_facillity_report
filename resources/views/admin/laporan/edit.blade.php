@@ -185,6 +185,52 @@
     .ep-badge-sedang  { background: #fef3c7; color: #92400e; }
     .ep-badge-tinggi  { background: #fee2e2; color: #991b1b; }
 
+    /* ── FOTO ── */
+    .ep-foto-box {
+        background: #f8f7ff;
+        border: 1.5px dashed #c4bfee;
+        border-radius: 9px;
+        padding: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 72px;
+    }
+    .ep-foto-thumb {
+        width: 56px;
+        height: 56px;
+        border-radius: 8px;
+        object-fit: cover;
+        border: 1.5px solid #eceaf8;
+        flex-shrink: 0;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+    .ep-foto-thumb:hover { opacity: 0.85; }
+    .ep-foto-placeholder {
+        width: 56px;
+        height: 56px;
+        border-radius: 8px;
+        background: #eceaf8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .ep-foto-meta { font-size: 0.8rem; color: #8b84d0; line-height: 1.5; }
+    .ep-foto-meta span { display: block; font-size: 0.84rem; color: #374151; font-weight: 600; margin-bottom: 2px; }
+    .ep-foto-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.78rem;
+        color: #6457e8;
+        font-weight: 600;
+        text-decoration: none;
+        margin-top: 4px;
+    }
+    .ep-foto-link:hover { text-decoration: underline; color: #6457e8; }
+
     /* ── FORM BODY ── */
     .ep-form-body {
         padding: 20px 20px 24px;
@@ -283,16 +329,15 @@
     @endif
 
     {{-- ── HEADER ── --}}
-    <div class="ep-header">
-        <div class="ep-header-text">
-            <h4><i class='bx bx-edit-alt' style="margin-right:6px;vertical-align:-2px;font-size:1.15rem;"></i>Edit Laporan</h4>
-            <p>Perbarui data laporan kerusakan fasilitas sekolah</p>
-        </div>
-        <a href="{{ route('admin.laporan.index') }}" class="ep-btn-back">
-            <i class='bx bx-arrow-back'></i> Kembali
-        </a>
+   <div class="ep-header">
+    <div class="ep-header-text">
+        <h4>Edit Laporan</h4>
+        <p>Perbarui data laporan kerusakan fasilitas sekolah</p>
     </div>
-
+    <a href="{{ route('admin.laporan.index') }}" class="ep-btn-back">
+        Kembali
+    </a>
+</div>
     {{-- ── CARD ── --}}
     <div class="ep-card">
 
@@ -340,6 +385,37 @@
                     <div class="ep-field-label">Deskripsi</div>
                     <div class="ep-field-box ep-field-desc">{{ $laporan->deskripsi ?? '-' }}</div>
                 </div>
+
+                {{-- ── FOTO LAPORAN ── --}}
+                <div class="ep-field-full">
+                    <div class="ep-field-label">Foto Laporan</div>
+                    <div class="ep-foto-box">
+                        @if($laporan->foto)
+                            <a href="{{ asset('storage/' . $laporan->foto) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $laporan->foto) }}"
+                                     alt="Foto Laporan"
+                                     class="ep-foto-thumb">
+                            </a>
+                            <div class="ep-foto-meta">
+                                <span>Foto tersedia</span>
+                                Foto yang dilampirkan pelapor
+                                <br>
+                                <a href="{{ asset('storage/' . $laporan->foto) }}" target="_blank" class="ep-foto-link">
+                                    <i class='bx bx-link-external' style="font-size:0.8rem;"></i> Lihat foto penuh
+                                </a>
+                            </div>
+                        @else
+                            <div class="ep-foto-placeholder">
+                                <i class='bx bx-image' style="font-size:1.4rem;color:#8b84d0;"></i>
+                            </div>
+                            <div class="ep-foto-meta">
+                                <span>Tidak ada foto</span>
+                                Pelapor tidak melampirkan foto
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
             </div>
         </div>
 

@@ -33,22 +33,20 @@
     </li>
 
     <!-- Laporan -->
-    <li class="menu-item {{ request()->routeIs('teknisi.laporan.*') ? 'active' : '' }}">
+    <li class="menu-item {{ request()->routeIs('teknisi.laporan.*') && !request()->routeIs('teknisi.laporan.riwayat') && !request()->routeIs('teknisi.laporan.riwayat.show') ? 'active' : '' }}">
       <a href="{{ route('teknisi.laporan.index') }}" class="menu-link">
         <i class="menu-icon tf-icons bx bx-file"></i>
         <div>Laporan</div>
       </a>
     </li>
 
-    <!-- riwayat -->
-    <li class="menu-item {{ request()->routeIs('teknisi.laporan.riwayat') ? 'active' : '' }}">
+    <!-- Riwayat -->
+    <li class="menu-item {{ request()->routeIs('teknisi.laporan.riwayat') || request()->routeIs('teknisi.laporan.riwayat.show') ? 'active' : '' }}">
         <a href="{{ route('teknisi.laporan.riwayat') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-history"></i>
             <div data-i18n="Riwayat Laporan">Riwayat Laporan</div>
         </a>
     </li>
-
-
 
   </ul>
 </aside>

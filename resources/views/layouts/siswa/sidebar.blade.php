@@ -19,26 +19,25 @@
 
   <ul class="menu-inner py-1">
 
-    <!-- Dashboard -->
-    <li class="menu-item {{ request()->routeIs('siswa.dashboard') ? 'active' : '' }}">
-      <a href="{{ route('siswa.dashboard') }}" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-home-circle"></i>
-        <br><br><div>Dashboard</div>
-      </a>
-    </li>
-
     <!-- Operasional -->
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text">Operasional</span>
     </li>
 
     <!-- Laporan -->
-    <li class="menu-item {{ request()->routeIs('siswa.laporan.*') ? 'active' : '' }}">
-      <a href="{{ route('siswa.laporan.index') }}" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-file"></i>
-        <div>Laporan</div>
-      </a>
+    <li class="menu-item {{ request()->routeIs('siswa.laporan.index') || request()->routeIs('siswa.laporan.create') || request()->routeIs('siswa.laporan.edit') ? 'active' : '' }}">
+        <a href="{{ route('siswa.laporan.index') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-file"></i>
+            <div>Laporan</div>
+        </a>
     </li>
 
+    <!-- Riwayat Laporan -->
+    <li class="menu-item {{ request()->routeIs('siswa.laporan.riwayat') || (request()->routeIs('siswa.laporan.show') && request()->is('siswa/laporan/riwayat*') == false && \App\Models\Laporan::find(request()->route('laporan'))?->status == 'selesai') ? 'active' : '' }}">
+        <a href="{{ route('siswa.laporan.riwayat') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-history"></i>
+            <div>Riwayat Laporan</div>
+        </a>
+    </li>
   </ul>
 </aside>

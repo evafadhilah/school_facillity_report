@@ -112,6 +112,27 @@
         padding: 1rem 1.5rem;
         margin-bottom: 1.5rem;
     }
+
+    .foto-thumb {
+        height: 50px;
+        width: 65px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid #e5e7eb;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .foto-thumb:hover {
+        transform: scale(1.08);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .no-foto {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: #9ca3af;
+        font-size: 0.78rem;
+    }
 </style>
 
 <div class="container-xxl flex-grow-1 container-p-y">
@@ -119,12 +140,11 @@
     <div class="index-header">
         <div class="header-content">
             <div class="header-title">
-                <h4><i class='bx bx-clipboard me-2'></i>Laporan Saya</h4>
-                <p>Daftar laporan yang ditugaskan kepada kamu</p>
+                <h4>Laporan Saya</h4>
+                <p>Daftar laporan yang ditugaskan</p>
             </div>
         </div>
     </div>
-
     @if(session('success'))
         <div class="alert-success">
             <i class='bx bx-check-circle me-2'></i>{{ session('success') }}
@@ -141,6 +161,7 @@
                                 <th>No</th>
                                 <th>Pelapor</th>
                                 <th>Fasilitas</th>
+                                <th>Foto</th>
                                 <th>Lokasi</th>
                                 <th>Deskripsi</th>
                                 <th>Urgency</th>
@@ -154,8 +175,20 @@
                             <tr>
                                 <td>{{ $laporans->firstItem() + $i }}</td>
                                 <td>{{ $laporan->nama_pelapor ?? $laporan->user->name ?? '-' }}</td>
-                                <td>{{ $laporan->fasilitas->nama_fasilitas ?? '-' }}</td> {{-- ← dibenerin --}}
-                                <td>{{ $laporan->lokasi->nama_lokasi ?? '-' }}</td> {{-- ← dibenerin --}}
+                                <td>{{ $laporan->fasilitas->nama_fasilitas ?? '-' }}</td>
+                                <td>
+                                    @if($laporan->foto)
+                                        <img src="{{ Storage::url($laporan->foto) }}"
+                                            class="foto-thumb"
+                                            onclick="window.open('{{ Storage::url($laporan->foto) }}')"
+                                            title="Klik untuk lihat full">
+                                    @else
+                                        <span class="no-foto">
+                                            <i class='bx bx-image-alt'></i> Tidak ada
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>{{ $laporan->lokasi->nama_lokasi ?? '-' }}</td>
                                 <td>{{ Str::limit($laporan->deskripsi, 40) }}</td>
                                 <td>
                                     <span class="badge-urgency badge-{{ $laporan->tingkat_urgency }}">

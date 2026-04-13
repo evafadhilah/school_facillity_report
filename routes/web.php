@@ -13,12 +13,14 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 // Siswa Controllers
-use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
 use App\Http\Controllers\Siswa\LaporanController as SiswaLaporanController;
 
 // Teknisi Controllers
 use App\Http\Controllers\Teknisi\DashboardController as TeknisiDashboardController;
 use App\Http\Controllers\Teknisi\LaporanController as TeknisiLaporanController;
+
+// Guru Controllers
+use App\Http\Controllers\Guru\LaporanController as GuruLaporanController;
 
 // Halaman utama
 Route::get('/', function () {
@@ -34,7 +36,7 @@ Route::get('/', function () {
         case 'guru':
             return redirect()->route('guru.laporan.index');
         case 'siswa':
-            return redirect()->route('siswa.dashboard');
+            return redirect()->route('siswa.laporan.index');
         default:
             return redirect()->route('login');
     }
@@ -74,6 +76,8 @@ Route::middleware(['auth', 'role:teknisi'])
         Route::get('/dashboard', [TeknisiDashboardController::class, 'index'])->name('dashboard');
         Route::resource('laporan', TeknisiLaporanController::class)->only(['index', 'edit', 'update']);
         Route::get('/riwayat-laporan', [TeknisiLaporanController::class, 'riwayat'])->name('laporan.riwayat');
+        Route::get('/laporan/{id}/show', [TeknisiLaporanController::class, 'show'])->name('laporan.show');
+        Route::get('/riwayat-laporan/{id}/show', [TeknisiLaporanController::class, 'show'])->name('laporan.riwayat.show');
     });
 
 // Guru routes
@@ -81,7 +85,7 @@ Route::middleware(['auth', 'role:guru'])
     ->prefix('guru')
     ->name('guru.')
     ->group(function () {
-        Route::resource('laporan', AdminLaporanController::class)->only(['index', 'create', 'store']);
+        Route::resource('laporan', GuruLaporanController::class)->only(['index', 'create', 'store']);
     });
 
 // Siswa routes
@@ -89,12 +93,15 @@ Route::prefix('siswa')
     ->middleware(['auth', 'role:siswa'])
     ->name('siswa.')
     ->group(function () {
-        Route::get('/', [SiswaDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/', function () {
+            return redirect()->route('siswa.laporan.index');
+        })->name('dashboard');
 
         Route::prefix('laporan')->name('laporan.')->group(function () {
             Route::get('/', [SiswaLaporanController::class, 'index'])->name('index');
             Route::get('/create', [SiswaLaporanController::class, 'create'])->name('create');
             Route::post('/', [SiswaLaporanController::class, 'store'])->name('store');
+            Route::get('/riwayat', [SiswaLaporanController::class, 'riwayat'])->name('riwayat');
             Route::get('/{id}/edit', [SiswaLaporanController::class, 'edit'])->name('edit');
             Route::put('/{id}', [SiswaLaporanController::class, 'update'])->name('update');
             Route::get('/{id}', [SiswaLaporanController::class, 'show'])->name('show');

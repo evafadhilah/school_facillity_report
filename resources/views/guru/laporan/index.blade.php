@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Data Laporan')
+@section('title', 'Data Laporan Saya')
 
 @section('content')
 
@@ -174,6 +174,31 @@
         color: white;
     }
 
+    .badge-urgency {
+        padding: 0.5rem 0.875rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .badge-rendah {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+
+    .badge-sedang {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+    }
+
+    .badge-tinggi {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
     .foto-thumb {
         width: 60px;
         height: 60px;
@@ -186,59 +211,6 @@
 
     .foto-thumb:hover {
         transform: scale(1.1);
-    }
-
-    .btn-action {
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.85rem;
-        border: none;
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25rem;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .btn-detail {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-        color: white;
-    }
-
-    .btn-detail:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-        color: white;
-    }
-
-    .btn-edit {
-        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-        color: white;
-    }
-
-    .btn-edit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-        color: white;
-    }
-
-    .btn-delete {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: white;
-    }
-
-    .btn-delete:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-        color: white;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
     }
 
     .empty-state {
@@ -287,8 +259,6 @@
         .custom-table { font-size: 0.85rem; }
         .custom-table thead th { padding: 1rem 0.75rem; font-size: 0.8rem; }
         .custom-table tbody td { padding: 0.75rem 0.5rem; }
-        .action-buttons { flex-direction: column; }
-        .action-buttons .btn-action { width: 100%; justify-content: center; }
         .badge { font-size: 0.75rem; padding: 0.4rem 0.75rem; }
     }
 
@@ -306,9 +276,9 @@
         <div class="header-content">
             <div class="header-title">
                 <h4>Data Laporan Saya</h4>
-                <p>Daftar laporan fasilitas yang sudah dikirim</p>
+                <p>Daftar laporan fasilitas yang sudah kamu kirim</p>
             </div>
-            <a href="{{ route('siswa.laporan.create') }}" class="btn-add">
+            <a href="{{ route('guru.laporan.create') }}" class="btn-add">
                 <i class='bx bx-plus-circle'></i>
                 Buat Laporan
             </a>
@@ -331,32 +301,28 @@
                     <thead>
                         <tr>
                             <th style="width: 50px;">No</th>
-                            <th>Nama</th>
-                            <th>Kelas</th>
                             <th>Kategori</th>
                             <th>Fasilitas</th>
                             <th>Foto</th>
                             <th>Lokasi</th>
                             <th>Deskripsi</th>
                             <th>Tanggal</th>
+                            <th>Urgency</th>
                             <th>Status</th>
-                            <th style="width: 180px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($laporan as $item)
+                        @forelse($laporans as $item)
                         <tr>
                             <td class="text-center"><strong>{{ $loop->iteration }}</strong></td>
-                            <td><strong>{{ $item->user->name ?? '-' }}</strong></td>
-                            <td>{{ $item->kelas->nama_kelas ?? '-' }}</td>
                             <td>{{ $item->kategori->nama_kategori ?? '-' }}</td>
                             <td>{{ $item->fasilitas->nama_fasilitas ?? '-' }}</td>
 
-                            {{-- COVER --}}
+                            {{-- Foto --}}
                             <td>
-                                @if($item->cover)
-                                    <a href="{{ asset('storage/' . $item->cover) }}" target="_blank">
-                                        <img src="{{ asset('storage/' . $item->cover) }}" class="foto-thumb" alt="Foto Laporan">
+                                @if($item->foto)
+                                    <a href="{{ asset('storage/' . $item->foto) }}" target="_blank">
+                                        <img src="{{ asset('storage/' . $item->foto) }}" class="foto-thumb" alt="Foto Laporan">
                                     </a>
                                 @else
                                     <span style="color:#d1d5db;">-</span>
@@ -370,6 +336,20 @@
                                 </div>
                             </td>
                             <td>{{ $item->created_at ? $item->created_at->format('d-m-Y') : '-' }}</td>
+
+                            {{-- Urgency --}}
+                            <td>
+                                @php $urgency = strtolower($item->urgency ?? 'rendah'); @endphp
+                                <span class="badge-urgency badge-{{ $urgency }}">
+                                    @if($urgency == 'rendah') <i class='bx bx-down-arrow-circle'></i>
+                                    @elseif($urgency == 'sedang') <i class='bx bx-minus-circle'></i>
+                                    @else <i class='bx bx-up-arrow-circle'></i>
+                                    @endif
+                                    {{ ucfirst($urgency) }}
+                                </span>
+                            </td>
+
+                            {{-- Status --}}
                             <td>
                                 @if($item->status == 'pending')
                                     <span class="badge badge-pending">
@@ -387,44 +367,14 @@
                                     {{ $item->status }}
                                 @endif
                             </td>
-
-                            {{-- AKSI --}}
-                            <td>
-                                <div class="action-buttons">
-                                    @if($item->status == 'pending')
-                                        <a href="{{ route('siswa.laporan.edit', $item->id) }}"
-                                           class="btn-action btn-edit">
-                                            <i class='bx bx-edit'></i> Edit
-                                        </a>
-                                        <form action="{{ route('siswa.laporan.destroy', $item->id) }}" method="POST"
-                                              onsubmit="return confirm('Yakin mau hapus laporan ini?')" style="margin:0;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn-action btn-delete">
-                                                <i class='bx bx-trash'></i> Hapus
-                                            </button>
-                                        </form>
-                                    @endif
-                                    <a href="{{ route('siswa.laporan.show', $item->id) }}"
-                                       class="btn-action btn-detail">
-                                        <i class='bx bx-show'></i> Detail
-                                    </a>
-                                </div>
-                            </td>
                         </tr>
 
                         @empty
                         <tr>
-                            <td colspan="11">
+                            <td colspan="9">
                                 <div class="empty-state">
                                     <i class='bx bx-folder-open'></i>
-                                    <p>
-                                        @if($search ?? false)
-                                            Tidak ada laporan yang cocok dengan "{{ $search }}"
-                                        @else
-                                            Belum ada laporan yang dikirim
-                                        @endif
-                                    </p>
+                                    <p>Belum ada laporan yang dikirim</p>
                                 </div>
                             </td>
                         </tr>

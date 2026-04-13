@@ -278,7 +278,7 @@
                 <h4>Detail Laporan</h4>
                 <p>Informasi lengkap laporan fasilitas</p>
             </div>
-            <a href="{{ route('siswa.laporan.index') }}" class="btn-back">
+            <a href="{{ $laporan->status == 'selesai' ? route('siswa.laporan.riwayat') : route('siswa.laporan.index') }}" class="btn-back">
                 <i class='bx bx-arrow-back'></i> Kembali
             </a>
         </div>
@@ -436,17 +436,11 @@
                 <h5>Foto Laporan</h5>
             </div>
 
-            @if($laporan->fotoLaporan->count() > 0)
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; padding: 1rem; background: #f9fafb; border-radius: 12px;">
-                    @foreach($laporan->fotoLaporan as $item)
-                        <a href="{{ Storage::url($item->foto) }}" target="_blank">
-                            <img src="{{ Storage::url($item->foto) }}"
-                                style="width:100%; height:200px; object-fit:cover; border-radius:10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s;"
-                                onmouseover="this.style.transform='scale(1.03)'"
-                                onmouseout="this.style.transform='scale(1)'"
-                                alt="Foto Laporan">
-                        </a>
-                    @endforeach
+            @if($laporan->cover)
+                <div class="photo-wrapper">
+                    <a href="{{ asset('storage/' . $laporan->cover) }}" target="_blank">
+                        <img src="{{ asset('storage/' . $laporan->cover) }}" alt="Foto Laporan">
+                    </a>
                 </div>
             @else
                 <div class="photo-wrapper">

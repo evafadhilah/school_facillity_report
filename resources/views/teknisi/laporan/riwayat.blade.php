@@ -18,19 +18,50 @@
     .index-header::before {
         content: '';
         position: absolute;
-        top: -50%;
-        right: -5%;
-        width: 200px;
-        height: 200px;
+        top: -50%; right: -5%;
+        width: 200px; height: 200px;
         background: rgba(255,255,255,0.1);
+        border-radius: 50%;
+    }
+    .index-header::after {
+        content: '';
+        position: absolute;
+        bottom: -30%; left: -3%;
+        width: 150px; height: 150px;
+        background: rgba(255,255,255,0.08);
         border-radius: 50%;
     }
     .header-content {
         position: relative;
         z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
     }
     .header-title h4 { margin: 0; font-size: 1.8rem; font-weight: 700; color: white; }
-    .header-title p  { margin: 0.5rem 0 0 0; font-size: 0.95rem; color: white; opacity: 0.9; }
+    .header-title p  { margin: 0.4rem 0 0 0; font-size: 0.92rem; color: rgba(255,255,255,0.85); }
+
+    .stat-card {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 14px;
+        padding: 0.85rem 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+    }
+    .stat-icon {
+        width: 44px; height: 44px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.3rem; color: white; flex-shrink: 0;
+    }
+    .stat-number { font-size: 1.6rem; font-weight: 700; color: white; line-height: 1; }
+    .stat-label  { font-size: 0.78rem; color: rgba(255,255,255,0.8); margin-top: 2px; }
 
     .table-card { border: none; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
     .table-card .card-body { padding: 0; }
@@ -91,32 +122,32 @@
     }
     .empty-state i { font-size: 3rem; margin-bottom: 1rem; display: block; }
 
-    .stat-badge {
-        background: rgba(255,255,255,0.2);
-        border-radius: 12px;
-        padding: 0.75rem 1.25rem;
-        display: inline-block;
+    @media (max-width: 576px) {
+        .index-header { padding: 1.5rem; }
+        .header-title h4 { font-size: 1.4rem; }
+        .header-content { flex-direction: column; align-items: flex-start; }
     }
-    .stat-badge span { font-size: 1.8rem; font-weight: 700; display: block; }
-    .stat-badge p { margin: 0; font-size: 0.85rem; opacity: 0.9; }
 </style>
 
 <div class="container-xxl flex-grow-1 container-p-y">
 
     <div class="index-header">
-        <div class="header-content">
-            <div class="header-title">
-                <h4><i class='bx bx-history me-2'></i>Riwayat Laporan</h4>
-                <p>Laporan yang telah kamu selesaikan</p>
+    <div class="header-content">
+        <div class="header-title">
+            <h4>Riwayat Laporan</h4>
+            <p>Laporan yang telah diselesaikan</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class='bx bx-check-double'></i>
             </div>
-            <div class="mt-3">
-                <div class="stat-badge">
-                    <span>{{ $riwayats->total() }}</span>
-                    <p>Total Selesai</p>
-                </div>
+            <div>
+                <div class="stat-number">{{ $riwayats->total() }}</div>
+                <div class="stat-label">Total Selesai</div>
             </div>
         </div>
     </div>
+</div>
 
     <div class="card table-card">
         <div class="card-body">
@@ -156,7 +187,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('teknisi.laporan.edit', $laporan->id) }}" class="btn-detail">
+                                        <a href="{{ route('teknisi.laporan.riwayat.show', $laporan->id) }}" class="btn-detail">
                                         <i class='bx bx-show'></i> Detail
                                     </a>
                                 </td>

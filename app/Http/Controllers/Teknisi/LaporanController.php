@@ -56,6 +56,15 @@ class LaporanController extends Controller
             ->with('success', 'Status laporan berhasil diperbarui!');
     }
 
+    public function show($id)
+        {
+            $laporan = Laporan::where('teknisi_id', auth()->id())
+                ->with(['fasilitas', 'lokasi', 'kelas', 'user'])
+                ->findOrFail($id);
+
+            return view('teknisi.laporan.show', compact('laporan'));
+        }
+
     public function riwayat()
     {
         $riwayats = Laporan::where('teknisi_id', auth()->id())

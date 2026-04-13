@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Data Laporan')
+@section('title', 'Riwayat Laporan')
 
 @section('content')
 
@@ -62,7 +62,7 @@
         text-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
 
-    .btn-add {
+    .btn-back {
         background: white;
         color: #667eea;
         border: none;
@@ -77,7 +77,7 @@
         text-decoration: none;
     }
 
-    .btn-add:hover {
+    .btn-back:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(255,255,255,0.4);
         color: #764ba2;
@@ -159,16 +159,6 @@
         gap: 0.25rem;
     }
 
-    .badge-pending {
-        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-        color: white;
-    }
-
-    .badge-diproses {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-        color: white;
-    }
-
     .badge-selesai {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: white;
@@ -213,28 +203,6 @@
         color: white;
     }
 
-    .btn-edit {
-        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-        color: white;
-    }
-
-    .btn-edit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-        color: white;
-    }
-
-    .btn-delete {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: white;
-    }
-
-    .btn-delete:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-        color: white;
-    }
-
     .action-buttons {
         display: flex;
         gap: 0.5rem;
@@ -258,15 +226,6 @@
         margin: 0;
     }
 
-    .alert-success {
-        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-        border: none;
-        border-radius: 12px;
-        color: #065f46;
-        padding: 1rem 1.5rem;
-        font-weight: 500;
-    }
-
     .desc-cell {
         max-width: 200px;
         white-space: nowrap;
@@ -280,7 +239,7 @@
             gap: 1rem;
             align-items: flex-start;
         }
-        .btn-add {
+        .btn-back {
             width: 100%;
             justify-content: center;
         }
@@ -305,23 +264,14 @@
     <div class="index-header">
         <div class="header-content">
             <div class="header-title">
-                <h4>Data Laporan Saya</h4>
-                <p>Daftar laporan fasilitas yang sudah dikirim</p>
+                <h4>Riwayat Laporan</h4>
+                <p>Daftar laporan fasilitas yang sudah selesai ditangani</p>
             </div>
-            <a href="{{ route('siswa.laporan.create') }}" class="btn-add">
-                <i class='bx bx-plus-circle'></i>
-                Buat Laporan
+            <a href="{{ route('siswa.laporan.index') }}" class="btn-back">
+                Laporan Aktif
             </a>
         </div>
     </div>
-
-    {{-- Success Alert --}}
-    @if(session('success'))
-        <div class="alert alert-success mb-4">
-            <i class='bx bx-check-circle me-2'></i>
-            {{ session('success') }}
-        </div>
-    @endif
 
     <!-- Table Card -->
     <div class="card table-card">
@@ -340,7 +290,7 @@
                             <th>Deskripsi</th>
                             <th>Tanggal</th>
                             <th>Status</th>
-                            <th style="width: 180px;">Aksi</th>
+                            <th style="width: 100px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -371,40 +321,14 @@
                             </td>
                             <td>{{ $item->created_at ? $item->created_at->format('d-m-Y') : '-' }}</td>
                             <td>
-                                @if($item->status == 'pending')
-                                    <span class="badge badge-pending">
-                                        <i class='bx bx-time-five'></i> Pending
-                                    </span>
-                                @elseif($item->status == 'diproses')
-                                    <span class="badge badge-diproses">
-                                        <i class='bx bx-loader-alt'></i> Diproses
-                                    </span>
-                                @elseif($item->status == 'selesai')
-                                    <span class="badge badge-selesai">
-                                        <i class='bx bx-check'></i> Selesai
-                                    </span>
-                                @else
-                                    {{ $item->status }}
-                                @endif
+                                <span class="badge badge-selesai">
+                                    <i class='bx bx-check-circle'></i> Selesai
+                                </span>
                             </td>
 
-                            {{-- AKSI --}}
+                            {{-- AKSI - hanya Detail karena sudah selesai --}}
                             <td>
                                 <div class="action-buttons">
-                                    @if($item->status == 'pending')
-                                        <a href="{{ route('siswa.laporan.edit', $item->id) }}"
-                                           class="btn-action btn-edit">
-                                            <i class='bx bx-edit'></i> Edit
-                                        </a>
-                                        <form action="{{ route('siswa.laporan.destroy', $item->id) }}" method="POST"
-                                              onsubmit="return confirm('Yakin mau hapus laporan ini?')" style="margin:0;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn-action btn-delete">
-                                                <i class='bx bx-trash'></i> Hapus
-                                            </button>
-                                        </form>
-                                    @endif
                                     <a href="{{ route('siswa.laporan.show', $item->id) }}"
                                        class="btn-action btn-detail">
                                         <i class='bx bx-show'></i> Detail
@@ -417,12 +341,12 @@
                         <tr>
                             <td colspan="11">
                                 <div class="empty-state">
-                                    <i class='bx bx-folder-open'></i>
+                                    <i class='bx bx-check-shield'></i>
                                     <p>
                                         @if($search ?? false)
-                                            Tidak ada laporan yang cocok dengan "{{ $search }}"
+                                            Tidak ada riwayat yang cocok dengan "{{ $search }}"
                                         @else
-                                            Belum ada laporan yang dikirim
+                                            Belum ada laporan yang selesai ditangani
                                         @endif
                                     </p>
                                 </div>
