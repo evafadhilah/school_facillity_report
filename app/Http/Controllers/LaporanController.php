@@ -42,24 +42,26 @@ class LaporanController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $laporan = Laporan::findOrFail($id);
+{
+    $laporan = Laporan::findOrFail($id);
 
-        $request->validate([
-            'fasilitas_id' => 'required',
-            'teknisi_id'   => 'nullable',
-            'status'       => 'required|in:pending,ditugaskan,diproses,selesai,ditolak',
-        ]);
+    $request->validate([
+        'fasilitas_id'      => 'required',
+        'teknisi_id'        => 'nullable',
+        'status'            => 'required|in:pending,ditugaskan,diproses,selesai,ditolak',
+        'catatan_penolakan' => 'nullable|string|max:1000',
+    ]);
 
-        $laporan->update([
-            'fasilitas_id' => $request->fasilitas_id,
-            'teknisi_id'   => $request->teknisi_id ?: null,
-            'status'       => $request->status,
-        ]);
+    $laporan->update([
+        'fasilitas_id'      => $request->fasilitas_id,
+        'teknisi_id'        => $request->teknisi_id ?: null,
+        'status'            => $request->status,
+        'catatan_penolakan' => $request->status === 'ditolak' ? $request->catatan_penolakan : null,
+    ]);
 
-        return redirect()->route('admin.laporan.index')
-            ->with('success', 'Laporan berhasil diperbarui');
-    }
+    return redirect()->route('admin.laporan.index')
+        ->with('success', 'Laporan berhasil diperbarui');
+}   
 
     public function destroy($id)
     {
@@ -69,7 +71,6 @@ class LaporanController extends Controller
             Storage::disk('public')->delete($laporan->cover);
         }
 
-        // Hapus foto jika ada array foto
         if ($laporan->foto) {
             $fotos = is_array($laporan->foto)
                 ? $laporan->foto
@@ -86,7 +87,6 @@ class LaporanController extends Controller
             ->with('success', 'Laporan berhasil dihapus');
     }
 
-    // Tidak dipakai admin, tapi wajib ada karena resource route
     public function create() { abort(403); }
     public function store(Request $request) { abort(403); }
 }

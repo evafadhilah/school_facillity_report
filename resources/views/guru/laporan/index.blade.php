@@ -309,6 +309,7 @@
                             <th>Tanggal</th>
                             <th>Urgency</th>
                             <th>Status</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -318,11 +319,11 @@
                             <td>{{ $item->kategori->nama_kategori ?? '-' }}</td>
                             <td>{{ $item->fasilitas->nama_fasilitas ?? '-' }}</td>
 
-                            {{-- Foto --}}
+                            {{-- Cover --}}
                             <td>
-                                @if($item->foto)
-                                    <a href="{{ asset('storage/' . $item->foto) }}" target="_blank">
-                                        <img src="{{ asset('storage/' . $item->foto) }}" class="foto-thumb" alt="Foto Laporan">
+                                @if($item->cover)
+                                    <a href="{{ asset('storage/' . $item->cover) }}" target="_blank">
+                                        <img src="{{ asset('storage/' . $item->cover) }}" class="foto-thumb" alt="Foto Laporan">
                                     </a>
                                 @else
                                     <span style="color:#d1d5db;">-</span>
@@ -337,9 +338,9 @@
                             </td>
                             <td>{{ $item->created_at ? $item->created_at->format('d-m-Y') : '-' }}</td>
 
-                            {{-- Urgency --}}
+                            {{-- Tingkat Urgency --}}
                             <td>
-                                @php $urgency = strtolower($item->urgency ?? 'rendah'); @endphp
+                                @php $urgency = strtolower($item->tingkat_urgency ?? 'rendah'); @endphp
                                 <span class="badge-urgency badge-{{ $urgency }}">
                                     @if($urgency == 'rendah') <i class='bx bx-down-arrow-circle'></i>
                                     @elseif($urgency == 'sedang') <i class='bx bx-minus-circle'></i>
@@ -367,11 +368,28 @@
                                     {{ $item->status }}
                                 @endif
                             </td>
+
+                            {{-- Aksi --}}
+                            <td>
+                                <a href="{{ route('guru.laporan.show', $item->id) }}"
+                                   class="btn btn-sm"
+                                   style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border-radius: 8px; padding: 0.4rem 0.75rem;">
+                                    <i class='bx bx-show'></i>
+                                </a>
+                                @if($item->status == 'pending')
+                                <a href="{{ route('guru.laporan.edit', $item->id) }}"
+                                   class="btn btn-sm"
+                                   style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border-radius: 8px; padding: 0.4rem 0.75rem;">
+                                    <i class='bx bx-edit'></i>
+                                </a>
+                                @endif
+                            </td>
+
                         </tr>
 
                         @empty
                         <tr>
-                            <td colspan="9">
+                            <td colspan="10">
                                 <div class="empty-state">
                                     <i class='bx bx-folder-open'></i>
                                     <p>Belum ada laporan yang dikirim</p>

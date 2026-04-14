@@ -85,8 +85,8 @@ Route::middleware(['auth', 'role:guru'])
     ->prefix('guru')
     ->name('guru.')
     ->group(function () {
-        Route::resource('laporan', GuruLaporanController::class)->only(['index', 'create', 'store']);
-    });
+        Route::resource('laporan', GuruLaporanController::class)->only(['index', 'create', 'store', 'edit', 'update', 'show']);
+      });
 
 // Siswa routes
 Route::prefix('siswa')

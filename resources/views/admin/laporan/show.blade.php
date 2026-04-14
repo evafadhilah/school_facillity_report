@@ -209,6 +209,23 @@
         color: white;
     }
 
+    .catatan-tolak-box {
+        background: #fff5f5;
+        border: 1.5px solid #fca5a5;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        color: #991b1b;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    .catatan-tolak-box i {
+        font-size: 1.3rem;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
     @media (max-width: 768px) {
         .header-content { flex-direction: column; gap: 1rem; align-items: flex-start; }
         .btn-back { width: 100%; justify-content: center; }
@@ -288,6 +305,22 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Catatan Penolakan --}}
+            @if($laporan->status == 'ditolak' && $laporan->catatan_penolakan)
+            <div class="card detail-card">
+                <div class="card-header">
+                    <i class='bx bx-x-circle' style="color:#ef4444; font-size:1.1rem;"></i>
+                    <h6 style="color:#ef4444;">Alasan Penolakan</h6>
+                </div>
+                <div class="card-body">
+                    <div class="catatan-tolak-box">
+                        <i class='bx bx-error-circle'></i>
+                        <span>{{ $laporan->catatan_penolakan }}</span>
+                    </div>
+                </div>
+            </div>
+            @endif
 
             {{-- Foto --}}
             @php

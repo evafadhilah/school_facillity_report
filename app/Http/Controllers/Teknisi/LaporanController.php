@@ -12,7 +12,7 @@ class LaporanController extends Controller
     public function index()
     {
         $laporans = Laporan::where('teknisi_id', auth()->id())
-            ->with(['fasilitas', 'kelas', 'lokasi'])
+            ->with(['fasilitas', 'kelas', 'lokasi', 'user'])
             ->orderByRaw("CASE tingkat_urgency WHEN 'tinggi' THEN 1 WHEN 'sedang' THEN 2 WHEN 'rendah' THEN 3 ELSE 4 END")
             ->paginate(10);
 

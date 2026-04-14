@@ -164,6 +164,16 @@
         color: white;
     }
 
+    .badge-diproses {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+    }
+
+    .badge-ditolak {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
     .foto-thumb {
         width: 60px;
         height: 60px;
@@ -268,7 +278,7 @@
                 <p>Daftar laporan fasilitas yang sudah selesai ditangani</p>
             </div>
             <a href="{{ route('siswa.laporan.index') }}" class="btn-back">
-                Laporan Aktif
+                <i class='bx bx-arrow-back'></i> Laporan Aktif
             </a>
         </div>
     </div>
@@ -320,13 +330,29 @@
                                 </div>
                             </td>
                             <td>{{ $item->created_at ? $item->created_at->format('d-m-Y') : '-' }}</td>
+
+                            {{-- STATUS DINAMIS --}}
                             <td>
-                                <span class="badge badge-selesai">
-                                    <i class='bx bx-check-circle'></i> Selesai
-                                </span>
+                                @if($item->status == 'selesai')
+                                    <span class="badge badge-selesai">
+                                        <i class='bx bx-check-circle'></i> Selesai
+                                    </span>
+                                @elseif($item->status == 'diproses')
+                                    <span class="badge badge-diproses">
+                                        <i class='bx bx-loader-circle'></i> Diproses
+                                    </span>
+                                @elseif($item->status == 'ditolak')
+                                    <span class="badge badge-ditolak">
+                                        <i class='bx bx-x-circle'></i> Ditolak
+                                    </span>
+                                @else
+                                    <span class="badge" style="background:#e5e7eb; color:#6b7280;">
+                                        {{ ucfirst($item->status) }}
+                                    </span>
+                                @endif
                             </td>
 
-                            {{-- AKSI - hanya Detail karena sudah selesai --}}
+                            {{-- AKSI --}}
                             <td>
                                 <div class="action-buttons">
                                     <a href="{{ route('siswa.laporan.show', $item->id) }}"

@@ -42,6 +42,30 @@ class LaporanController extends Controller
         return view('siswa.laporan.index', compact('laporan', 'search'));
     }
 
+    public function riwayat(Request $request)
+    {
+        $search = $request->get('search');
+
+        $laporan = Laporan::with(['user', 'kelas', 'kategori', 'fasilitas', 'lokasi'])
+            ->where('user_id', Auth::id())
+            ->whereIn('status', ['diproses', 'selesai', 'ditolak'])
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama_pelapor', 'like', "%$search%")
+                      ->orWhere('deskripsi', 'like', "%$search%")
+                      ->orWhere('status', 'like', "%$search%")
+                      ->orWhereHas('kelas', fn($q) => $q->where('nama_kelas', 'like', "%$search%"))
+                      ->orWhereHas('kategori', fn($q) => $q->where('nama_kategori', 'like', "%$search%"))
+                      ->orWhereHas('fasilitas', fn($q) => $q->where('nama_fasilitas', 'like', "%$search%"))
+                      ->orWhereHas('lokasi', fn($q) => $q->where('nama_lokasi', 'like', "%$search%"));
+                });
+            })
+            ->latest()
+            ->get();
+
+        return view('siswa.laporan.riwayat', compact('laporan', 'search'));
+    }
+
     public function create()
     {
         $kelas     = Kelas::all();

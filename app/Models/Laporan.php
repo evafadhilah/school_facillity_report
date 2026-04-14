@@ -24,6 +24,7 @@ class Laporan extends Model
         'tingkat_urgency',
         'status',
         'tanggal_selesai',
+        'catatan_penolakan',
     ];
 
     protected $casts = [

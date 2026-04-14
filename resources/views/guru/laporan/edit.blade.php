@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Buat Laporan')
+@section('title', 'Edit Laporan')
 
 @section('content')
 
@@ -89,9 +89,7 @@
         overflow: hidden;
     }
 
-    .form-card .card-body {
-        padding: 2rem;
-    }
+    .form-card .card-body { padding: 2rem; }
 
     .form-label {
         font-weight: 600;
@@ -130,10 +128,7 @@
         padding-right: 2.5rem;
     }
 
-    textarea.form-control {
-        resize: vertical;
-        min-height: 120px;
-    }
+    textarea.form-control { resize: vertical; min-height: 120px; }
 
     .form-divider {
         border: none;
@@ -202,6 +197,15 @@
         gap: 1.25rem;
     }
 
+    .cover-preview {
+        width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1.5px solid #e5e7eb;
+        margin-bottom: 0.75rem;
+    }
+
     @media (max-width: 768px) {
         .header-content { flex-direction: column; gap: 1rem; align-items: flex-start; }
         .btn-back { width: 100%; justify-content: center; }
@@ -224,8 +228,8 @@
     <div class="index-header">
         <div class="header-content">
             <div class="header-title">
-                <h4>Buat Laporan Fasilitas</h4>
-                <p>Laporkan kerusakan fasilitas sekolah</p>
+                <h4>Edit Laporan</h4>
+                <p>Perbarui laporan fasilitas kamu</p>
             </div>
             <a href="{{ route('guru.laporan.index') }}" class="btn-back">
                 <i class='bx bx-arrow-back'></i> Kembali
@@ -250,8 +254,9 @@
     <div class="card form-card">
         <div class="card-body">
 
-            <form action="{{ route('guru.laporan.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('guru.laporan.update', $laporan->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
 
                 {{-- Row 1: Kategori + Fasilitas --}}
                 <div class="form-row-2">
@@ -262,7 +267,7 @@
                         <select name="kategori_id" class="form-control @error('kategori_id') is-invalid @enderror" required>
                             <option value="">-- Pilih Kategori --</option>
                             @foreach($kategoris as $k)
-                                <option value="{{ $k->id }}" {{ old('kategori_id') == $k->id ? 'selected' : '' }}>
+                                <option value="{{ $k->id }}" {{ old('kategori_id', $laporan->kategori_id) == $k->id ? 'selected' : '' }}>
                                     {{ $k->nama_kategori }}
                                 </option>
                             @endforeach
@@ -279,7 +284,7 @@
                         <select name="fasilitas_id" class="form-control @error('fasilitas_id') is-invalid @enderror" required>
                             <option value="">-- Pilih Fasilitas --</option>
                             @foreach($fasilitas as $f)
-                                <option value="{{ $f->id }}" {{ old('fasilitas_id') == $f->id ? 'selected' : '' }}>
+                                <option value="{{ $f->id }}" {{ old('fasilitas_id', $laporan->fasilitas_id) == $f->id ? 'selected' : '' }}>
                                     {{ $f->nama_fasilitas }}
                                 </option>
                             @endforeach
@@ -299,7 +304,7 @@
                         <select name="lokasi_id" class="form-control @error('lokasi_id') is-invalid @enderror" required>
                             <option value="">-- Pilih Lokasi --</option>
                             @foreach($lokasis as $l)
-                                <option value="{{ $l->id }}" {{ old('lokasi_id') == $l->id ? 'selected' : '' }}>
+                                <option value="{{ $l->id }}" {{ old('lokasi_id', $laporan->lokasi_id) == $l->id ? 'selected' : '' }}>
                                     {{ $l->nama_lokasi }}
                                 </option>
                             @endforeach
@@ -315,9 +320,9 @@
                         </label>
                         <select name="tingkat_urgency" class="form-control @error('tingkat_urgency') is-invalid @enderror" required>
                             <option value="">-- Pilih Urgency --</option>
-                            <option value="rendah" {{ old('tingkat_urgency') == 'rendah' ? 'selected' : '' }}>Rendah</option>
-                            <option value="sedang" {{ old('tingkat_urgency') == 'sedang' ? 'selected' : '' }}>Sedang</option>
-                            <option value="tinggi" {{ old('tingkat_urgency') == 'tinggi' ? 'selected' : '' }}>Tinggi</option>
+                            <option value="rendah" {{ old('tingkat_urgency', $laporan->tingkat_urgency) == 'rendah' ? 'selected' : '' }}>Rendah</option>
+                            <option value="sedang" {{ old('tingkat_urgency', $laporan->tingkat_urgency) == 'sedang' ? 'selected' : '' }}>Sedang</option>
+                            <option value="tinggi" {{ old('tingkat_urgency', $laporan->tingkat_urgency) == 'tinggi' ? 'selected' : '' }}>Tinggi</option>
                         </select>
                         @error('tingkat_urgency')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -327,11 +332,18 @@
 
                 <hr class="form-divider">
 
-                {{-- Cover / Foto --}}
+                {{-- Cover --}}
                 <div class="mb-4">
                     <label class="form-label">
                         <i class='bx bx-image me-1'></i> Foto Kerusakan
                     </label>
+
+                    @if($laporan->cover)
+                        <div id="currentCover" class="mb-2">
+                            <img src="{{ asset('storage/' . $laporan->cover) }}" class="cover-preview" alt="Foto saat ini">
+                            <p style="font-size:0.85rem; color:#9ca3af;">Foto saat ini — upload baru untuk mengganti</p>
+                        </div>
+                    @endif
 
                     <div id="dropZone" style="border: 2px dashed #667eea; border-radius: 12px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; background: #fafafa; transition: all 0.3s; position: relative;">
                         <input type="file" name="cover" id="coverInput" accept="image/*" style="position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;">
@@ -365,7 +377,7 @@
                         rows="4"
                         placeholder="Contoh: Kursi rusak, AC tidak dingin, dll"
                         required
-                    >{{ old('deskripsi') }}</textarea>
+                    >{{ old('deskripsi', $laporan->deskripsi) }}</textarea>
                     @error('deskripsi')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -377,7 +389,7 @@
                         <i class='bx bx-x'></i> Batal
                     </a>
                     <button type="submit" class="btn-submit">
-                        <i class='bx bx-send'></i> Kirim Laporan
+                        <i class='bx bx-save'></i> Simpan Perubahan
                     </button>
                 </div>
 

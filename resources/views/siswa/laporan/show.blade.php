@@ -71,14 +71,12 @@
         color: #764ba2;
     }
 
-    /* Main Detail Container */
     .detail-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1.5rem;
     }
 
-    /* Detail Card */
     .detail-card {
         background: white;
         border-radius: 16px;
@@ -108,7 +106,6 @@
         color: #1f2937;
     }
 
-    /* Info Row */
     .info-row {
         display: flex;
         align-items: flex-start;
@@ -157,7 +154,6 @@
         word-wrap: break-word;
     }
 
-    /* Status Badge */
     .status-badge {
         display: inline-flex;
         align-items: center;
@@ -169,22 +165,12 @@
         margin-top: 0.25rem;
     }
 
-    .status-pending {
-        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-        color: #92400e;
-    }
+    .status-pending     { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #92400e; }
+    .status-proses      { background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); color: #1e40af; }
+    .status-selesai     { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #065f46; }
+    .status-ditugaskan  { background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%); color: #5b21b6; }
+    .status-ditolak     { background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #991b1b; }
 
-    .status-proses {
-        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-        color: #1e40af;
-    }
-
-    .status-selesai {
-        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-        color: #065f46;
-    }
-
-    /* Full Width Cards */
     .full-width-card {
         grid-column: span 2;
     }
@@ -200,7 +186,24 @@
         min-height: 100px;
     }
 
-    /* Photo Container */
+    .catatan-tolak-box {
+        background: #fff5f5;
+        border: 1.5px solid #fca5a5;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        color: #991b1b;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        border-left: 4px solid #ef4444;
+    }
+    .catatan-tolak-box i {
+        font-size: 1.3rem;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
     .photo-wrapper {
         display: flex;
         justify-content: center;
@@ -232,40 +235,17 @@
         opacity: 0.5;
     }
 
-    /* Responsive */
     @media (max-width: 992px) {
-        .detail-container {
-            grid-template-columns: 1fr;
-        }
-
-        .full-width-card {
-            grid-column: span 1;
-        }
+        .detail-container { grid-template-columns: 1fr; }
+        .full-width-card { grid-column: span 1; }
     }
 
     @media (max-width: 768px) {
-        .header-content {
-            flex-direction: column;
-            gap: 1rem;
-            align-items: flex-start;
-        }
-
-        .btn-back {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .detail-header {
-            padding: 1.5rem;
-        }
-
-        .header-title h4 {
-            font-size: 1.5rem;
-        }
-
-        .detail-card {
-            padding: 1.25rem;
-        }
+        .header-content { flex-direction: column; gap: 1rem; align-items: flex-start; }
+        .btn-back { width: 100%; justify-content: center; }
+        .detail-header { padding: 1.5rem; }
+        .header-title h4 { font-size: 1.5rem; }
+        .detail-card { padding: 1.25rem; }
     }
 </style>
 
@@ -295,9 +275,7 @@
             </div>
 
             <div class="info-row">
-                <div class="info-icon">
-                    <i class='bx bx-user'></i>
-                </div>
+                <div class="info-icon"><i class='bx bx-user'></i></div>
                 <div class="info-content">
                     <div class="info-label">Nama Pelapor</div>
                     <div class="info-value">{{ $laporan->nama_pelapor }}</div>
@@ -305,9 +283,7 @@
             </div>
 
             <div class="info-row">
-                <div class="info-icon">
-                    <i class='bx bx-book'></i>
-                </div>
+                <div class="info-icon"><i class='bx bx-book'></i></div>
                 <div class="info-content">
                     <div class="info-label">Kelas</div>
                     <div class="info-value">{{ $laporan->kelas->nama_kelas }}</div>
@@ -315,9 +291,7 @@
             </div>
 
             <div class="info-row">
-                <div class="info-icon">
-                    <i class='bx bx-calendar'></i>
-                </div>
+                <div class="info-icon"><i class='bx bx-calendar'></i></div>
                 <div class="info-content">
                     <div class="info-label">Tanggal Lapor</div>
                     <div class="info-value">{{ \Carbon\Carbon::parse($laporan->created_at)->format('d M Y, H:i') }} WIB</div>
@@ -333,9 +307,7 @@
             </div>
 
             <div class="info-row">
-                <div class="info-icon">
-                    <i class='bx bx-category'></i>
-                </div>
+                <div class="info-icon"><i class='bx bx-category'></i></div>
                 <div class="info-content">
                     <div class="info-label">Kategori</div>
                     <div class="info-value">{{ $laporan->kategori->nama_kategori }}</div>
@@ -343,9 +315,7 @@
             </div>
 
             <div class="info-row">
-                <div class="info-icon">
-                    <i class='bx bx-buildings'></i>
-                </div>
+                <div class="info-icon"><i class='bx bx-buildings'></i></div>
                 <div class="info-content">
                     <div class="info-label">Fasilitas</div>
                     <div class="info-value">{{ $laporan->fasilitas->nama_fasilitas }}</div>
@@ -353,9 +323,7 @@
             </div>
 
             <div class="info-row">
-                <div class="info-icon">
-                    <i class='bx bx-map'></i>
-                </div>
+                <div class="info-icon"><i class='bx bx-map'></i></div>
                 <div class="info-content">
                     <div class="info-label">Lokasi</div>
                     <div class="info-value">{{ $laporan->lokasi->nama_lokasi }}</div>
@@ -371,15 +339,17 @@
             </div>
 
             <div class="info-row">
-                <div class="info-icon">
-                    <i class='bx bx-timer'></i>
-                </div>
+                <div class="info-icon"><i class='bx bx-timer'></i></div>
                 <div class="info-content">
                     <div class="info-label">Status Saat Ini</div>
                     <div class="info-value">
                         @if($laporan->status == 'pending')
                             <span class="status-badge status-pending">
                                 <i class='bx bx-time-five'></i> Menunggu Proses
+                            </span>
+                        @elseif($laporan->status == 'ditugaskan')
+                            <span class="status-badge status-ditugaskan">
+                                <i class='bx bx-user-check'></i> Ditugaskan ke Teknisi
                             </span>
                         @elseif($laporan->status == 'diproses')
                             <span class="status-badge status-proses">
@@ -388,6 +358,10 @@
                         @elseif($laporan->status == 'selesai')
                             <span class="status-badge status-selesai">
                                 <i class='bx bx-check-circle'></i> Selesai Diperbaiki
+                            </span>
+                        @elseif($laporan->status == 'ditolak')
+                            <span class="status-badge status-ditolak">
+                                <i class='bx bx-x-circle'></i> Ditolak
                             </span>
                         @else
                             <span class="status-badge status-pending">
@@ -398,6 +372,20 @@
                 </div>
             </div>
         </div>
+
+        {{-- Card: Alasan Penolakan (hanya muncul jika ditolak) --}}
+        @if($laporan->status == 'ditolak' && $laporan->catatan_penolakan)
+        <div class="detail-card full-width-card">
+            <div class="card-header-custom">
+                <i class='bx bx-x-circle' style="color:#ef4444;"></i>
+                <h5 style="color:#ef4444;">Alasan Penolakan</h5>
+            </div>
+            <div class="catatan-tolak-box">
+                <i class='bx bx-error-circle'></i>
+                <span>{{ $laporan->catatan_penolakan }}</span>
+            </div>
+        </div>
+        @endif
 
         {{-- Card: Catatan Teknisi --}}
         @if($laporan->catatan)
@@ -418,7 +406,7 @@
         </div>
         @endif
 
-        <!-- Card 4: Deskripsi (Full Width) -->
+        <!-- Card: Deskripsi (Full Width) -->
         <div class="detail-card full-width-card">
             <div class="card-header-custom">
                 <i class='bx bx-note'></i>
@@ -429,7 +417,7 @@
             </div>
         </div>
 
-        <!-- Card 5: Foto (Full Width) -->
+        <!-- Card: Foto (Full Width) -->
         <div class="detail-card full-width-card">
             <div class="card-header-custom">
                 <i class='bx bx-camera'></i>

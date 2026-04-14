@@ -177,10 +177,10 @@
                                 <td>{{ $laporan->nama_pelapor ?? $laporan->user->name ?? '-' }}</td>
                                 <td>{{ $laporan->fasilitas->nama_fasilitas ?? '-' }}</td>
                                 <td>
-                                    @if($laporan->foto)
-                                        <img src="{{ Storage::url($laporan->foto) }}"
+                                    @if($laporan->cover)
+                                        <img src="{{ Storage::url($laporan->cover) }}"
                                             class="foto-thumb"
-                                            onclick="window.open('{{ Storage::url($laporan->foto) }}')"
+                                            onclick="window.open('{{ Storage::url($laporan->cover) }}')"
                                             title="Klik untuk lihat full">
                                     @else
                                         <span class="no-foto">

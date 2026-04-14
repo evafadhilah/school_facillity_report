@@ -278,6 +278,51 @@
         max-width: calc(50% - 7px);
     }
 
+    /* ── CATATAN PENOLAKAN ── */
+    .ep-catatan-wrap {
+        margin-top: -8px;
+        margin-bottom: 22px;
+        display: none;
+    }
+    .ep-catatan-wrap.show { display: block; }
+    .ep-catatan-label {
+        display: block;
+        font-size: 0.69rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.65px;
+        color: #ef4444;
+        margin-bottom: 5px;
+    }
+    .ep-textarea {
+        width: 100%;
+        padding: 10px 13px;
+        border: 1.5px solid #fca5a5;
+        border-radius: 9px;
+        font-size: 0.875rem;
+        color: #374151;
+        font-weight: 500;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        resize: vertical;
+        min-height: 90px;
+        background: #fff5f5;
+        transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    .ep-textarea:focus {
+        outline: none;
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+    }
+    .ep-catatan-hint {
+        font-size: 0.76rem;
+        color: #ef4444;
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        opacity: 0.8;
+    }
+
     /* ── SUBMIT BTN ── */
     .ep-btn-submit {
         display: inline-flex;
@@ -329,15 +374,16 @@
     @endif
 
     {{-- ── HEADER ── --}}
-   <div class="ep-header">
-    <div class="ep-header-text">
-        <h4>Edit Laporan</h4>
-        <p>Perbarui data laporan kerusakan fasilitas sekolah</p>
+    <div class="ep-header">
+        <div class="ep-header-text">
+            <h4>Edit Laporan</h4>
+            <p>Perbarui data laporan kerusakan fasilitas sekolah</p>
+        </div>
+        <a href="{{ route('admin.laporan.index') }}" class="ep-btn-back">
+            Kembali
+        </a>
     </div>
-    <a href="{{ route('admin.laporan.index') }}" class="ep-btn-back">
-        Kembali
-    </a>
-</div>
+
     {{-- ── CARD ── --}}
     <div class="ep-card">
 
@@ -456,7 +502,7 @@
                     </div>
                     <div class="ep-field-status">
                         <label class="ep-form-label">Status</label>
-                        <select name="status" class="ep-select">
+                        <select name="status" class="ep-select" id="statusSelect">
                             @foreach(['pending','ditugaskan','diproses','selesai','ditolak'] as $s)
                                 <option value="{{ $s }}"
                                     {{ $laporan->status == $s ? 'selected' : '' }}>
@@ -464,6 +510,20 @@
                                 </option>
                             @endforeach
                         </select>
+                    </div>
+                </div>
+
+                {{-- ── CATATAN PENOLAKAN ── --}}
+                <div class="ep-catatan-wrap {{ $laporan->status == 'ditolak' || old('catatan_penolakan') ? 'show' : '' }}" id="catatanWrap">
+                    <label class="ep-catatan-label">
+                        <i class='bx bx-x-circle' style="font-size:0.8rem;"></i>
+                        Alasan Penolakan <span style="color:#ef4444;">*</span>
+                    </label>
+                    <textarea name="catatan_penolakan" class="ep-textarea"
+                              placeholder="Tuliskan alasan mengapa laporan ini ditolak...">{{ old('catatan_penolakan', $laporan->catatan_penolakan ?? '') }}</textarea>
+                    <div class="ep-catatan-hint">
+                        <i class='bx bx-info-circle'></i>
+                        Alasan ini akan ditampilkan kepada pelapor
                     </div>
                 </div>
 
@@ -476,5 +536,18 @@
 
     </div>
 </div>
+
+<script>
+    const statusSelect = document.getElementById('statusSelect');
+    const catatanWrap  = document.getElementById('catatanWrap');
+
+    statusSelect.addEventListener('change', function () {
+        if (this.value === 'ditolak') {
+            catatanWrap.classList.add('show');
+        } else {
+            catatanWrap.classList.remove('show');
+        }
+    });
+</script>
 
 @endsection
