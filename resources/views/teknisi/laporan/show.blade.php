@@ -233,7 +233,7 @@
                     <div class="mb-4">
                         <span class="info-label">Kondisi Awal</span>
                         @if($laporan->foto)
-                            <img src="{{ Storage::url($laporan->foto) }}" class="foto-display" onclick="window.open(this.src)">
+                            <img src="{{ Storage::url($laporan->cover) }}" class="foto-display" onclick="window.open(this.src)">
                         @else
                             <div class="no-foto-placeholder">
                                 <i class='bx bx-image-alt fs-1'></i>

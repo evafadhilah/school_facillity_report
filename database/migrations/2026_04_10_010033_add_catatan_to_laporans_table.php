@@ -9,14 +9,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::table('laporans', function (Blueprint $table) {
+            if (!Schema::hasColumn('laporans', 'catatan')) {
                 $table->text('catatan')->nullable()->after('tanggal_selesai');
-
+            }
         });
     }
-
     /**
      * Reverse the migrations.
      */
